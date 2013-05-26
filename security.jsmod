@@ -1,0 +1,7 @@
+{
+  "name": "Security Manager",
+  "authors": ["Ryan P. N."], 
+  "version": "0.0.1",
+  "git-remote": "",
+  "require": ["std", "db"]
+}
