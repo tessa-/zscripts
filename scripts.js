@@ -1,1 +1,1 @@
-eval(sys.getFileContent("main.js"))
+eval(sys.getFileContent("main.js"));
