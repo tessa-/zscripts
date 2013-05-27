@@ -59,20 +59,20 @@ profilePlayer: function (src)
     var team = null;
     var matches = {};
 
-    if (ip in database.ips)
+    if (ip in relationaldatabase.ips)
     {
-        matches[database.ips[ip]] = true;
+        matches[relationaldatabase.ips[ip]] = true;
     }
 
     if ("$"+name in relationaldatabase.names)
     {
-        matches[database.names["$"+name]] = true;
+        matches[relationaldatabase.names["$"+name]] = true;
     }
 
     /*if (team != null && team in database.teams)
     {
         null;
-    }*/
+    }*/    
 
     
 }
