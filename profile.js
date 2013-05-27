@@ -72,8 +72,24 @@ profilePlayer: function (src)
     /*if (team != null && team in database.teams)
     {
         null;
-    }*/    
+    }*/
 
+    var matches_list = Object.keys(matches);
+
+    if (matches == 0)
+    {
+        // Code for new profile goes here.
+    }
+    /*
+    else if (matches > 1)
+    {
+        //Code for multiple matches goes here.
+    }
+    */
+    else 
+    {
+        return this.database.profiles[matches[0]];
+    }
     
 }
 ,
