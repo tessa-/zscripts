@@ -69,10 +69,10 @@ profilePlayer: function (src)
         matches[database.names["$"+name]] = true;
     }
 
-    if (team != null && team in database.teams)
+    /*if (team != null && team in database.teams)
     {
         null;
-    }
+    }*/
 
     
 }
