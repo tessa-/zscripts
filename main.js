@@ -29,53 +29,41 @@ registerHandler: function (handlername, registrant)
 ,
 loadModule: function (modname) 
 {
-    if (this.module_info[modname]) return;
+    if (this.module[modname]) return;
 
-    this.log("Request to load module: " + modname);
 
-    var f = sys.getFileContent(modname + ".jsmod");
-   
-    if (!f) throw new Error ("Can't find module");
+    this.log ("MODULE_MANAGER: Loading \"" + modname + "\"");
 
     try
     {
-        this.module_info[modname] = JSON.parse(f);
-    }
-    catch (e)
-    {
-        var e2 = new Error("Error loading module info for " +modname+ ": " + e);
-        throw e2;
-    }
-    
-    if (this.module_info[modname].require) 
-    {
-        for (var x in this.module_info[modname].require)
-        {
-            this.loadModule(this.module_info[modname].require[x]);
-        }
-    }
-    else this.module_info[modname].require = [];
-
-    this.log ("Loading module: " + modname);
-
-    try
-    {
-        var lic = sys.getFileContent(modname + ".lic");
-
-        if (lic) this.log(lic); 
-
         var t = sys.getFileContent(modname + ".js");
-        if (t)
-        {
-            var s = sys.eval(t);
-            this.module[modname] = s;    
-            s.loadModule();
-        }
-        this.log("Loaded module " + modname);
+
+        var s = sys.eval(t);
+
+
+        this.module[modname] = s;    
+
+	if (!s.require) s.require = [];
+	s.submodules = [];
+
+	for (var x in s.require)
+	{
+	    this.log("MODULE_MANAGER: Module \"" + modname+ "\" requires module \""+s.require[x]+"\"");
+	    this.loadModule(s.require[x]);
+	    this.module[s.require[x]].submodules.push(modname);
+	}
+
+	if ("loadModule" in s)
+	{
+	    s.loadModule();
+	    this.log("MODULE_MANAGER: Initializing \"" + modname + "\"");
+	}
+	
+        this.log("MODULE_MANAGER: Completed loading \"" + modname + "\"");
     }
     catch (e) 
     {
-        var e = new Error ("Error loading module "+ modname+ ": "+ e);
+        var e = new Error ("Error loading module "+ modname+ ": "+ e + " on line " + e.lineNumber);
         this.module[modname] = e;
         throw e;
     }  
@@ -84,7 +72,16 @@ loadModule: function (modname)
 ,
 unloadModule: function (modname)
 {
-    return; // unimplemented but does it need to be? not yet anyway
+    if ( !(modname in this.modules[modname].submodules) ) return;
+
+    for (var x in this.modules[modname].submodules)
+    {
+	this.unloadModule(this.modules[modname].submodules[x]);
+    }
+    
+    this.modules[modname].unloadModule();
+    
+    return;
 }
 ,
 loadScript: function () 
@@ -139,7 +136,10 @@ loadScript: function ()
 ,
 unloadScript: function ()
 {
-
+    for (var x in this.modules)
+    {
+	this.unloadModule(x);
+    }
 }
 
 })

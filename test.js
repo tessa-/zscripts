@@ -1,4 +1,6 @@
 ({
+    require: ["sched"]
+    ,
     loadModule: function ()
     {
         

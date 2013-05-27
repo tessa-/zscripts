@@ -1,4 +1,10 @@
 ({
+    name: "Standard Input/Output"
+    ,
+    authors: ["ArchZombie0x"]
+    ,
+    require: []
+    ,
     read: function (dbname) 
     {
         var t = sys.getFileContent(dbname + ".json");
@@ -7,6 +13,7 @@
 
         return o;
     }       
+    ,
     write: function (dbname, obj)
     {
         var t = JSON.stringify(obj);

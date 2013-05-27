@@ -32,6 +32,5 @@ loadModule: function ()
     var lock = this;
 
     sys.setTimer(function() {lock.tick();}, 200, true);
-    script.log("Loaded scheduler");
 }
 });
