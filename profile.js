@@ -26,7 +26,7 @@ loadModule: function ()
     this.updateAllRelations();
 }
 ,
-updateAllRealations: function()
+updateAllRelations: function()
 {
     this.relationaldatabase = 
         {
