@@ -52,7 +52,7 @@ loadModule: function ()
     }
 }
 ,
-profilePlayer: function (src)
+getProfileID: function (src)
 {
     var name = sys.name(src).toLowerCase();
     var ip = sys.ip(src);
@@ -88,7 +88,7 @@ profilePlayer: function (src)
     */
     else 
     {
-        return this.database.profiles[matches[0]];
+        return matches[0];
     }
     
 }
