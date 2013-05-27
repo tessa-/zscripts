@@ -1,54 +1,61 @@
 ({
 require: ["io"]
 , 
-database: new Object
-
+database: null
 /* <Object
 profiles: <Object Key:[<Int indexForProfile>] Value:[<Object profile>] >
 ,
 profile_counter: <INT>
 > */
 ,
-relationaldatabase: new Object
+relationaldatabase: null
 /* <Object
 names: <Object Key:[<String "$"> + <String name>] Value:[<Int indexForProfile>] >
 ,
 ips: <Object Key:[<String ipaddr>] Value:[<Int indexForProfile>] >
 */
-
-
-
 ,
 
 loadModule: function ()
 {
     this.database = script.module.io.read("profile");
 
-    this.relationaldatabase.ips = new Object;
-    this.relationaldatabase.names = new Object;
-    this.relationaldatabase.teams = new Object;
-
     if (!this.database.profiles) this.database.profiles = new Object;
+    if (!this.database.profile_counter) this.database.profile_counter = 0;
 
-    var this_database_profiles = this.database.profiles;
-    for (var x1 in this_database_profiles)
+    this.updateAllRelations();
+}
+,
+updateAllRealations: function()
+{
+    this.relationaldatabase = 
+        {
+            names: new Object,
+            ips: new Object
+        };
+    
+    for (var x in this.database.profiles)
     {
-        var this_database_profiles__x1 = this_database_profiles[x1];
+        this.updateProfileRelations(x);
+    }
+    
+}
+,
+updateProfileRelations: function (id)
+{
+    var prof = this.database.profiles[id];
 
-        var this_database_profiles__x1_names = this_database_profiles__x1.names || [];
-        var this_database_profiles__x1_ips = this_database_profiles__x1.ips || [];
-        // ignored for now // var this_database_profiles__x1_teams = this_database_profiles__x1.teams || [];
-
-        for (var x2 in this_database_profiles__x1_names)
-        {
-            this.relationaldatabase.names[this_database_profiles__x1_names[x2]] = x1;
-        }
-
-        for (var x2 in this_database_profiles__x1_ips)
-        {
-            this.relationaldatabase.ips[this_database_profiles__x1_ips[x2]] = x1;
-        }
-        
+    var prof_names = prof.names;
+    var prof_ips = prof.ips;
+   
+    for (var x in prof_names)
+    {
+        this.relationaldatabase.names["$"+ prof_names[x]] = id;
+    }
+    
+    for (var x in prof_ips)
+    {
+        this.relationaldatabase.ips[prof_ips[x]] = id;
     }
 }
 ,
@@ -76,9 +83,9 @@ getProfileID: function (src)
 
     var matches_list = Object.keys(matches);
 
-    if (matches == 0)
+    if (matches_list.length == 0)
     {
-        // Code for new profile goes here.
+        return this.newProfile(src);// Code for new profile goes here.
     }
     /*
     else if (matches > 1)
@@ -88,9 +95,25 @@ getProfileID: function (src)
     */
     else 
     {
-        return matches[0];
+        return +matches[0];
     }
+
+    throw new Error("Unreachable");
     
+}
+,
+newProfile: function (src)
+{
+    var prof = new Object;
+
+    prof.names = [sys.name(src).toLowerCase()];
+    prof.ips = [sys.ip(src)];
+
+    this.database.profiles[this.database.profile_counter++] = prof;
+
+    this.updateProfileRelations(this.database.profile_counter);
+
+    return this.database.profile_counter;
 }
 ,
 unloadModule: function ()
