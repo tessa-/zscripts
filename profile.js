@@ -22,7 +22,7 @@ ips: <Object Key:[<String ipaddr>] Value:[<Int indexForProfile>] >
 
 loadModule: function ()
 {
-    this.database = scirpt.module.io.read("profile");
+    this.database = script.module.io.read("profile");
 
     this.relationaldatabase.ips = new Object;
     this.relationaldatabase.names = new Object;
