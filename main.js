@@ -74,13 +74,11 @@ unloadModule: function (modname)
 {
     if ( !(modname in this.module) ) return;
 
-    script.broadcast("actually unloading module " + modname);
-
     for (var x in this.module[modname].submodules)
     {
 	    this.unloadModule(this.module[modname].submodules[x]);
     }
-    script.broadcast( "mod " +modname+ ("unloadModule" in this.module[modname]) );
+    
     if ("unloadModule" in this.module[modname]) this.module[modname].unloadModule();
 
     delete this.module[modname];
@@ -140,13 +138,10 @@ loadScript: function ()
 ,
 unloadScript: function ()
 {
-    script.broadcast("unloadScript");
-
     var mods = Object.keys (this.module);
 
     for (var x in mods)
     {
-        script.broadcast("call unload module: " + mods[x]);
 	    this.unloadModule(mods[x]);
     }
 }
