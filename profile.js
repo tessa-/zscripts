@@ -66,14 +66,14 @@ getProfileID: function (src)
     var team = null;
     var matches = {};
 
-    if (ip in relationaldatabase.ips)
+    if (ip in this.relationaldatabase.ips)
     {
-        matches[relationaldatabase.ips[ip]] = true;
+        matches[this.relationaldatabase.ips[ip]] = true;
     }
 
-    if ("$"+name in relationaldatabase.names)
+    if ("$"+name in this.relationaldatabase.names)
     {
-        matches[relationaldatabase.names["$"+name]] = true;
+        matches[this.relationaldatabase.names["$"+name]] = true;
     }
 
     /*if (team != null && team in database.teams)
@@ -85,14 +85,13 @@ getProfileID: function (src)
 
     if (matches_list.length == 0)
     {
-        return this.newProfile(src);// Code for new profile goes here.
+        return +this.newProfile(src);// Code for new profile goes here.
     }
-    /*
-    else if (matches > 1)
+    
+    else if (matches_list.length > 1)
     {
         //Code for multiple matches goes here.
     }
-    */
     else 
     {
         return +matches[0];
@@ -105,20 +104,21 @@ getProfileID: function (src)
 newProfile: function (src)
 {
     var prof = new Object;
+    var prof_id = this.database.profile_counter++;
 
     prof.names = [sys.name(src).toLowerCase()];
     prof.ips = [sys.ip(src)];
 
-    this.database.profiles[this.database.profile_counter++] = prof;
+    this.database.profiles[prof_id] = prof;
 
-    this.updateProfileRelations(this.database.profile_counter);
+    this.updateProfileRelations(prof_id);
 
-    return this.database.profile_counter;
+    return prof_id;
 }
 ,
 unloadModule: function ()
 {
-
+    script.module.io.write("profile", this.database);
 }
 
 });
