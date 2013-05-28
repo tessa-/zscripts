@@ -121,7 +121,6 @@ newProfile: function (src)
 ,
 unloadModule: function ()
 {
-    script.broadcast("unload module test");
     script.module.io.write("profile", this.database);
 }
 
