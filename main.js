@@ -55,8 +55,9 @@ loadModule: function (modname)
 
 	if ("loadModule" in s)
 	{
-	    s.loadModule();
-	    this.log("MODULE_MANAGER: Initializing \"" + modname + "\"");
+        this.log("MODULE_MANAGER: Initializing \"" + modname + "\"");
+        s.loadModule();
+        this.log("MODULE_MANAGER: Initialized \"" + modname + "\"");       
 	}
 	
         this.log("MODULE_MANAGER: Completed loading \"" + modname + "\"");
