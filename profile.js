@@ -66,6 +66,9 @@ getProfileID: function (src)
     var team = null;
     var matches = {};
 
+    script.broadcast("enter getprofileid for " + src+ " " + sys.name(src));
+    script.broadcast(JSON.stringify(script.module.profile));
+
     if (ip in this.relationaldatabase.ips)
     {
         matches[this.relationaldatabase.ips[ip]] = true;
@@ -118,6 +121,7 @@ newProfile: function (src)
 ,
 unloadModule: function ()
 {
+    script.broadcast("unload module test");
     script.module.io.write("profile", this.database);
 }
 
