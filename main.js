@@ -4,7 +4,7 @@
 // This is the module loader.
 
 ({
-    git config: null
+    config: null
     ,
     module_info: {}
     ,
