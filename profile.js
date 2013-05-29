@@ -66,9 +66,6 @@ getProfileID: function (src)
     var team = null;
     var matches = {};
 
-    script.broadcast("enter getprofileid for " + src+ " " + sys.name(src));
-    script.broadcast(JSON.stringify(script.module.profile));
-
     if (ip in this.relationaldatabase.ips)
     {
         matches[this.relationaldatabase.ips[ip]] = true;
@@ -90,14 +87,14 @@ getProfileID: function (src)
     {
         return +this.newProfile(src);// Code for new profile goes here.
     }
-    
+    /*
     else if (matches_list.length > 1)
     {
         //Code for multiple matches goes here.
-    }
+    }*/
     else 
     {
-        return +matches[0];
+        return parseInt(matches_list[0]); // lazy bum code
     }
 
     throw new Error("Unreachable");
