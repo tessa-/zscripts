@@ -134,17 +134,17 @@
             list[x1].mergedInto = list[0];
             for (var x2 in this.database.profiles[list[x1]].names)
             {
-                if (origin.names.indexOf( this.database.profiles[list[x1]].names[x2]) == -1)
+                if (origin.names.indexOf(this.database.profiles[list[x1]].names[x2]) == -1)
                 {
-                    origin.names.push( this.database.profiles[list[x1]].names[x2]);
+                    origin.names.push(this.database.profiles[list[x1]].names[x2]);
                 }
             }
 
             for (var x2 in list[x1].ips)
             {
-                if (origin.ips.indexOf( this.database.profile[list[x1]].ips[x2]) == -1)
+                if (origin.ips.indexOf(this.database.profile[list[x1]].ips[x2]) == -1)
                 {
-                    origin.ips.push.( this.database.profile[list[x1]].ips[x2]);
+                    origin.ips.push(this.database.profile[list[x1]].ips[x2]);
                 }                
             }
             
