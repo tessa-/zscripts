@@ -131,7 +131,7 @@
         {
             for (var x2 in list[x1].names)
             {
-                if (origin.names.indexOf(list[x1].names[x2] == -1))
+                if (origin.names.indexOf(list[x1].names[x2]) == -1)
                 {
                     origin.names.push(list[x1].names[x2]);
                 }
@@ -139,7 +139,7 @@
 
             for (var x2 in list[x1].ips)
             {
-                if (origin.ips.indexOf(list[x1].ips[x2] == -1))
+                if (origin.ips.indexOf(list[x1].ips[x2]) == -1)
                 {
                     origin.ips.push(list[x1].ips[x2]);
                 }                
