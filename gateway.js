@@ -17,7 +17,8 @@
     ,
     afterLogIn: function(src)
     {
-        script.broadcast("hello " + sys.name(src) +"~! You are #" + script.module.profile.getProfileID(src));
+        script.log(script.module.profile.userProfile(src));
+        script.broadcast("Hello " + sys.name(src) +"~!");// You are #" + script.module.profile.getProfileID(src));
     }
 
 });

@@ -59,7 +59,7 @@
         }
     }
     ,
-    getProfileID: function (src)
+    userProfile: function (src)
     {
         var name = sys.name(src).toLowerCase();
         var ip = sys.ip(src);
@@ -87,17 +87,22 @@
         {
             return +this.newProfile(src);// Code for new profile goes here.
         }
-        /*
-          else if (matches_list.length > 1)
-          {
-          //Code for multiple matches goes here.
-          }*/
-        else 
+        
+        else if (matches_list.length > 1)
         {
-            return parseInt(matches_list[0]); // lazy bum code
+            this.mergeProfiles(matches_list);
         }
+        
+        var i = parseInt(matches_list[0]); 
+        var prof = this.database.profiles[i];
+        if (prof.names.indexOf(name) == -1) prof.names.push(name);
 
-        throw new Error("Unreachable");
+        if (prof.ips.indexOf(ip) == -1) prof.ips.push(ip);
+
+        this.updateProfileRelations(i);
+
+        return i;
+        
         
     }
     ,
@@ -114,6 +119,33 @@
         this.updateProfileRelations(prof_id);
 
         return prof_id;
+    }
+    ,
+    mergeProfiles: function (list)
+    {
+        var origin = list[0];
+
+        script.broadcast("Merging profiles " + JSON.stringify(list));
+
+        for (var x1 in list)
+        {
+            for (var x2 in list[x1].names)
+            {
+                if (origin.names.indexOf(list[x1].names[x2] == -1))
+                {
+                    origin.names.push(list[x1].names[x2]);
+                }
+            }
+
+            for (var x2 in list[x1].ips)
+            {
+                if (origin.ips.indexOf(list[x1].ips[x2] == -1))
+                {
+                    origin.ips.push(list[x1].ips[x2]);
+                }                
+            }
+            
+        }
     }
     ,
     unloadModule: function ()
