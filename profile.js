@@ -123,25 +123,28 @@
     ,
     mergeProfiles: function (list)
     {
-        var origin = list[0];
+        var origin = this.database.profiles[list[0]];
 
         script.broadcast("Merging profiles " + JSON.stringify(list));
 
         for (var x1 in list)
         {
-            for (var x2 in list[x1].names)
+            if (x1 == 0) continue;
+
+            list[x1].mergedInto = list[0];
+            for (var x2 in this.database.profiles[list[x1]].names)
             {
-                if (origin.names.indexOf(list[x1].names[x2]) == -1)
+                if (origin.names.indexOf( this.database.profiles[list[x1]].names[x2]) == -1)
                 {
-                    origin.names.push(list[x1].names[x2]);
+                    origin.names.push( this.database.profiles[list[x1]].names[x2]);
                 }
             }
 
             for (var x2 in list[x1].ips)
             {
-                if (origin.ips.indexOf(list[x1].ips[x2]) == -1)
+                if (origin.ips.indexOf( this.database.profile[list[x1]].ips[x2]) == -1)
                 {
-                    origin.ips.push(list[x1].ips[x2]);
+                    origin.ips.push.( this.database.profile[list[x1]].ips[x2]);
                 }                
             }
             
