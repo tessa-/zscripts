@@ -43,23 +43,23 @@
 
             this.module[modname] = s;    
 
-	        if (!s.require) s.require = [];
-	        s.submodules = [];
+            if (!s.require) s.require = [];
+            s.submodules = [];
 
-	        for (var x in s.require)
-	        {
-	            this.log("MODULE_MANAGER: Module \"" + modname+ "\" requires module \""+s.require[x]+"\"");
-	            this.loadModule(s.require[x]);
-	            this.module[s.require[x]].submodules.push(modname);
-	        }
+            for (var x in s.require)
+            {
+                this.log("MODULE_MANAGER: Module \"" + modname+ "\" requires module \""+s.require[x]+"\"");
+                this.loadModule(s.require[x]);
+                this.module[s.require[x]].submodules.push(modname);
+            }
 
-	        if ("loadModule" in s)
-	        {
+            if ("loadModule" in s)
+            {
                 this.log("MODULE_MANAGER: Initializing \"" + modname + "\"");
                 s.loadModule();
                 this.log("MODULE_MANAGER: Initialized \"" + modname + "\"");       
-	        }
-	        
+            }
+            
             this.log("MODULE_MANAGER: Completed loading \"" + modname + "\"");
         }
         catch (e) 
@@ -77,7 +77,7 @@
 
         for (var x in this.module[modname].submodules)
         {
-	        this.unloadModule(this.module[modname].submodules[x]);
+            this.unloadModule(this.module[modname].submodules[x]);
         }
         
         if ("unloadModule" in this.module[modname]) this.module[modname].unloadModule();
@@ -143,7 +143,7 @@
 
         for (var x in mods)
         {
-	        this.unloadModule(mods[x]);
+            this.unloadModule(mods[x]);
         }
     }
 
