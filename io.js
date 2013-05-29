@@ -17,7 +17,7 @@
     write: function (dbname, obj)
     {
         var t = JSON.stringify(obj);
-
+        
         sys.writeToFile(dbname + ".json", t);
     }
 });
