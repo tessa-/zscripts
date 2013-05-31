@@ -1,9 +1,4 @@
 ({
-    loadModule: function()
-    {
-        throw new Error("REMOVED");// script.registerHandler("escapeHTML", this.escapeHTML);
-    }
-    ,
     escapeHTML: function (html)
     {
         return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -13,4 +8,4 @@
     {
         return html.replace(/<\/[A-Za-z]+\s*\/?>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
     }
-})
+});

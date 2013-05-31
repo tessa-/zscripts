@@ -59,7 +59,7 @@
         }
     }
     ,
-    userProfile: function (src)
+    profileOpenCreate: function(src)
     {
         var name = sys.name(src).toLowerCase();
         var ip = sys.ip(src);
@@ -75,11 +75,6 @@
         {
             matches[this.relationaldatabase.names["$"+name]] = true;
         }
-
-        /*if (team != null && team in database.teams)
-          {
-          null;
-          }*/
 
         var matches_list = Object.keys(matches);
 
@@ -102,8 +97,20 @@
         this.updateProfileRelations(i);
 
         return i;
-        
-        
+    }
+    ,
+    profileByIP: function (ip)
+    {
+        if (ip in this.relationaldatabase.ips) return this.relationaldatabase.ips[ip];
+
+        else return -1;
+    }
+    ,
+    profileByName: function (name)
+    {
+        if (name in this.relationaldatabase.names) return this.relationaldatabase.names[name];
+
+        else return -1;        
     }
     ,
     newProfile: function (src)
