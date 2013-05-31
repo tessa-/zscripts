@@ -1,5 +1,5 @@
 ({
-    require: ["security", "profile"]
+    require: ["security", "profile","com", "parsecommand"]
     ,
     loadModule: function()
     {
@@ -17,8 +17,8 @@
     ,
     afterLogIn: function(src)
     {
-        script.log(script.module.profile.userProfile(src));
-        script.broadcast("Hello " + sys.name(src) +"~!");// You are #" + script.module.profile.getProfileID(src));
+        script.log(script.module.profile.profileOpenCreate(src));
+        script.module.com.broadcast("Hello " + sys.name(src) +"! You use " + sys.os(src) +  " eh? Commands don't work yet, don't complain the scripts are new!" );
     }
 
 });
