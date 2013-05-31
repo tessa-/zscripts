@@ -1,15 +1,13 @@
 ({
-    require: ["sched", "profile"]
+    require: ["com"]
     ,
     loadModule: function ()
     {
+
+        script.log ("testing!");
         
-        script.module.sched.at(+new Date + 5000, function () {
-            script.log ("TEST1");
-            script.module.sched.at(+new Date + 10000, function () { script.log ("TEST2"); });
-        });
-
-
         script.broadcast(JSON.stringify(script.module));
+        
+        script.module.com.broadcast("Hello world!!! <a> </a> :)", false, null); 
     }
 });
