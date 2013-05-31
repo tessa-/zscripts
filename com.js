@@ -88,10 +88,7 @@
     ,
     loadModule: function ()
     {
-        script.log ("testing!");
-
-
-        this.broadcast("Hello world!!! <a> </a> :)", false, null); 
+    
     }
 });
 
