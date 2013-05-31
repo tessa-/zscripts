@@ -122,7 +122,7 @@
 
             this.config = o;
 
-            if (!this.config.modules) this.config.modules = new Array;
+            if (!this.config.modules) this.config.modules = ["default"];
 
             for (var x in this.config.modules)
             {
