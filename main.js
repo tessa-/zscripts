@@ -50,6 +50,14 @@
             {
                 this.log("MODULE_MANAGER: Module \"" + modname+ "\" requires module \""+s.require[x]+"\"");
                 this.loadModule(s.require[x]);
+                
+                if ( !(s.require[x] in this.module) || this.module[s.require[x]] instanceof Error) 
+                {
+                    this.log("MODULE_MANAGER: This module is not available. Can't load.");
+                    this.module[modname] = new Error("Unmet dependencies.");
+                    return;
+                }
+
                 this.module[s.require[x]].submodules.push(modname);
             }
 
