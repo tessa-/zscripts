@@ -6,7 +6,7 @@
        
     }
     ,
-    parseCommand: function(text)
+    parseCommand: function (text)
     {
         var cmd = new Object;
         
@@ -27,7 +27,6 @@
         
         function cl_next (text, flagname, flagvaluestr, flagvalueraw, argvaluestr, argvalueraw)
         {
-            script.module.com.broadcast(JSON.stringify([text, flagname, flagvaluestr, flagvalueraw/* arguments[4], arguments[5]*/]));
             if (flagname)
             {
                 cmd.flags[flagname] = ((flagvaluestr ? flagvaluestr: void 0) || flagvalueraw).replace(/\\(.)/g, "$1");

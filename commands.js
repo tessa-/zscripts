@@ -20,7 +20,7 @@
     ,
     issueCommand: function(src, text, chan)
     {
-        var cmd = script.module.parsecommand.parseCommand(cmd);
+        var cmd = script.module.parsecommand.parseCommand(text);
         
         if (!(cmd.name in this.commands_db))
         {
