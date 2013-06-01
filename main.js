@@ -20,11 +20,28 @@
         sys.sendAll("SCRIPT: " + msg);
     }
     ,
-    registerHandler: function (handlername, registrant)
+    registerHandler: function (handlername, registrant, thisobj)
     {
-        if (handlername in script) throw new Error("Handlername already occupied");
+	if (handlername in script)
+	{
+	    if ( !(script[handlername].callbacks)) throw new Error("Not registerable");
+	    
+	    script[handlername].callbacks.push({func:registrant, "_this":thisobj});
+	    return;
+	}
+	var f = function () 
+	{
+	    for (var x in f.callbacks)
+	    {
+		f.callbacks[x].func.apply(f.callbacks[x]._this, arguments);
+	    }
+	}
 
-        script[handlername] = registrant;
+        script[handlername] = f;
+	script[handlername].callbacks = [{func: registrant, "_this":thisobj}];
+
+	return;
+
     }
     ,
     loadModule: function (modname) 
