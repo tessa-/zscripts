@@ -13,7 +13,7 @@
         ,
         code: function(src, cmd)
         {
-            script.com.broadcast("<font color=pink><timestamp />" + script.module.text.escapeHTML(sys.name(src) + " " + cmd.input)); 
+            sys.sendHtmlAll("<font color=pink><timestamp />" + script.module.text.escapeHTML(sys.name(src) + " " + cmd.input) + "</font>"); 
         }
     }
 });

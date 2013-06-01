@@ -3,7 +3,7 @@
     ,
     message: function (usrs, msg, type, html, chans, servercode )
     {
-        var fmt_msg = script.module.theme.format(this.escapeHtmlBool(msg, html));
+        var fmt_msg = script.module.theme.formatAs(this.escapeHtmlBool(msg, html), type || 0);
         if (!chans)
         {
             for (var x in usrs)
@@ -32,6 +32,8 @@
     broadcast: function (msg, type, html, chans)
     {
         var usrs = new Object;
+
+        var fmt_msg = script.module.theme.formatAs(this.escapeHtmlBool(msg, html), type || 0);
         if (chans)
         {
             for (var x1 in chans)
@@ -56,7 +58,7 @@
         {
             for (var x in usrs)
             {
-                sys.sendHtmlMessage(usrs[x], script.module.theme.scriptHTML + this.escapeHtmlBool(msg, html));
+                sys.sendHtmlMessage(usrs[x], fmt_msg );
             }
         }
         else
@@ -65,7 +67,7 @@
             {
                 for (var x2 in chans)
                 {
-                    sys.sendHtmlMessage(usrs[x1], script.module.theme.scriptHTML + this.escapeHtmlBool(msg, html), chans[x2]);
+                    sys.sendHtmlMessage(usrs[x1], fmt_msg, chans[x2]);
                 }
             }
         }

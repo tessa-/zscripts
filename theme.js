@@ -11,17 +11,21 @@
     ,
     WARN: 1
     ,
-    ERROR: 2
+    CRITICAL: 2
     ,
-    CRITICAL: 3
-    ,
-    formatAs: function (text)
+    formatAs: function (text, type)
     {
-        return [
-            function(){ return this.scriptHTML + text; }, 
-            function(){ return this.warnHTML + text; }, 
-            function(){ return this.warnHTML + "<font color=red><b>" + text+ "</b></font>"; }, 
-        ][type](); 
+        switch (type)
+        {
+            case 0:
+            return this.scriptHTML + text; 
+
+            case 1:
+            return this.warnHTML + text;
+
+            case 2:
+            return this.warnHTML + "<font color=red><b>" + text + "</b></font>";
+        }
     }
     
       
