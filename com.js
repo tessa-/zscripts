@@ -1,13 +1,14 @@
 ({
     require: ["text", "theme"]
     ,
-    message: function (usrs, msg, html, chans, servercode)
+    message: function (usrs, msg, type, html, chans, servercode )
     {
+        var fmt_msg = script.module.theme.format(this.escapeHtmlBool(msg, html));
         if (!chans)
         {
             for (var x in usrs)
             {
-                sys.sendHtmlMessage(usrs[x], script.module.theme.scriptHTML + this.escapeHtmlBool(msg, html));
+                sys.sendHtmlMessage(usrs[x], fmt_msg );
             }
         }
         else
@@ -16,7 +17,7 @@
             {
                 for (var x2 in chans)
                 {
-                    sys.sendHtmlMessage(usrs[x1], script.module.theme.scriptHTML + this.escapeHtmlBool(msg, html), chans[x2]);
+                    sys.sendHtmlMessage(usrs[x1], fmt_msg, chans[x2]);
                 }
             }
         }
@@ -36,7 +37,7 @@
             for (var x1 in chans)
             {
                 throw new Error("unimplemented");
-//                var t = sys.getPlayerIdsByChannel()
+                //  var t = sys.getPlayerIdsByChannel()
             }
         }
         else
@@ -69,7 +70,7 @@
             }
         }
 
-       print((chans ?"C":"G") + " " + script.module.theme.scriptText + this.stripHtmlBool(msg, html));
+       print((chans ?"C":"") + " " + script.module.theme.scriptText + this.stripHtmlBool(msg, html));
     }  
     ,
     escapeHtmlBool: function (text, bool)
