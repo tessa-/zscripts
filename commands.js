@@ -1,7 +1,7 @@
 ({
     require: ["com", "theme"]
     ,
-    commands_db: new Object;
+    commands_db: new Object
     ,
     loadModule: function ()
     {
@@ -10,14 +10,14 @@
     ,
     registerCommand: function (name, command)
     {
-        if (name in commands_db)
+        if (name in this.commands_db)
         {
             script.log("WARN: Overwriting command " +name);
         }
         
-        commands_db[name] = command;
+        this.commands_db[name] = command;
     }
-
+    ,
     issueCommand: function(src, text, chan)
     {
         var cmd = script.module.parsecommand.parseCommand(cmd);

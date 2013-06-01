@@ -1,4 +1,6 @@
 ({
+    require: ["commands"]
+    ,
     beforeNewMessage: function (src, msg, chan)
     {
         if (msg.length == 0) return;
