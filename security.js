@@ -1,5 +1,5 @@
 ({
-    require: ["sched", "io"]
+    require: ["sched", "io", "profile"]
     ,
     database: null
     ,
@@ -19,10 +19,55 @@
         script.module.io.write("security", this.database);
     }
     ,
+    userIsMuted: function (uid)
+    {
+	if (sys.auth(uid) == 3) return false;
+
+        var p = script.module.profile.profileOpenCreate(uid);
+
+        if (p in this.database.mutes) return true;
+
+	return false;
+    } 
+    ,
+    setMute: function (profid, time, reason)
+    {
+	this.database.mutes[profid] = 
+	    {
+		reason: reason
+		,
+		expires: (time ? time + +new Date : false)
+	    }
+    }
+    ,
+    removeMute: function (profid)
+    {
+	delete this.database.mutes[profid];
+    }
+    ,
     userIsBanned: function (uid)
     {
-        var p = script.module.profile.userProfile(uid);
+	if (sys.auth(uid) == 3) return false;
+
+        var p = script.module.profile.profileOpenCreate(uid);
 
         if (p in this.database.bans) return true;
+
+	return false;
     } 
+    ,
+    setBan: function (profid, time, reason)
+    {
+	this.database.bans[profid] = 
+	    {
+		reason: reason
+		,
+		expires: (time ? time + +new Date : false)
+	    }
+    }  
+    ,
+    removeBan: function(profid)
+    {
+	delete this.database.bans[profid];
+    }
 })
