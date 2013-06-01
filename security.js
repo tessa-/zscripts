@@ -19,16 +19,22 @@
         script.module.io.write("security", this.database);
     }
     ,
-    userIsMuted: function (uid)
+    profIsMuted: function (p)
     {
-	if (sys.auth(uid) == 3) return false;
-
-        var p = script.module.profile.profileOpenCreate(uid);
-
         if (p in this.database.mutes) return true;
 
 	return false;
     } 
+    ,
+    getBan: function (profid)
+    {
+	return this.database.bans[profid];
+    }
+    ,
+    getMute: function (profid)
+    {
+	return this.database.mutes[profid];
+    }
     ,
     setMute: function (profid, time, reason)
     {
@@ -45,12 +51,8 @@
 	delete this.database.mutes[profid];
     }
     ,
-    userIsBanned: function (uid)
+    profIsBanned: function (p)
     {
-	if (sys.auth(uid) == 3) return false;
-
-        var p = script.module.profile.profileOpenCreate(uid);
-
         if (p in this.database.bans) return true;
 
 	return false;
