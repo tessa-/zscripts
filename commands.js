@@ -1,5 +1,5 @@
 ({
-    require: ["com"]
+    require: ["com", "theme"]
     ,
     commands_db: new Object;
     ,
@@ -18,11 +18,26 @@
         commands_db[name] = command;
     }
 
-    issueCommand: function(src, cmd)
+    issueCommand: function(src, text, chan)
     {
-        if (!(cmd in commands_db))
+        var cmd = script.module.parsecommand.parseCommand(cmd);
+        
+        if (!(cmd.name in this.commands_db))
         {
-            script.module;
+            if (sys.auth(src) != 3 && !(this.commands_dp.perm(src)))
+            {
+                script.module.com.message([src], "Permission denied.", script.module.theme.WARN);
+            }
+            try 
+            {
+                this.commands_db[cmd.name].code(src, cmd);
+            }
+            catch (e)
+            {
+                script.module.com.message([src], e.toString() + ":" + e.lineNumber, script.module.theme.CRITICAL)
+                script.module.com.broadcast("Script Error, check logs.", script.module.theme.CRITICAL);
+                script.log(e.toString() + ":" + e.lineNumber);
+            }
         }
     }
     

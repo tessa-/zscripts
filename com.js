@@ -29,7 +29,7 @@
         
     }
     ,
-    broadcast: function (msg, html, chans)
+    broadcast: function (msg, type, html, chans)
     {
         var usrs = new Object;
         if (chans)
