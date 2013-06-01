@@ -1,7 +1,7 @@
 ({
     require: ["commands"]
     ,
-    beforeNewMessage: function (src, msg, chan)
+    beforeChatMessage: function (src, msg, chan)
     {
         if (msg.length == 0) return;
 
@@ -15,6 +15,6 @@
     ,
     loadModule: function ()
     {
-        script.registerHandler("beforeNewMessage", this.beforeNewMessage);
+        script.registerHandler("beforeChatMessage", this.beforeNewMessage);
     }
 });
