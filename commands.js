@@ -1,5 +1,5 @@
 ({
-    require: ["com", "theme"]
+    require: ["com", "theme", "parsecommand"]
     ,
     commands_db: new Object
     ,

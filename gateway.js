@@ -1,5 +1,5 @@
 ({
-    require: ["security", "profile", "com", "parsecommand"]
+    require: ["security", "profile", "com"]
     ,
     loadModule: function()
     {
