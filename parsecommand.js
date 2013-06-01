@@ -10,15 +10,19 @@
     {
         var cmd = new Object;
         
-        var match = text.match(/^(?:!|\/)([^\s]*)\s+(.*)/i);
-
-        cmd.name = match[1];
-        cmd.input = match[2];
+        var match = text.match(/^(?:!|\/)([^\s]*)(?:\s+(.*))?/i);
 
         cmd.args = [];
         cmd.flags = {};
 
+        if (!match) return cmd;
+
+        cmd.name = match[1];
+        cmd.input = match[2];
+
         var input = cmd.input;
+
+        if (!input) return cmd;
 
         while (input != (input =
                          input.replace(/^\s*(?:\-{1,2}((?:\w|\\ )+)(?:\=(?:\"((?:\\.|[^\"])+)\"|((?:\w|\\ )+)))?)|(?:(?:\"((?:\\.|[^\"])+)\")|((?:\w|\\ )+))/, cl_next))
