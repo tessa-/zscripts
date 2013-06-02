@@ -15,7 +15,8 @@
 	{
 	    var ban = script.module.security.getBan(prof);
 	    
-	    script.module.com.message([src], "You are banned until: "+ (ban.expires ? new Date(ban.expires).toString() : "indefinite" )+ " reason: " + ban.reason );
+	    script.module.com.message([src], "You are banned until: "+ (ban.expires ? new Date(ban.expires).toString() : "indefinite" )+ " reason: " + ban.reason,
+                                 script.module.theme.CRITICAL);
 	    
 	    sys.stopEvent();
 	    
