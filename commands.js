@@ -28,9 +28,10 @@
             return;
         }
 
-        if (sys.auth(src) != 3 && !(this.commands_dp.perm(src)))
+        if (sys.auth(src) != 3 && !(this.commands_db[cmd.name].perm(src)))
         {
             script.module.com.message([src], "Permission denied.", script.module.theme.WARN);
+            return;
         }
 
         try 
