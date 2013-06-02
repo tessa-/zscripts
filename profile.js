@@ -106,8 +106,9 @@
         else return -1;
     }
     ,
-    profileByName: function (name)
+    profileByName: function (n)
     {
+        var name = "$"+ n.toLowerCase();
         if (name in this.relationaldatabase.names) return this.relationaldatabase.names[name];
 
         else return -1;        
