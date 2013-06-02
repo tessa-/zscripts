@@ -33,11 +33,20 @@
         {
             if (flagname)
             {
-                cmd.flags[flagname] = ((flagvaluestr ? flagvaluestr: void 0) || flagvalueraw).replace(/\\(.)/g, "$1");
+                var f = ((flagvaluestr ? flagvaluestr: void 0) || flagvalueraw);
+
+                if (f)
+                {
+                    cmd.flags[flagname] = f.replace(/\\(.)/g, "$1");
+                }
+                else 
+                {
+                    cmd.flags[flagname] = true;
+                }
             }
             else 
             {
-                cmd.args.push(((argvaluestr? argvaluestr: void 0) || argvalueraw).replace(/\\(.)/g, "$1"));
+                cmd.args.push(((argvaluestr === undefined ? argvaluestr: void 0) || argvalueraw).replace(/\\(.)/g, "$1"));
             }
             return "";
         }
