@@ -23,53 +23,43 @@
     {
         if (p in this.database.mutes) return true;
 
-	return false;
+        return false;
     } 
     ,
     getBan: function (profid)
     {
-	return this.database.bans[profid];
+        return this.database.bans[profid];
     }
     ,
     getMute: function (profid)
     {
-	return this.database.mutes[profid];
+        return this.database.mutes[profid];
     }
     ,
-    setMute: function (profid, time, reason)
+    setMute: function (profid, mute)
     {
-	this.database.mutes[profid] = 
-	    {
-		reason: reason
-		,
-		expires: (time ? time + +new Date : false)
-	    }
+        this.database.mutes[profid] = mute
     }
     ,
     removeMute: function (profid)
     {
-	delete this.database.mutes[profid];
+        delete this.database.mutes[profid];
     }
     ,
     profIsBanned: function (p)
     {
         if (p in this.database.bans) return true;
 
-	return false;
+        return false;
     } 
     ,
-    setBan: function (profid, time, reason)
+    setBan: function (profid, ban)
     {
-	this.database.bans[profid] = 
-	    {
-		reason: reason
-		,
-		expires: (time ? time + +new Date : false)
-	    }
+        this.database.bans[profid] = ban;
     }  
     ,
     removeBan: function(profid)
     {
-	delete this.database.bans[profid];
+        delete this.database.bans[profid];
     }
 })

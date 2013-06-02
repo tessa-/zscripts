@@ -22,25 +22,25 @@
     ,
     registerHandler: function (handlername, registrant, thisobj)
     {
-	if (handlername in script)
-	{
-	    if ( !(script[handlername].callbacks)) throw new Error("Not registerable");
-	    
-	    script[handlername].callbacks.push({func:registrant, "_this":thisobj});
-	    return;
-	}
-	var f = function () 
-	{
-	    for (var x in f.callbacks)
-	    {
-		f.callbacks[x].func.apply(f.callbacks[x]._this, arguments);
-	    }
-	}
+        if (handlername in script)
+        {
+            if ( !(script[handlername].callbacks)) throw new Error("Not registerable");
+            
+            script[handlername].callbacks.push({func:registrant, "_this":thisobj});
+            return;
+        }
+        var f = function () 
+        {
+            for (var x in f.callbacks)
+            {
+                f.callbacks[x].func.apply(f.callbacks[x]._this, arguments);
+            }
+        }
 
         script[handlername] = f;
-	script[handlername].callbacks = [{func: registrant, "_this":thisobj}];
+        script[handlername].callbacks = [{func: registrant, "_this":thisobj}];
 
-	return;
+        return;
 
     }
     ,

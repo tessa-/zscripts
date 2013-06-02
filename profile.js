@@ -41,6 +41,11 @@
         
     }
     ,
+    lastName: function (prof)
+    {
+        return this.database.profiles[prof].lastName;
+    }
+    ,
     updateProfileRelations: function (id)
     {
         var prof = this.database.profiles[id];
@@ -61,7 +66,8 @@
     ,
     profileOpenCreate: function(src)
     {
-        var name = sys.name(src).toLowerCase();
+        var sys_name$src = sys.name(src);
+        var name = sys_name$src.toLowerCase();
         var ip = sys.ip(src);
         var team = null;
         var matches = {};
@@ -90,10 +96,12 @@
         
         var i = parseInt(matches_list[0]); 
         var prof = this.database.profiles[i];
+        
         if (prof.names.indexOf(name) == -1) prof.names.push(name);
 
         if (prof.ips.indexOf(ip) == -1) prof.ips.push(ip);
 
+        prof.lastName = sys_name$src;
         this.updateProfileRelations(i);
 
         return i;
