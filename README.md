@@ -12,19 +12,4 @@ Suggested install method:
   Then doing git pull will update the scripts on your server. :)
 
 ========
-
-Script heiarchy (roughly speaking, multiple inheritance is used):
-
-script
-  com
-  text
-  profile
-    security
-      chat
-        commands <- commandparser
-          me_command
-          ban_command
-          kick_command
-      greeting
-      gateway
       
