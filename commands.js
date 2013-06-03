@@ -8,27 +8,32 @@
         
     }
     ,
-    registerCommand: function (name, command)
+    registerCommand: function (name, object)
     {
         if (name in this.commands_db)
         {
             script.log("WARN: Overwriting command " +name);
         }
         
-        this.commands_db[name] = command;
+        this.commands_db[name] = object[name];
+        this.commands_db[name].bind = object;
+
+        return;
     }
     ,
     issueCommand: function(src, text, chan)
     {
         var cmd = this.parsecommand.parseCommand(text);
+
+        var cmd_obj = this.commands_db[cmd.name];
         
-        if (!(cmd.name in this.commands_db))
+        if (!cmd_obj)
         {
             this.com.message([src], "Command does not exist.", this.theme.WARN);
             return;
         }
 
-        if (sys.auth(src) != 3 && !(this.commands_db[cmd.name].perm(src)))
+        if (sys.auth(src) != 3 && !(cmd_obj.perm.apply(cmd_obj.bind, [src])))
         {
             this.com.message([src], "Permission denied.", this.theme.WARN);
             return;
@@ -36,7 +41,7 @@
 
         try 
         {
-            this.commands_db[cmd.name].code(src, cmd);
+            cmd_obj.code.apply(cmd_obj.bind, [src, cmd])
         }
         catch (e)
         {

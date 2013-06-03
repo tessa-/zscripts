@@ -15,6 +15,6 @@
     ,
     loadModule: function ()
     {
-        script.registerHandler("beforeChatMessage", this.beforeChatMessage);
+        script.registerHandler("beforeChatMessage", this);
     }
 });

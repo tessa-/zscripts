@@ -1,5 +1,5 @@
 ({
-    require: ["commands", "security"]
+    require: ["commands", "security", "profile", "text", "com", "theme"]
     ,
     unbanall:
     {
@@ -159,9 +159,9 @@
     ,
     loadModule: function()
     {
-        this.commands.registerCommand("ban", this.ban);
-        this.commands.registerCommand("unban", this.unban);
-        this.commands.registerCommand("banlist", this.banlist);
-        this.commands.registerCommand("unbanall", this.unbanall);
+        this.commands.registerCommand("ban", this);
+        this.commands.registerCommand("unban", this);
+        this.commands.registerCommand("banlist", this);
+        this.commands.registerCommand("unbanall", this);
     }
 });

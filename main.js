@@ -20,25 +20,26 @@
         sys.sendAll("SCRIPT: " + msg);
     }
     ,
-    registerHandler: function (handlername, registrant, thisobj)
+    registerHandler: function (handlername, object)
     {
         if (handlername in script)
         {
             if ( !(script[handlername].callbacks)) throw new Error("Not registerable");
             
-            script[handlername].callbacks.push({func:registrant, "_this":thisobj});
+            script[handlername].callbacks.push({func:object[handlername], bind:object});
             return;
         }
+
         var f = function () 
         {
             for (var x in f.callbacks)
             {
-                f.callbacks[x].func.apply(f.callbacks[x]._this, arguments);
+                f.callbacks[x].func.apply(f.callbacks[x].bind, arguments);
             }
         }
 
         script[handlername] = f;
-        script[handlername].callbacks = [{func: registrant, "_this":thisobj}];
+        script[handlername].callbacks = [{func:object[handlername], bind:object}];
 
         return;
 

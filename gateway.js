@@ -3,10 +3,7 @@
     ,
     loadModule: function()
     {
-        var _this = this;
-
-        script.log(Object.keys(this));
-        script.registerHandler("beforeLogIn", function (src) { _this.beforeLogIn(src) } );
+        script.registerHandler("beforeLogIn", this );
     }
     ,
     beforeLogIn: function(src)

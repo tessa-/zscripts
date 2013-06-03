@@ -3,7 +3,7 @@
     ,
     loadModule: function ()
     {
-        script.registerHandler("afterLogIn", this.afterLogIn, this);
+        script.registerHandler("afterLogIn", this);
     }
     ,
     afterLogIn: function (src, msg, chan)
