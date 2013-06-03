@@ -3,6 +3,13 @@
     ,
     unbanall:
     {
+        desc: "Bans users from the server"
+        ,
+        options:
+        {
+            reason: "Specifies a reason for the ban"
+        }
+        ,
         perm: function (src) 
         {
             return sys.auth(src) >= 2;

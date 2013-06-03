@@ -14,9 +14,17 @@
         {
             script.log("WARN: Overwriting command " +name);
         }
-        
+
+        var comnd = object[name];
+        comnd.bind = object;
+        comnd.name = name;
+
         this.commands_db[name] = object[name];
-        this.commands_db[name].bind = object;
+
+        if (comnd.aliases) for (var x in comnd.aliases)
+        {
+            this.commands_db[comnd.aliases[x]] = comnd;
+        }
 
         return;
     }
