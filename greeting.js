@@ -9,7 +9,7 @@
     afterLogIn: function (src, msg, chan)
     {
         var os = sys.os(src);
-        this.com.broadcast("Hello " + sys.name(src) +"! Commands don't work yet, don't complain the scripts are new!" );
+        this.com.broadcast("Hello " + sys.name(src) +"! These are new scripts with many WIP features! Not everything works yet." );
         
         if (os === "linux")
         {
