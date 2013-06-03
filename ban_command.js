@@ -12,13 +12,13 @@
         {
             if (!(cmd.flags.force || cmd.flags.f))
             {
-                script.module.com.message([src], "Are you sure you want to do this? Retry with --force | -f option.", script.module.theme.WARN);
+                this.com.message([src], "Are you sure you want to do this? Retry with --force | -f option.", this.theme.WARN);
                 return;
             }
             
-            script.module.com.broadcast(sys.name(src) + " has cleared the server's ban list.");
+            this.com.broadcast(sys.name(src) + " has cleared the server's ban list.");
 
-            script.module.security.database.bans = new Object;
+            this.security.database.bans = new Object;
         }
     }
     ,
@@ -39,7 +39,7 @@
 
             for (var x in cmd.args)
             {
-                var prof = script.module.profile.profileByName(cmd.args[x]);
+                var prof = this.profile.profileByName(cmd.args[x]);
                 
                 if (prof != -1) 
                 {
@@ -48,7 +48,7 @@
                 }
                 else
                 {
-                    script.module.com.message([src], "Could not find user: " + cmd.args[x], script.module.theme.WARN);
+                    this.com.message([src], "Could not find user: " + cmd.args[x], this.theme.WARN);
 
                     if (!(cmd.flags.force || cmd.flags.f)) return;
                 }
@@ -56,15 +56,15 @@
 
             if (profbanlst.length == 0)
             {
-                script.module.com.message([src], "No users to unban", script.module.theme.WARN);
+                this.com.message([src], "No users to unban", this.theme.WARN);
                 return;
             }
 
-            script.module.com.broadcast(sys.name(src) + " has unbanned " + profnamelst.join(", ") + ".");
+            this.com.broadcast(sys.name(src) + " has unbanned " + profnamelst.join(", ") + ".");
 
             for (var x in profbanlst)
             {
-                script.module.security.removeBan(profbanlst[x]);
+                this.security.removeBan(profbanlst[x]);
             }
         }
     }
@@ -85,7 +85,7 @@
 
             for (var x in cmd.args)
             {
-                var prof = script.module.profile.profileByName(cmd.args[x]);
+                var prof = this.profile.profileByName(cmd.args[x]);
                 
                 if (prof != -1) 
                 {
@@ -94,7 +94,7 @@
                 }
                 else
                 {
-                    script.module.com.message([src], "Could not find user: " + cmd.args[x], script.module.theme.WARN);
+                    this.com.message([src], "Could not find user: " + cmd.args[x], this.theme.WARN);
 
                     if (!(cmd.flags.force || cmd.flags.f)) return;
                 }
@@ -102,14 +102,14 @@
 
             if (profbanlst.length == 0)
             {
-                script.module.com.message([src], "No users to ban", script.module.theme.WARN);
+                this.com.message([src], "No users to ban", this.theme.WARN);
                 return;
             }
 
-            script.module.com.broadcast(
+            this.com.broadcast(
                 sys.name(src) + " has banned " + profnamelst.join(", ") +
                     (typeof cmd.flags.reason == "string" ? ". Reason: \"" + cmd.flags.reason + "\"" : "."),
-                script.module.theme.CRITICAL
+                this.theme.CRITICAL
             );
 
             for (var x in profbanlst)
@@ -122,7 +122,7 @@
                 };
 
                 script.log(o.author);
-                script.module.security.setBan(profbanlst[x], o);
+                this.security.setBan(profbanlst[x], o);
             }  
         }
     }
@@ -137,8 +137,8 @@
         code: function (src)
         {
             var bans = [];
-            var profile = script.module.profile;
-            var banlist = script.module.security.database.bans;
+            var profile = this.profile;
+            var banlist = this.security.database.bans;
 
             script.log(JSON.stringify(banlist));
 
@@ -147,21 +147,21 @@
                 bans.push (
                     "<b>Ban on user:</b> " + profile.lastName(x) + "<br/>" +
                         "Expires: <i>" + (banlist[x].expires ? new Date(banlist[x].expires).toString():"indefinite") + "</i><br/>" +
-                        "Reason: <i>" + script.module.text.escapeHTML(banlist[x].reason || "") + "</i><br/>" +
-                        "Author: <i>"+ script.module.text.escapeHTML(banlist[x].author || "") + "</i>"
+                        "Reason: <i>" + this.text.escapeHTML(banlist[x].reason || "") + "</i><br/>" +
+                        "Author: <i>"+ this.text.escapeHTML(banlist[x].author || "") + "</i>"
                 );                                        
             }
 
-            script.module.com.message([src], bans.join("<br/>"), script.module.theme.INFO, true);
+            this.com.message([src], bans.join("<br/>"), this.theme.INFO, true);
         }
 
     }
     ,
     loadModule: function()
     {
-        script.module.commands.registerCommand("ban", this.ban);
-        script.module.commands.registerCommand("unban", this.unban);
-        script.module.commands.registerCommand("banlist", this.banlist);
-        script.module.commands.registerCommand("unbanall", this.unbanall);
+        this.commands.registerCommand("ban", this.ban);
+        this.commands.registerCommand("unban", this.unban);
+        this.commands.registerCommand("banlist", this.banlist);
+        this.commands.registerCommand("unbanall", this.unbanall);
     }
 });

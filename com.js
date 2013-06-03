@@ -3,7 +3,7 @@
     ,
     message: function (usrs, msg, type, html, chans, servercode )
     {
-        var fmt_msg = script.module.theme.formatAs(this.escapeHtmlBool(msg, html), type || 0);
+        var fmt_msg = this.theme.formatAs(this.escapeHtmlBool(msg, html), type || 0);
         if (!chans)
         {
             for (var x in usrs)
@@ -24,7 +24,7 @@
 
         if (typeof servercode == "undefined") return;
 
-        print(servercode + " " + script.module.theme.scriptText + this.stripHtmlBool(msg, html));
+        print(servercode + " " + this.theme.scriptText + this.stripHtmlBool(msg, html));
 
         
     }
@@ -33,7 +33,7 @@
     {
         var usrs = new Object;
 
-        var fmt_msg = script.module.theme.formatAs(this.escapeHtmlBool(msg, html), type || 0);
+        var fmt_msg = this.theme.formatAs(this.escapeHtmlBool(msg, html), type || 0);
         if (chans)
         {
             for (var x1 in chans)
@@ -72,19 +72,19 @@
             }
         }
 
-       print((chans ?"C":"") + " " + script.module.theme.scriptText + this.stripHtmlBool(msg, html));
+       print((chans ?"C":"") + " " + this.theme.scriptText + this.stripHtmlBool(msg, html));
     }  
     ,
     escapeHtmlBool: function (text, bool)
     {
         if (bool) return text;
         
-        return script.module.text.escapeHTML(text);
+        return this.text.escapeHTML(text);
     }
     ,
     stripHtmlBool: function (text, bool)
     {
-        if (bool) return script.module.text.stripHTML(text);
+        if (bool) return this.text.stripHTML(text);
         
         return text;
     }

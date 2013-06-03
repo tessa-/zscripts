@@ -8,7 +8,7 @@
     ,
     module_info: {}
     ,
-    module: {}
+    modules: {}
     ,
     log: function (msg)
     {
@@ -46,7 +46,7 @@
     ,
     loadModule: function (modname) 
     {
-        if (this.module[modname]) return;
+        if (this.modules[modname]) return;
 
 
         this.log ("MODULE_MANAGER: Loading \"" + modname + "\"");
@@ -58,7 +58,7 @@
             var s = sys.eval(t);
 
 
-            this.module[modname] = s;    
+            this.modules[modname] = s;    
 
             if (!s.require) s.require = [];
             s.submodules = [];
@@ -68,15 +68,15 @@
                 this.log("MODULE_MANAGER: Module \"" + modname+ "\" requires module \""+s.require[x]+"\"");
                 this.loadModule(s.require[x]);
                 
-                if ( !(s.require[x] in this.module) || this.module[s.require[x]] instanceof Error) 
+                if ( !(s.require[x] in this.modules) || this.modules[s.require[x]] instanceof Error) 
                 {
                     this.log("MODULE_MANAGER: This module is not available. Can't load.");
-                    this.module[modname] = new Error("Unmet dependencies.");
+                    this.modules[modname] = new Error("Unmet dependencies.");
                     return;
                 }
 
-                this.module[s.require[x]].submodules.push(modname);
-                this.module[s.require[x]] = this.module[s.require[x]];
+                this.modules[s.require[x]].submodules.push(modname);
+                this.modules[modname][s.require[x]] = this.modules[s.require[x]];
             }
 
             if ("loadModule" in s)
@@ -91,7 +91,7 @@
         catch (e) 
         {
             var e = new Error ("Error loading module "+ modname+ ": "+ e + " on line " + e.lineNumber);
-            this.module[modname] = e;
+            this.modules[modname] = e;
             throw e;
         }  
 
@@ -99,16 +99,16 @@
     ,
     unloadModule: function (modname)
     {
-        if ( !(modname in this.module) ) return;
+        if ( !(modname in this.modules) ) return;
 
-        for (var x in this.module[modname].submodules)
+        for (var x in this.modules[modname].submodules)
         {
-            this.unloadModule(this.module[modname].submodules[x]);
+            this.unloadModule(this.modules[modname].submodules[x]);
         }
         
-        if ("unloadModule" in this.module[modname]) this.module[modname].unloadModule();
+        if ("unloadModule" in this.modules[modname]) this.modules[modname].unloadModule();
 
-        delete this.module[modname];
+        delete this.modules[modname];
         
         return;
     }
@@ -165,7 +165,7 @@
     ,
     unloadScript: function ()
     {
-        var mods = Object.keys (this.module);
+        var mods = Object.keys (this.modules);
 
         for (var x in mods)
         {

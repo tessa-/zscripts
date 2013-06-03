@@ -20,17 +20,17 @@
     ,
     issueCommand: function(src, text, chan)
     {
-        var cmd = script.module.parsecommand.parseCommand(text);
+        var cmd = this.parsecommand.parseCommand(text);
         
         if (!(cmd.name in this.commands_db))
         {
-            script.module.com.message([src], "Command does not exist.", script.module.theme.WARN);
+            this.com.message([src], "Command does not exist.", this.theme.WARN);
             return;
         }
 
         if (sys.auth(src) != 3 && !(this.commands_db[cmd.name].perm(src)))
         {
-            script.module.com.message([src], "Permission denied.", script.module.theme.WARN);
+            this.com.message([src], "Permission denied.", this.theme.WARN);
             return;
         }
 
@@ -40,8 +40,8 @@
         }
         catch (e)
         {
-            script.module.com.message([src], e.toString() + ":" + e.lineNumber, script.module.theme.CRITICAL)
-            script.module.com.broadcast("Script Error, check logs.", script.module.theme.CRITICAL);
+            this.com.message([src], e.toString() + ":" + e.lineNumber, this.theme.CRITICAL)
+            this.com.broadcast("Script Error, check logs.", this.theme.CRITICAL);
             script.log(e.toString() + ":" + e.lineNumber);
         }
     }

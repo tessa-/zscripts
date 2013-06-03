@@ -8,7 +8,7 @@
         if (msg[0] == "/")
         {
             sys.stopEvent();
-            script.module.commands.issueCommand(src, msg, chan);
+            this.commands.issueCommand(src, msg, chan);
             return;
         }
     }

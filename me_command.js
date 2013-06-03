@@ -3,7 +3,7 @@
     ,
     loadModule: function ()
     {
-        script.module.commands.registerCommand("me", this.me);
+        this.commands.registerCommand("me", this.me);
     }
     ,
     "me":
@@ -13,7 +13,7 @@
         ,
         code: function(src, cmd)
         {
-            sys.sendHtmlAll("<font color=pink><timestamp />" + script.module.text.escapeHTML(sys.name(src) + " " + cmd.input) + "</font>"); 
+            sys.sendHtmlAll("<font color=pink><timestamp />" + this.text.escapeHTML(sys.name(src) + " " + cmd.input) + "</font>"); 
         }
     }
 });

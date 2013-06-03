@@ -7,7 +7,7 @@
     ,
     loadModule: function () 
     {
-        this.database = script.module.io.read("security");
+        this.database = this.io.read("security");
 
         if (!this.database.bans) this.database.bans = new Object;
 
@@ -16,7 +16,7 @@
     ,
     unloadModule: function()
     {
-        script.module.io.write("security", this.database);
+        this.io.write("security", this.database);
     }
     ,
     profIsMuted: function (p)

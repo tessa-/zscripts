@@ -18,7 +18,7 @@
 
     loadModule: function ()
     {
-        this.database = script.module.io.read("profile");
+        this.database = this.io.read("profile");
 
         if (!this.database.profiles) this.database.profiles = new Object;
         if (!this.database.profile_counter) this.database.profile_counter = 0;
@@ -169,7 +169,7 @@
     ,
     unloadModule: function ()
     {
-        script.module.io.write("profile", this.database);
+        this.io.write("profile", this.database);
     }
 
 });
