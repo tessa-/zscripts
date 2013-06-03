@@ -1,5 +1,7 @@
 #zscripts
+
 ========
+
 Copyright 2013 "ArchZombie0x" Ryan P. Nicholl <archzombielord@gmail.com>
 
 License for all the files is the GNU AGPLv3+
@@ -11,10 +13,18 @@ Suggested install method:
 
 ========
 
-- [x] Modloader-basic
-- [x] Profiles-basic
-- [ ] Communication Module
-  - [x] Send Message
-  - [ ] Broadcast Message
-- [x] Theme Module
-- [ ] Gateway Module
+Script heiarchy (roughly speaking, multiple inheritance is used):
+
+script
+  com
+  text
+  profile
+    security
+      chat
+        commands <- commandparser
+          me_command
+          ban_command
+          kick_command
+      greeting
+      gateway
+      
