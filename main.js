@@ -76,6 +76,7 @@
                 }
 
                 this.module[s.require[x]].submodules.push(modname);
+                this.module[s.require[x]] = this.module[s.require[x]];
             }
 
             if ("loadModule" in s)
