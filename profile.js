@@ -102,7 +102,7 @@
         var sys_name$src = sys.name(src);
         var sys_ip$src = sys.ip(src);
 
-        if (prof.names.indexOf(sys_name$src) == -1) prof.names.push(sys_name$src);
+        if (prof.names.indexOf(sys_name$src.toLowerCase()) == -1) prof.names.push(sys_name$src.toLowerCase());
 
         if (prof.ips.indexOf(sys_ip$src) == -1) prof.ips.push(sys_ip$src);
 
