@@ -64,6 +64,26 @@
         }
     }
     ,
+    profileMatches: function (src)
+    {
+        var sys_name$src = sys.name(src);
+        var name = sys_name$src.toLowerCase();
+        var ip = sys.ip(src);
+        var matches = new Object;
+
+        if (ip in this.relationaldatabase.ips)
+        {
+            matches[this.relationaldatabase.ips[ip]] = null;
+        }
+
+        if ("$"+name in this.relationaldatabase.names)
+        {
+            matches[this.relationaldatabase.names["$"+name]] = null;
+        }
+
+        return Object.keys(matches);
+    }
+    ,
     profileOpenCreate: function(src)
     {
         var sys_name$src = sys.name(src);
