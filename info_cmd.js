@@ -35,8 +35,8 @@
 
                 m.push("Last used name: " + this.text.escapeHTML(""+this.profile.database.profiles[profids[x]].lastName));
                 m.push("Last used IP: " + this.text.escapeHTML(""+this.profile.database.profiles[profids[x]].lastIP));
-                m.push("Names: " + this.text.escapeHTML(JSON.stringify(this.profile.profileNames(profids[x]))));
-                m.push("IP Addresses: " + this.text.escapeHTML(JSON.stringify(this.profile.profileIPs(profids[x]))));                       
+                m.push("Names: " + this.text.escapeHTML(""+JSON.stringify(this.profile.profileNames(profids[x]))));
+                m.push("IP Addresses: " + this.text.escapeHTML(""+JSON.stringify(this.profile.profileIPs(profids[x]))));                       
             }
 
             this.com.message([src], "<br/>"+m.join("<br/>"), this.theme.INFO, true);
