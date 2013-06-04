@@ -163,7 +163,7 @@
                 );                                        
             }
 
-            this.com.message([src], bans.join("<br/>"), this.theme.INFO, true);
+            this.com.message([src], "Ban list:<br/>" + bans.join("<br/>"), this.theme.INFO, true);
         }
 
     }
