@@ -3,12 +3,7 @@
     ,
     unbanall:
     {
-        desc: "Bans users from the server"
-        ,
-        options:
-        {
-            reason: "Specifies a reason for the ban"
-        }
+        desc: "Clears the ban list"
         ,
         perm: function (src) 
         {
@@ -17,9 +12,9 @@
         ,
         code: function (src, cmd)
         {
-            if (!(cmd.flags.force || cmd.flags.f))
+            if (!(cmd.flags.force))
             {
-                this.com.message([src], "Are you sure you want to do this? Retry with --force | -f option.", this.theme.WARN);
+                this.com.message([src], "Are you sure you want to do this? Retry with --force option.", this.theme.WARN);
                 return;
             }
             
@@ -31,6 +26,8 @@
     ,
     unban: 
     {
+        desc: "Removes bans from users"
+        ,
         perm: function (src) 
         {
             return sys.auth(src) >= 2;
@@ -78,6 +75,12 @@
     ,
     ban: 
     {
+        desc: "Bans users from the server"
+        ,
+        options:
+        {
+            reason: "Specifies a reason for the ban"
+        }
         perm: function (src) 
         {
             return sys.auth(src) >= 2;
