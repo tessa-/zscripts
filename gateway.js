@@ -1,5 +1,5 @@
 ({
-    require: ["security", "profile", "com"]
+    require: ["security", "profile", "com", "theme"]
     ,
     loadModule: function()
     {
