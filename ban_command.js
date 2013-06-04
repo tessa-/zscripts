@@ -1,5 +1,5 @@
 ({
-    require: ["commands", "security", "profile", "text", "com", "theme"]
+    require: ["commands", "security", "profile", "text", "com", "theme", "time"]
     ,
     unbanall:
     {
@@ -117,24 +117,39 @@
                 return;
             }
 
+            var exp = false;
+            var t = null;
+
+            if (cmd.flags.time)
+            {
+                t = this.time.strToDiff(cmd.flags.time);
+
+                if (t) exp = t + +new Date;
+            }
+
             this.com.broadcast(
-                sys.name(src) + " has banned " + profnamelst.join(", ") +
-                    (typeof cmd.flags.reason == "string" ? ". Reason: \"" + cmd.flags.reason + "\"" : "."),
+                sys.name(src) + " has banned " + profnamelst.join(", ") + "!" +
+                    (typeof cmd.flags.reason == "string" ? " Reason: \"" + cmd.flags.reason + "\"" : "")+
+                    (t ? " Duration: " + this.time.diffToStr(t) + "" : "")
+                ,
                 this.theme.CRITICAL
             );
+
+            
 
             for (var x in profbanlst)
             {
                 script.log("hi");
                 var o =  {
-                    expires: false,
+                    expires: exp,
                     reason: cmd.flags.reason,
                     author: sys.name(src)
                 };
 
                 script.log(o.author);
                 this.security.setBan(profbanlst[x], o);
-            }  
+            } 
+            this.security.checkUsers();
         }
     }
     ,
@@ -150,8 +165,6 @@
             var bans = [];
             var profile = this.profile;
             var banlist = this.security.database.bans;
-
-            script.log(JSON.stringify(banlist));
 
             for (var x in banlist)
             {

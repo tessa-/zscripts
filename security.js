@@ -1,5 +1,5 @@
 ({
-    require: ["sched", "io", "profile"]
+    require: ["sched", "io", "profile", "com"]
     ,
     database: null
     ,
@@ -12,6 +12,36 @@
         if (!this.database.bans) this.database.bans = new Object;
 
         if (!this.database.mutes) this.database.mutes = new Object;
+
+        for (var x in this.database.bans)
+        {
+            var ban = this.database.bans[x];
+            var _this = this;
+            if (ban.expires)
+            {
+                this.sched.at(ban.expires, function () { _this.checkBan(x); });
+            }
+        }
+    }
+    ,
+    checkUsers: function (src)
+    {
+        var uids = sys.playerIds();
+
+        for (var x in uids)
+        {
+            this.checkUser(uids[x]);
+        }
+    }
+    ,
+    checkUser: function (src)
+    {
+        var p = this.profile.profileOpenCreate(src);
+
+        if (sys.auth(src) != 3 && this.profIsBanned(p))
+        {
+            sys.kick(src);
+        }
     }
     ,
     unloadModule: function()
@@ -56,10 +86,28 @@
     setBan: function (profid, ban)
     {
         this.database.bans[profid] = ban;
+        var _this = this;
+        if (ban.expires)
+        {
+            this.sched.at(ban.expires, function () { _this.checkBan(profid); });
+        }
     }  
     ,
     removeBan: function(profid)
     {
         delete this.database.bans[profid];
+    }
+    ,
+    checkBan: function (profid)
+    {
+        var ban = this.database.bans[profid];
+
+        if (!ban) return;
+
+        if (ban.expires && ban.expires <= +new Date)
+        {
+            this.com.broadcast("Ban on " + this.profile.lastName(profid) + " (#: "+profid+") expired.");
+            delete this.database.bans[profid];
+        }
     }
 })

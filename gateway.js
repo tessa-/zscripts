@@ -1,5 +1,5 @@
 ({
-    require: ["security", "profile", "com", "theme"]
+    require: ["security", "profile", "com", "theme", "time"]
     ,
     loadModule: function()
     {
@@ -16,7 +16,11 @@
             
             this.com.message(
                 [src],
-                "You are banned until: "+ (ban.expires ? new Date(ban.expires).toString() : "indefinite" )+ " reason: " + ban.reason,
+                "You are banned until: "+
+                    (ban.expires ? new Date(ban.expires).toString() + " ("+this.time.diffToStr(ban.expires - +new Date)  +" from now)" : "indefinite" )+
+                    " Reason: " + ban.reason +
+                    " Ban Author: " + ban.author
+                ,
                 this.theme.CRITICAL
             );
 
