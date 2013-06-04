@@ -1,14 +1,21 @@
 ({
     timers: []
     ,
+    needsSorting: false
+    ,
     at: function (time, callback)
     {
         this.timers.push({time: time, callback: callback});
+        this.needsSorting = true;
     }
     ,
-    tick: function (callback)
+    step: function (callback)
     {
-        this.timers.sort( function (a, b) { return a.time - b.time } );
+        if (this.needsSorting)
+        {   
+            this.timers.sort( function (a, b) { return a.time - b.time } );
+            this.needsSorting = false;
+        }
 
         var now = +new Date;
 
@@ -29,8 +36,10 @@
     ,
     loadModule: function ()
     {
-        var lock = this;
+        // var lock = this;
 
-        sys.setTimer(function() {lock.tick();}, 200, true);
+        //sys.setTimer(function() {lock.tick();}, 200, true);
+
+        script.registerHandler("step", this);
     }
 });

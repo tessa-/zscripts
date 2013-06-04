@@ -46,9 +46,21 @@
         return this.database.profiles[prof].lastName;
     }
     ,
+    profileNames: function (prof)
+    {
+        return this.database.profiles[prof].names;
+    }
+    ,
+    profileIPs: function (prof)
+    {
+        return this.database.profiles[prof].ips;
+    }
+    ,
     updateProfileRelations: function (id)
     {
         var prof = this.database.profiles[id];
+
+        if (prof.mergedInto) return;
 
         var prof_names = prof.names;
         var prof_ips = prof.ips;
@@ -84,45 +96,45 @@
         return Object.keys(matches);
     }
     ,
-    profileOpenCreate: function(src)
+    profileUpdateInfo: function (profid, src)
     {
+        var prof = this.database.profiles[profid];
         var sys_name$src = sys.name(src);
-        var name = sys_name$src.toLowerCase();
-        var ip = sys.ip(src);
-        var team = null;
-        var matches = {};
+        var sys_ip$src = sys.ip(src);
 
-        if (ip in this.relationaldatabase.ips)
-        {
-            matches[this.relationaldatabase.ips[ip]] = true;
-        }
+        if (prof.names.indexOf(sys_name$src) == -1) prof.names.push(sys_name$src);
 
-        if ("$"+name in this.relationaldatabase.names)
-        {
-            matches[this.relationaldatabase.names["$"+name]] = true;
-        }
-
-        var matches_list = Object.keys(matches);
-
-        if (matches_list.length == 0)
-        {
-            return +this.newProfile(src);// Code for new profile goes here.
-        }
-        
-        else if (matches_list.length > 1)
-        {
-            this.mergeProfiles(matches_list);
-        }
-        
-        var i = parseInt(matches_list[0]); 
-        var prof = this.database.profiles[i];
-        
-        if (prof.names.indexOf(name) == -1) prof.names.push(name);
-
-        if (prof.ips.indexOf(ip) == -1) prof.ips.push(ip);
+        if (prof.ips.indexOf(sys_ip$src) == -1) prof.ips.push(sys_ip$src);
 
         prof.lastName = sys_name$src;
-        this.updateProfileRelations(i);
+        prof.lastIP = sys_ip$src;
+
+        this.updateProfileRelations(profid);
+
+        return;
+    }
+    ,
+    profileOpenCreate: function(src)
+    { 
+
+        var matchesList = this.profileMatches(src);
+
+        if (matchesList.length == 0)
+        {
+            var p = this.newProfile(src);
+            this.profileUpdateInfo(p, src);
+            return p;
+        }
+        
+        else if (matchesList.length > 1)
+        {
+            this.mergeProfiles(matchesList);
+        }
+        
+        var i = parseInt(matchesList[0]); 
+        var prof = this.database.profiles[i];   
+
+        this.profileUpdateInfo(i, src);
 
         return i;
     }
@@ -147,12 +159,9 @@
         var prof = new Object;
         var prof_id = this.database.profile_counter++;
 
-        prof.names = [sys.name(src).toLowerCase()];
-        prof.ips = [sys.ip(src)];
-
+        prof.names = [];
+        prof.ips = [];
         this.database.profiles[prof_id] = prof;
-
-        this.updateProfileRelations(prof_id);
 
         return prof_id;
     }

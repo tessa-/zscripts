@@ -19,6 +19,8 @@
                 "You are banned until: "+ (ban.expires ? new Date(ban.expires).toString() : "indefinite" )+ " reason: " + ban.reason,
                 this.theme.CRITICAL
             );
+
+            script.log("Banned user: " + sys.name(src) + " (IP: " + sys.ip(src) + ") (#: " + prof + ") tried to log in.");
             
             sys.stopEvent();
             
