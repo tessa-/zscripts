@@ -17,9 +17,10 @@
             var profids = [];
             for (var x in cmd.args)
             {
-                var test = this.profile.profileByName(cmd.args[x]) || this.profile.profileByIP(cmd.args[x]);
+                var test = this.profile.profileByName(cmd.args[x]);
+                if (test == -1) test = this.profile.profileByIP(cmd.args[x]);
                 
-                if (!test) 
+                if (test == -1) 
                 {
                     this.com.message([src], "Can't find user " + cmd.args[x], this.theme.WARN);
                     continue;
