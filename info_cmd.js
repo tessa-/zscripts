@@ -28,6 +28,8 @@
                 
                 profids.push(test);
             }
+
+            if (profids.length == 0) return;
             
             var m = [];
             for (var x in profids)
