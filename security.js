@@ -20,7 +20,7 @@
             if (ban.expires)
             {
                 (function(x, _this) {
-                    this.sched.at(ban.expires, function () { _this.checkBan(x); });
+                    _this.sched.at(ban.expires, function () { _this.checkBan(x); });
                 })(x, this);
             }
         }
@@ -32,7 +32,7 @@
             if (mute.expires)
             {
                 (function(x, _this) {
-                    this.sched.at(mute.expires, function () { _this.checkMute(x); });
+                    _this.sched.at(mute.expires, function () { _this.checkMute(x); });
                 })(x, this);
             }
         }
