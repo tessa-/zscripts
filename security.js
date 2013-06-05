@@ -3,8 +3,6 @@
     ,
     database: null
     ,
-    quicksync: {}
-    ,
     loadModule: function () 
     {
         this.database = this.io.read("security");
@@ -13,13 +11,29 @@
 
         if (!this.database.mutes) this.database.mutes = new Object;
 
+        var _this = this;
+
         for (var x in this.database.bans)
         {
             var ban = this.database.bans[x];
-            var _this = this;
+         
             if (ban.expires)
             {
-                this.sched.at(ban.expires, function () { _this.checkBan(x); });
+                (function(x, _this) {
+                    this.sched.at(ban.expires, function () { _this.checkBan(x); });
+                })(x, this);
+            }
+        }
+
+        for (var x in this.database.mutes)
+        {
+            var mute = this.database.mutes[x];
+         
+            if (mute.expires)
+            {
+                (function(x, _this) {
+                    this.sched.at(mute.expires, function () { _this.checkMute(x); });
+                })(x, this);
             }
         }
     }
@@ -56,11 +70,6 @@
         return false;
     } 
     ,
-    getBan: function (profid)
-    {
-        return this.database.bans[profid];
-    }
-    ,
     getMute: function (profid)
     {
         return this.database.mutes[profid];
@@ -68,7 +77,27 @@
     ,
     setMute: function (profid, mute)
     {
-        this.database.mutes[profid] = mute
+        this.database.mutes[profid] = mute;
+
+        var _this = this;
+        if (mute.expires)
+        {
+            this.sched.at(mute.expires, function () { _this.checkMute(profid); });
+        }
+    }
+    ,
+
+    checkMute: function (profid)
+    {
+        var mute = this.database.mutes[profid];
+
+        if (!mute) return;
+
+        if (mute.expires && mute.expires <= +new Date)
+        {
+            this.com.broadcast("Mute on " + this.profile.lastName(profid) + " (#: "+profid+") expired.");
+            delete this.database.mutes[profid];
+        }
     }
     ,
     removeMute: function (profid)
@@ -97,6 +126,11 @@
     {
         delete this.database.bans[profid];
     }
+    ,
+    getBan: function (profid)
+    {
+        return this.database.bans[profid];
+    }  
     ,
     checkBan: function (profid)
     {
