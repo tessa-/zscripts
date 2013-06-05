@@ -7,10 +7,13 @@
 
         if (msg[0] == "/")
         {
+            script.log("" + sys.name(src) + "["+chan+"] " + msg);
             sys.stopEvent();
             this.commands.issueCommand(src, msg, chan);
             return;
         }
+
+        
     }
     ,
     loadModule: function ()
