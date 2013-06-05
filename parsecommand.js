@@ -46,7 +46,7 @@
             }
             else 
             {
-                cmd.args.push(((argvaluestr === undefined ? argvaluestr: void 0) || argvalueraw).replace(/\\(.)/g, "$1"));
+                cmd.args.push(((argvaluestr !== undefined ? argvaluestr: void 0) || argvalueraw).replace(/\\(.)/g, "$1"));
             }
             return "";
         }
