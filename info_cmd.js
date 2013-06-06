@@ -25,6 +25,16 @@
                     this.com.message([src], "Can't find user " + cmd.args[x], this.theme.WARN);
                     continue;
                 }
+                else if (test === undefined || test === "" || test === null)
+                {
+                    this.com.broadcast("ZOMMMG W.T.F.", this.theme.CRITICAL);
+                    script.log(JSON.stringify(this.profile.database));
+                    script.log(JSON.stringify(this.profile.relationaldatabase));
+
+                    script.log(this.profile.profileByName(cmd.args[x]));
+                    script.log(this.profile.profileByIP(cmd.args[x]));
+                    continue;
+                }
                 
                 profids.push(test);
             }
@@ -34,7 +44,13 @@
             var m = [];
             for (var x in profids)
             {
-                m.push("<b>Info about profile #" + this.text.escapeHTML(profids[x]) + ":</b>");
+                try {
+                    m.push("<b>Info about profile #" + this.text.escapeHTML(profids[x]) + ":</b>");
+                } catch (e)
+                {
+                    script.log("ERR" + typeof profids[x]);
+                    script.log("" + profids[x]);
+                }
 
                 m.push("Last used name: " + this.text.escapeHTML(""+this.profile.database.profiles[profids[x]].lastName));
                 m.push("Last used IP: " + this.text.escapeHTML(""+this.profile.database.profiles[profids[x]].lastIP));

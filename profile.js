@@ -8,7 +8,7 @@
        profile_counter: <INT>
        > */
     ,
-    relationaldatabase: null
+    relationaldatabase: new Object
     /* <Object
        names: <Object Key:[<String "$"> + <String name>] Value:[<Int indexForProfile>] >
        ,
@@ -23,7 +23,16 @@
         if (!this.database.profiles) this.database.profiles = new Object;
         if (!this.database.profile_counter) this.database.profile_counter = 0;
 
+        var uids = sys.playerIds();
+        
         this.updateAllRelations();
+        
+        for (var x in uids)
+        {
+            this.profileOpenCreate(uids[x]);
+        }
+
+        
     }
     ,
     updateAllRelations: function()
