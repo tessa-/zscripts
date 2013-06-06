@@ -7,6 +7,13 @@
     ,
     read: function (dbname) 
     {
+        try 
+        {
+            var o = sys.readObject(dbname + ".jsqz");
+            if (o) return o;
+        }
+        catch (e) {};       
+        
         var t = sys.getFileContent(dbname + ".json");
         if (!t) t = "{}";
         var o = JSON.parse(t);
@@ -14,10 +21,8 @@
         return o;
     }       
     ,
-    write: function (dbname, obj)
+    write: function (dbname, obj, fast)
     {
-        var t = JSON.stringify(obj);
-        
-        sys.writeToFile(dbname + ".json", t);
+        sys.writeObject(dbname + ".jsqz", obj, (fast ? 5 : 3));
     }
 });

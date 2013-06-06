@@ -1,9 +1,9 @@
 ({
-    require: ["com", "parsecommand"]
+    require: ["com", "parsecommand", "profile"]
     ,
     loadModule: function ()
     {
-
+        script.log(JSON.stringify(this.profile.database));
         //script.log ("testing!");
         
         //script.broadcast(JSON.stringify(script.module));

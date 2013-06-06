@@ -116,6 +116,13 @@
     ,
     loadScript: function () 
     {
+
+        if (!( sys.readObject && sys.os))
+        {
+            print("Missing required functions.");
+            sys.stopEvent();
+            return;
+        }
         print ("================================================================================");
         print ("Welcome to ArchScript0x!");
         print ("Copyright 2013 Ryan P. Nicholl <archzombielord@gmail.com>");
