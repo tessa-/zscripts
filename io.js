@@ -13,16 +13,24 @@
             if (o) return o;
         }
         catch (e) {};       
-        
+
+        return new Object;
+    }
+    ,
+    readConfig: function (cfgname)
+    {
         var t = sys.getFileContent(dbname + ".json");
         if (!t) t = "{}";
         var o = JSON.parse(t);
-
-        return o;
-    }       
+    }
     ,
-    write: function (dbname, obj, fast)
+    write: function (dbname, obj)
     {
-        sys.writeObject(dbname + ".jsqz", obj, (fast ? 5 : 3));
+        sys.writeObject(dbname + ".jsqz", obj, 5);
+    }
+    ,
+    writeConfig: function (cfgname, val)
+    {
+        sys.writeToFile(cfgname + ".config.json", JSON.stringify(cfgname));
     }
 });
