@@ -15,7 +15,7 @@
         ,
         code: function(src, cmd)
         {
-            sys.sendHtmlAll("<font color=pink><timestamp />" + this.text.escapeHTML(sys.name(src) + " " + cmd.input) + "</font>"); 
+            sys.sendHtmlAll("<font color=blue><timestamp /><i>" + this.text.escapeHTML(sys.name(src) + " " + cmd.input) + "</i></font>"); 
         }
         ,
         bind: this
