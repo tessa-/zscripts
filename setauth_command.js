@@ -1,10 +1,16 @@
 ({
-
+    require: ["commands", "com", "theme"]
+    ,
     setauth:
     {
         aliases: ["auth"]
         ,
         desc: "Set user auth level"
+        ,
+        options:
+        {
+            level: "What level to set the user to"
+        }
         ,
         perm: function (src)
         {
@@ -33,12 +39,37 @@
                 this.com.message([src], "Unknown level", this.theme.WARN);
                 return;
             }
-            
+
             for (var x in cmd.args)
             {
-                if (!);
+                if (! sys.dbIp(cmd.args[x]))
+                {
+                    this.com.message([src], "User unknown", this.theme.WARN);
+                    continue;
+                }
+                if (! sys.dbRegistered(cmd.args[x])) 
+                {
+                    this.com.message([src], "User unregistered", this.theme.WARN);
+                    continue;
+                }
+                var i = sys.id(cmd.args[x]);
+
+                if (i) 
+                {
+                     sys.changeAuth(i, level);
+                }
+                else
+                {
+                    sys.changeDbAuth(cmd.args[x], level);
+                }
+
+                this.com.broadcast(sys.name(src) " set " + cmd.args[x] + " to level " + level, this.theme.INFO);
             }
         }
-       
-        
     }
+    ,
+    loadModule: function()
+    {
+        this.commands.registerCommand("setauth", this);
+    }
+});
