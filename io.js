@@ -7,21 +7,19 @@
     ,
     read: function (dbname) 
     {
-        try 
+        if (sys.exists(dbname+".jsqz")
         {
-            var o = sys.readObject(dbname + ".jsqz");
-            if (o) return o;
-        }
-        catch (e) {};       
+            return sys.readObject(dbname + ".jsqz");
+        }     
 
         return new Object;
     }
     ,
     readConfig: function (cfgname)
     {
-        var t = sys.getFileContent(dbname + ".json");
-        if (!t) t = "{}";
-        var o = JSON.parse(t);
+        if (!sys.exists(dbname + ".json")) return new Object;
+
+        return JSON.parse (sys.read(dbname + ".json"));
     }
     ,
     write: function (dbname, obj)
@@ -31,6 +29,6 @@
     ,
     writeConfig: function (cfgname, val)
     {
-        sys.writeToFile(cfgname + ".config.json", JSON.stringify(cfgname));
+        sys.write(cfgname + ".config.json", JSON.stringify(cfgname));
     }
 });
