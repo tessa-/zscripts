@@ -2,7 +2,7 @@
 // main.js
 
 // This is the module loader.
-
+"use strict";
 ({
     config: null
     ,
