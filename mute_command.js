@@ -80,11 +80,13 @@
         options:
         {
             reason: "Specifies a reason for the mute"
+            ,
+            time: "How long to mute someone for"
         }
         ,
         perm: function (src) 
         {
-            return sys.auth(src) >= 2;
+            return sys.auth(src) >= 1;
         }
         ,
         code: function (src, cmd, chan)

@@ -1,5 +1,7 @@
 ({
-    require: ["commands", "security", "profile", "com", "theme", "time"]
+    require: ["commands", "security", "profile", "com", "theme", "time", "logs"]
+    ,
+    filters: []
     ,
     beforeChatMessage: function (src, msg, chan)
     {
@@ -7,7 +9,7 @@
 
         if (msg[0] == "/")
         {
-            script.log("" + sys.name(src) + "["+chan+"] " + msg);
+            this.logs.logMessage(this.logs.INFO, "" + sys.name(src) + "["+chan+"] " + msg);
             sys.stopEvent();
             this.commands.issueCommand(src, msg, chan);
             return;
@@ -29,11 +31,23 @@
                 this.theme.WARN
             );
             
-            script.log("muted message: " + msg);
+            this.logs.logMessage(this.logs.INFO, "Muted message from "+sys.name(src)+": " + msg);
             sys.stopEvent();
             
             return;
         }
+
+        var m = msg;
+
+        for (var x in this.filters)
+        {
+            m = this.filters[x](src, msg, chan);
+
+            if (!m) break;
+        }
+
+        if (m) sys.sendHtmlAll("<timestamp /><b>" +sys.name(src) + ":</b> " + m, chan);
+        sys.stopEvent();
         
     }
     ,

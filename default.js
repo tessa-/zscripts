@@ -1,3 +1,3 @@
 ({
-    require: ["gateway"]
+    require: ["gateway", "chat", "greeting", "common_commands", "reputation"]
 });

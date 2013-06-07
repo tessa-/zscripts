@@ -51,10 +51,15 @@
 
 
         this.log ("MODULE_MANAGER: Loading \"" + modname + "\"");
-
         try
         {
-            var t = sys.getFileContent(modname + ".js");
+            try {
+                var t = sys.read(modname + ".js");
+            } 
+            catch (e)
+            {
+                throw new Error("Couldn't read module: "+ modname+".js: " + e);
+            }
 
             var s = sys.eval(t);
 
@@ -91,7 +96,7 @@
         }
         catch (e) 
         {
-            var e = new Error ("Error loading module "+ modname+ ": "+ e + " on line " + e.lineNumber);
+            var e = new Error ( "In " + e.fileName +":"+ e.lineNumber + ": Error loading module "+ modname+ ": "+ e );
             this.modules[modname] = e;
             throw e;
         }  

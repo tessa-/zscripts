@@ -63,7 +63,7 @@
                     sys.changeDbAuth(cmd.args[x], level);
                 }
 
-                this.com.broadcast(sys.name(src) " set " + cmd.args[x] + " to level " + level, this.theme.INFO);
+                this.com.broadcast(sys.name(src) + " set " + cmd.args[x] + " to level " + level, this.theme.INFO);
             }
         }
     }
