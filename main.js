@@ -117,12 +117,15 @@
     loadScript: function () 
     {
 
-        if (!( sys.readObject && sys.os))
+        if (!( sys.readObject && sys.os && sys.enableStrict))
         {
             print("Missing required functions.");
             sys.stopEvent();
             return;
         }
+
+        sys.enableStrict();
+
         print ("================================================================================");
         print ("Welcome to ArchScript0x!");
         print ("Copyright 2013 Ryan P. Nicholl <archzombielord@gmail.com>");
