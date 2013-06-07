@@ -7,7 +7,7 @@
     ,
     read: function (dbname) 
     {
-        if (sys.exists(dbname+".jsqz")
+        if (sys.exists(dbname+".jsqz"))
         {
             return sys.readObject(dbname + ".jsqz");
         }     
