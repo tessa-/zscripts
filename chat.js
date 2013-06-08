@@ -1,5 +1,5 @@
 ({
-    require: ["commands", "security", "profile", "com", "theme", "time", "logs"]
+    require: ["commands", "security", "profile", "com", "theme", "time", "logs", "text"]
     ,
     filters: []
     ,
@@ -46,7 +46,7 @@
             if (!m) break;
         }
 
-        if (m) this.com.broadcast("<timestamp /><b>" +sys.name(src) + ":</b> " + m, -1, true, [chan]);
+        if (m) this.com.broadcast("<timestamp /><b>" +sys.name(src) + ":</b> " + this.text.escapeHTML(m), -1, true, [chan]);
         sys.stopEvent();
         
     }
