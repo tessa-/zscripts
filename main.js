@@ -107,8 +107,11 @@
     {
         if ( !(modname in this.modules) ) return;
 
+        this.log("MODULE_MANAGER: Unloading \"" + modname + "\"");
+
         for (var x in this.modules[modname].submodules)
         {
+            this.log("MODULE_MANAGER: Submodule \"" + this.modules[modname].submodules[x] + "\"");
             this.unloadModule(this.modules[modname].submodules[x]);
         }
         

@@ -15,6 +15,11 @@
 
         for (var x in this.database.bans)
         {
+            var b = this.profile.trace(x);
+            if (b != x)
+            {
+                this.database.bans[b] = this.database.bans[b] || this.database.bans[x];
+            }
             var ban = this.database.bans[x];
          
             if (ban.expires)
@@ -28,6 +33,11 @@
         for (var x in this.database.mutes)
         {
             var mute = this.database.mutes[x];
+            var b = this.profile.trace(x);
+            if (b != x)
+            {
+                this.database.mutes[b] = this.database.mutes[b] || this.database.mutes[x];
+            }
          
             if (mute.expires)
             {

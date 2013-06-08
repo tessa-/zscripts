@@ -35,26 +35,36 @@
         this.io.write("reputation", this.database);
     }
     ,
+    updateReputation: function (src)
+    {
+        var now = +new Date;
+        var p = this.profile.profileOpenCreate(src);
+        
+        if (!this.database.users[p]) this.database.users[p] = 0;
+        
+        if (!this.times[p]) this.times[p] = now;
+        else 
+        {           
+            var diff = now - this.times[p];
+            var minutes =  ~~(diff / 1000 / 60);
+            this.database.users[p] += minutes;
+
+            this.times[p] = now;
+        }
+        
+
+    }
+    ,
     afterLogIn: function (src)
     {
-
-        var p = this.profile.profileOpenCreate(src);
-        this.times[p] = +new Date;
-
-        if (!this.database.users[p]) this.database.users[p] = 0;
+        this.updateReputation(src);        
     }
     ,
     beforeLogOut: function (src)
     {
         var p = this.profile.profileOpenCreate(src);
-       
-        var diff = +new Date - (this.times[p] || +new Date);
-
-        var minutes =  ~~(diff / 1000 / 60);
-
-        if (!this.database.users[p]) this.database.users[p] = 0;
-
-        this.database.users[p] += minutes;
+        this.updateReputation(src);
+        delete this.times[p];
     }
 });
 

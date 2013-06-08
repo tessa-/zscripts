@@ -1,5 +1,5 @@
 ({
-    require: ["io"]
+    require: ["io", "logs"]
     , 
     database: null
     /* <Object
@@ -175,17 +175,31 @@
         return prof_id;
     }
     ,
+    trace: function (prof)
+    {
+        var p = this.database.profiles[prof];
+
+        var idx = prof;
+        while (p.mergedInto)
+        {
+            idx = p.mergedInto;
+            p = this.database.profiles[p.mergedInto];
+        }
+
+        return idx;
+    }
+    ,
     mergeProfiles: function (list)
     {
         var origin = this.database.profiles[list[0]];
 
-        script.broadcast("Merging profiles " + JSON.stringify(list));
+        this.logs.logMessage(this.logs.WARN, "Merging profiles " + JSON.stringify(list));
 
         for (var x1 in list)
         {
             if (x1 == 0) continue;
 
-            list[x1].mergedInto = list[0];
+            this.database.profiles[list[x1]].mergedInto = list[0];
             for (var x2 in this.database.profiles[list[x1]].names)
             {
                 if (origin.names.indexOf(this.database.profiles[list[x1]].names[x2]) == -1)
@@ -194,11 +208,11 @@
                 }
             }
 
-            for (var x2 in list[x1].ips)
+            for (var x2 in this.database.profiles[list[x1]].ips)
             {
-                if (origin.ips.indexOf(this.database.profile[list[x1]].ips[x2]) == -1)
+                if (origin.ips.indexOf(this.database.profiles[list[x1]].ips[x2]) == -1)
                 {
-                    origin.ips.push(this.database.profile[list[x1]].ips[x2]);
+                    origin.ips.push(this.database.profiles[list[x1]].ips[x2]);
                 }                
             }
             
