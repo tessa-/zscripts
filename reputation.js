@@ -25,14 +25,14 @@
     ,
     unloadModule: function()
     {
-        this.io.write("reputation", this.database);
-
         var u = sys.playerIds();
 
         for (var x in u)
         {
             this.beforeLogOut(u[x]);
         }
+
+        this.io.write("reputation", this.database);
     }
     ,
     afterLogIn: function (src)
@@ -50,7 +50,7 @@
        
         var diff = +new Date - (this.times[p] || +new Date);
 
-        var minutes = (diff / 1000 / 60) | 0;
+        var minutes =  ~~(diff / 1000 / 60);
 
         if (!this.database.users[p]) this.database.users[p] = 0;
 

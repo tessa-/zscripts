@@ -159,7 +159,7 @@
     {
         perm: function (src)
         {
-            return sys.auth(src) >= 2;
+            return true;
         }
         ,
         code: function (src)

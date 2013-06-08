@@ -1,5 +1,5 @@
 ({
-    require: ["security", "profile", "com", "theme", "time"]
+    require: ["security", "profile", "com", "theme", "time", "logs"]
     ,
     loadModule: function()
     {
@@ -24,7 +24,7 @@
                 this.theme.CRITICAL
             );
 
-            script.log("Banned user: " + sys.name(src) + " (IP: " + sys.ip(src) + ") (#: " + prof + ") tried to log in.");
+            this.logs.logMessage(this.logs.WARN, "Banned user: " + sys.name(src) + " (IP: " + sys.ip(src) + ") (#: " + prof + ") tried to log in.");
             
             sys.stopEvent();
             
