@@ -80,6 +80,8 @@
         options:
         {
             reason: "Specifies a reason for the ban"
+            ,
+            time: "Duration of ban"
         }
         ,
         perm: function (src) 
