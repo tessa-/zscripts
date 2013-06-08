@@ -25,6 +25,9 @@
 
             case 2:
             return this.warnHTML + "<font color=red><b>" + text + "</b></font>";
+
+            default:
+            return text;
         }
     }
     

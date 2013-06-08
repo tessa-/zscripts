@@ -46,9 +46,14 @@
             if (!m) break;
         }
 
-        if (m) sys.sendHtmlAll("<timestamp /><b>" +sys.name(src) + ":</b> " + m, chan);
+        if (m) this.com.broadcast("<timestamp /><b>" +sys.name(src) + ":</b> " + m, -1, true, chan);
         sys.stopEvent();
         
+    }
+    ,
+    registerFilter: function (filter)
+    {
+        this.filters.push(filter);
     }
     ,
     loadModule: function ()
