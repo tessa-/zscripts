@@ -6,6 +6,6 @@
     ,
     stripHTML: function (html)
     {
-        return html.replace(/<\/[A-Za-z]+\s*\/?>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+        return html.replace(/<\/?[A-Za-z]+\s*\/?>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
     }
 });
