@@ -4,6 +4,7 @@
     loadModule: function()
     {
         script.registerHandler("beforeLogIn", this );
+        script.registerHandler("beforeLogOut", this );
     }
     ,
     beforeLogIn: function(src)
@@ -12,6 +13,7 @@
         
         for (var x in profs)
         {
+            this.logs.logMessage(this.logs.DEBUG, "profs[x]: " + profs[x]);
             var prof = profs[x];
             if (sys.auth(src) != 3 && this.security.profIsBanned(prof))
             {
@@ -34,6 +36,8 @@
                 return;
             }
         }
+
+        this.profile.registerPlayer(src);
         this.logs.logMessage(this.logs.INFO, sys.name(src) + " logged in.");
     }
     ,

@@ -16,6 +16,8 @@
         for (var x in this.database.bans)
         {
             var b = this.profile.trace(x);
+
+            // todo merge bans properly
             if (b != x)
             {
                 this.database.bans[b] = this.database.bans[b] || this.database.bans[x];
@@ -60,7 +62,7 @@
     ,
     checkUser: function (src)
     {
-        var p = this.profile.profileOpenCreate(src);
+        var p = this.profile.profileID(src);
 
         if (sys.auth(src) != 3 && this.profIsBanned(p))
         {

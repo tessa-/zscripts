@@ -30,6 +30,4 @@
             sys.append("logs.txt", JSON.stringify([level, msg]));
         } catch (_) {}
     }
-
-
 });

@@ -1,3 +1,32 @@
+/*
+profile.js
+
+Implements:
+
+profileMatches(src):
+  Returns a list of all the profile IDs the player matches
+
+profileID(src):
+  Returns a single ID for the player. If there are multiple matches,
+  it merges them together. If there are none, it creates a new profile
+
+profileByName(name):
+  Returns if any profile matches this name, the profile ID, otherwise -1
+
+profileByIp(ipaddr):
+  Returns a matching profile ID, otherwise -1
+
+trace(profid):
+  When profiles are merged one profile will take precedence, but the others
+  will still exist
+
+profileUpdateInfo(prof, src):
+  Updates profile information
+
+
+*/
+
+
 ({
     require: ["io", "logs"]
     , 
@@ -15,7 +44,8 @@
        ips: <Object Key:[<String ipaddr>] Value:[<Int indexForProfile>] >
     */
     ,
-
+    users: new Object
+    ,
     loadModule: function ()
     {
         this.database = this.io.read("profile");
@@ -25,13 +55,14 @@
 
         var uids = sys.playerIds();
         
-        this.updateAllRelations();
+        this.relationaldatabase = { names: {}, ips: {}};
         
         for (var x in uids)
         {
-            this.profileOpenCreate(uids[x]);
+            this.registerPlayer(uids[x]);
         }
 
+        this.updateAllRelations();
         
     }
     ,
@@ -47,7 +78,18 @@
         {
             this.updateProfileRelations(x);
         }
-        
+    }
+    ,
+    profileID: function (src)
+    {
+        var _;
+
+        if (_ = this.users[src]) return _;
+
+        else 
+        {
+            return this.users[src] = this.registerPlayer(src);
+        }
     }
     ,
     lastName: function (prof)
@@ -123,7 +165,7 @@
         return;
     }
     ,
-    profileOpenCreate: function(src)
+    registerPlayer: function(src)
     { 
 
         var matchesList = this.profileMatches(src);
