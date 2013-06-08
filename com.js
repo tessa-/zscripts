@@ -32,14 +32,24 @@
     broadcast: function (msg, type, html, chans)
     {
         var usrs = new Object;
+        var channames = [];
+
+        if (chans) for (var x in chans)
+        {
+            channames.push("[#" + sys.channel(chans[x]) +"] ");
+        }
 
         var fmt_msg = this.theme.formatAs(this.escapeHtmlBool(msg, html), type || 0);
         if (chans)
         {
             for (var x1 in chans)
             {
-                throw new Error("unimplemented");
-                //  var t = sys.getPlayerIdsByChannel()
+                var ids = sys.playersOfChannel(chans[x1]);
+                
+                for (var x2 in ids)
+                {
+                    usrs[ids[x2]] = null;
+                }
             }
         }
         else
@@ -48,7 +58,7 @@
 
             for (var x in t)
             {
-                usrs[t[x]] = true;
+                usrs[t[x]] = null;
             }
         }
 
@@ -72,7 +82,7 @@
             }
         }
 
-       print((chans ?"C":"") + " " + this.theme.scriptText + this.stripHtmlBool(msg, html));
+       print(channames.join("") +  (type != -1 ? this.theme.scriptText : "") + this.stripHtmlBool(msg, html));
     }  
     ,
     escapeHtmlBool: function (text, bool)
