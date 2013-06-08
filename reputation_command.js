@@ -9,7 +9,9 @@
         ,
         code: function (src, cmd, chan) 
         {
-            var p = this.profile.profileOpenCreate(src);
+            var p = sys.name(src).toLowerCase();
+
+            this.reputation.updateReputation(src);
 
             this.com.message([src], "Your reputation score is: " + this.reputation.database.users[p]);
             return;

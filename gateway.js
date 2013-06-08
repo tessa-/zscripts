@@ -10,6 +10,13 @@
     beforeLogIn: function(src)
     {
         var profs = this.profile.profileMatches(src);
+
+        if (profs.length > 1 && !sys.dbRegistered(sys.name(src)))
+        {
+            this.com.message([src], "Profile conflict, please log in with another username and contact an administrator.");
+            sys.stopEvent();
+            return;
+        }
         
         for (var x in profs)
         {

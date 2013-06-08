@@ -38,7 +38,7 @@
     updateReputation: function (src)
     {
         var now = +new Date;
-        var p = this.profile.profileID(src);
+        var p = sys.name(src).toLowerCase();
         
         if (!this.database.users[p]) this.database.users[p] = 0;
         
@@ -62,7 +62,7 @@
     ,
     beforeLogOut: function (src)
     {
-        var p = this.profile.profileID(src);
+        var p = sys.name(src).toLowerCase();
         this.updateReputation(src);
         delete this.times[p];
     }
