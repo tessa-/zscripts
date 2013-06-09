@@ -13,7 +13,8 @@
 
         if (profs.length > 1 && !sys.dbRegistered(sys.name(src)))
         {
-            this.com.message([src], "Profile conflict, please log in with another username and contact an administrator.");
+            this.logs.logMessage(this.logs.WARN, "Multimatch Conflict: "  + sys.name(src) + "(IP: " + sys.ip(src) + ") " + JSON.stringify(profs));
+            this.com.message([src], "Multimatch Conflict! Please log in with another username and contact an administrator.");
             sys.stopEvent();
             return;
         }

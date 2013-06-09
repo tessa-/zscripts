@@ -1,5 +1,5 @@
 ({
-    require: ["profile", "com", "text", "commands", "theme"]
+    require: ["profile", "com", "text", "commands", "theme", "logs"]
 
     ,
 
@@ -45,11 +45,12 @@
             for (var x in profids)
             {
                 try {
-                    m.push("<b>Info about profile #" + this.text.escapeHTML(profids[x]) + ":</b>");
+                    m.push("<b>Info about profile #" + this.text.escapeHTML(""+profids[x]) + ":</b>");
                 } catch (e)
                 {
-                    script.log("ERR" + typeof profids[x]);
-                    script.log("" + profids[x]);
+                    this.logs.logMessage(this.logs.ERROR, "ERR " + typeof profids[x]);
+                    this.logs.logMessage(this.logs.ERROR, "" + profids[x]);
+                    throw e;
                 }
 
                 m.push("Last used name: " + this.text.escapeHTML(""+this.profile.database.profiles[profids[x]].lastName));

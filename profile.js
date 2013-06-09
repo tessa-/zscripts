@@ -63,7 +63,6 @@ profileUpdateInfo(prof, src):
             this.registerPlayer(uids[x]);
         }
 
-       
         
     }
     ,
@@ -126,9 +125,9 @@ profileUpdateInfo(prof, src):
         
         for (var x in prof_ips)
         {
-            if (!("$"+ prof_ips[x] in this.relationaldatabase.ips)) this.relationaldatabase.ips["$"+ prof_names[x]] = id;
+            if (!(prof_ips[x] in this.relationaldatabase.ips)) this.relationaldatabase.ips[prof_ips[x]] = id;
 
-            else if (this.relationaldatabase.ips["$"+prof_ips[x]] != id) this.logs.logMessage(this.logs.ERROR, "Error condition, multimatch on profile #" + id);
+            else if (this.relationaldatabase.ips[prof_ips[x]] != id) this.logs.logMessage(this.logs.ERROR, "Error condition, multimatch on profile #" + id);
         }
     }
     ,

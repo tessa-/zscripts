@@ -27,7 +27,7 @@
         
         try 
         {
-            sys.append("logs.txt", JSON.stringify([level, msg]));
+            sys.append("logs.txt", JSON.stringify([level, msg]) + "\n");
         } catch (_) {}
     }
 });

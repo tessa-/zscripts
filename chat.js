@@ -15,7 +15,7 @@
             return;
         }
 
-        var prof = this.profile.profileOpenCreate(src);
+        var prof = this.profile.profileID(src);
         
         if (sys.auth(src) != 3 && this.security.profIsMuted(prof))
         {
