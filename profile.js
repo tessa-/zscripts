@@ -55,14 +55,15 @@ profileUpdateInfo(prof, src):
 
         var uids = sys.playerIds();
         
-        this.relationaldatabase = { names: {}, ips: {}};
-        
+
+        this.updateAllRelations(); 
+
         for (var x in uids)
         {
             this.registerPlayer(uids[x]);
         }
 
-        this.updateAllRelations();
+       
         
     }
     ,
@@ -118,12 +119,16 @@ profileUpdateInfo(prof, src):
         
         for (var x in prof_names)
         {
-            this.relationaldatabase.names["$"+ prof_names[x]] = id;
+            if (!("$"+ prof_names[x] in this.relationaldatabase.names)) this.relationaldatabase.names["$"+ prof_names[x]] = id;
+
+            else if (this.relationaldatabase.names["$"+prof_names[x]] != id) this.logs.logMessage(this.logs.ERROR, "Error condition, multimatch on profile #" + id);
         }
         
         for (var x in prof_ips)
         {
-            this.relationaldatabase.ips[prof_ips[x]] = id;
+            if (!("$"+ prof_ips[x] in this.relationaldatabase.ips)) this.relationaldatabase.ips["$"+ prof_names[x]] = id;
+
+            else if (this.relationaldatabase.ips["$"+prof_ips[x]] != id) this.logs.logMessage(this.logs.ERROR, "Error condition, multimatch on profile #" + id);
         }
     }
     ,
@@ -179,6 +184,7 @@ profileUpdateInfo(prof, src):
         
         else if (matchesList.length > 1)
         {
+            this.logs.logMessage(this.logs.INFO, "Merging profiles " + JSON.stringify(matchesList));
             this.mergeProfiles(matchesList);
         }
         
