@@ -3,9 +3,11 @@
     ,
     needsSorting: false
     ,
+    i: 0
+    ,
     at: function (time, callback)
     {
-        this.timers.push({time: time, callback: callback});
+        this.timers.push({time: time, callback: callback, id: this.i++});
         this.needsSorting = true;
     }
     ,

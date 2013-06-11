@@ -51,8 +51,11 @@
 
             this.times[p] = now;
         }
-        
-
+    }
+    ,
+    reputationOf: function (src)
+    {
+        return this.database.users[sys.name(src).toLowerCase()] || 0;        
     }
     ,
     afterLogIn: function (src)
