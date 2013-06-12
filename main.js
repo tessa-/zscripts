@@ -150,6 +150,8 @@
                     return sys.getFileContent(fname) == undefined;
                 }
             }
+
+            if (!sys.os) sys.os = function () {return "unknown";};
         }
 
         sys.enableStrict();
