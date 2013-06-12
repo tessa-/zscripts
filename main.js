@@ -130,8 +130,26 @@
         if (!( sys.readObject && sys.os && sys.enableStrict))
         {
             print("WARNING: Missing required functions.");
-            sys.stopEvent();
-            return;
+
+            if (!sys.writeObject)  
+            {
+                sys.stopEvent();
+                return;
+            }
+
+            if (!sys.write)
+            {
+                sys.write = sys.writeToFile;
+                sys.read = sys.readFromFile;
+            }
+
+            if (!sys.exists)
+            {
+                sys.exists = function (fname)
+                {
+                    return sys.getFileContent(fname) == undefined;
+                }
+            }
         }
 
         sys.enableStrict();
