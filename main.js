@@ -152,6 +152,8 @@
             }
 
             if (!sys.os) sys.os = function () {return "unknown";};
+
+            if (!sys.enableStrict) sys.enableStrict = function(){};
         }
 
         sys.enableStrict();
