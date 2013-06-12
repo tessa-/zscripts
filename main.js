@@ -1,7 +1,3 @@
-// ArchZombie's POJS Scripts
-// main.js
-
-// This is the module loader.
 "use strict";
 ({
     config: null
@@ -43,6 +39,12 @@
 
         return;
 
+    }
+    ,
+    reloadModule: function (modname)
+    {
+        this.unloadModule(modname);
+        this.loadModule(modname);
     }
     ,
     loadModule: function (modname) 
@@ -127,7 +129,7 @@
 
         if (!( sys.readObject && sys.os && sys.enableStrict))
         {
-            print("Missing required functions.");
+            print("WARNING: Missing required functions.");
             sys.stopEvent();
             return;
         }

@@ -1,5 +1,5 @@
 ({
-    require: ["com"]
+    require: ["com", "theme", "help_command"]
     ,
     loadModule: function ()
     {
@@ -9,11 +9,16 @@
     afterLogIn: function (src, msg, chan)
     {
         var os = sys.os(src);
-        this.com.broadcast("Hello " + sys.name(src) +"! These are new scripts with many WIP features! Not everything works yet." );
+        this.com.broadcast("Hello " + sys.name(src) +"!", this.theme.INFO );
+
+
+        this.com.message([src], "If you need help, type /help", this.theme.INFO);
         
         if (os === "linux")
         {
             this.com.broadcast(sys.name(src) +", I see you are a linux user! You are enlightened!");
         }
+
+        
     }
 });

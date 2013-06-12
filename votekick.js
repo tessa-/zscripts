@@ -89,11 +89,11 @@
                 
                 if (this.votedb[x])
                 {
-                    yesV += Math.log(this.reputation.reputationOf(x));
+                    yesV += Math.log(this.reputation.reputationOf(x)+Math.E);
                 }
                 else 
                 {
-                    noV += Math.log(this.reputation.reputationOf(x));
+                    noV += Math.log(this.reputation.reputationOf(x)+Math.E);
                 }
                 
 

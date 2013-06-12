@@ -3,10 +3,28 @@
     ,
     filters: []
     ,
+    capture: new Object
+    ,
+   /* registerCapture: function (src, func)
+    {
+        this.cap[src] = func;
+    }*/
+    //,
     beforeChatMessage: function (src, msg, chan)
     {
         if (msg.length == 0) return;
 
+        if (this.capture[src])
+        {
+            sys.stopEvent();
+            var f = this.capture[src];
+
+            delete this.capture[src];
+
+            f.call(new Object, src, msg, chan);
+            return;
+        }
+        
         if (msg[0] == "/")
         {
             this.logs.logMessage(this.logs.INFO, "" + sys.name(src) + "["+chan+"] " + msg);
