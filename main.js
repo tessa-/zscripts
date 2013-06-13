@@ -1,8 +1,6 @@
-"use strict";
-({
+//"use strict";
+(function () {return {
     config: null
-    ,
-    module_info: {}
     ,
     modules: {}
     ,
@@ -13,16 +11,18 @@
     ,
     broadcast: function (msg)
     {
-        sys.sendAll("SCRIPT: " + msg);
+        //sys.sendAll("SCRIPT: " + msg);
     }
     ,
-    registerHandler: function (handlername, object)
+    registerHandler: function (handlername, object, propname)
     {
+        if (!propname) propname = handlername;
+        
         if (handlername in script)
         {
             if ( !(script[handlername].callbacks)) throw new Error("Not registerable");
             
-            script[handlername].callbacks.push({func:object[handlername], bind:object});
+            script[handlername].callbacks.push({func:object[propname], bind:object});
             return;
         }
 
@@ -35,7 +35,7 @@
         }
 
         script[handlername] = f;
-        script[handlername].callbacks = [{func:object[handlername], bind:object}];
+        script[handlername].callbacks = [{func:object[propname], bind:object}];
 
         return;
 
@@ -49,82 +49,84 @@
     ,
     loadModule: function (modname) 
     {
+        
         if (this.modules[modname]) return;
+        print("Loading module: " + modname);
 
+        var mod = sys.exec(modname+".js");
 
-        this.log ("MODULE_MANAGER: Loading \"" + modname + "\"");
-        try
+        this.modules[modname] = mod;    
+
+        if (!mod.require) mod.require = [];
+        mod.submodules = [];
+
+        for (var x in mod.require)
         {
-            try {
-                var t = sys.read(modname + ".js");
-            } 
-            catch (e)
-            {
-                throw new Error("Couldn't read module: "+ modname+".js: " + e);
-            }
+            var reqmodname = mod.require[x];
 
-            var s = sys.eval(t);
-
-
-            this.modules[modname] = s;    
-
-            if (!s.require) s.require = [];
-            s.submodules = [];
-
-            for (var x in s.require)
-            {
-                this.log("MODULE_MANAGER: Module \"" + modname+ "\" requires module \""+s.require[x]+"\"");
-                this.loadModule(s.require[x]);
-                
-                if ( !(s.require[x] in this.modules) || this.modules[s.require[x]] instanceof Error) 
-                {
-                    this.log("MODULE_MANAGER: This module is not available. Can't load.");
-                    this.modules[modname] = new Error("Unmet dependencies.");
-                    return;
-                }
-
-                this.modules[s.require[x]].submodules.push(modname);
-                this.modules[modname][s.require[x]] = this.modules[s.require[x]];
-            }
-
-            if ("loadModule" in s)
-            {
-                this.log("MODULE_MANAGER: Initializing \"" + modname + "\"");
-                s.loadModule();
-                this.log("MODULE_MANAGER: Initialized \"" + modname + "\"");       
-            }
+            this.loadModule(reqmodname);
             
-            this.log("MODULE_MANAGER: Completed loading \"" + modname + "\"");
+            if ( !(reqmodname in this.modules) || this.modules[reqmodname] instanceof Error) 
+            {
+                this.modules[modname] = new Error("Unmet dependencies.");
+                return;
+            }
+
+            this.modules[reqmodname].submodules.push(modname);
+            this.modules[modname][reqmodname] = this.modules[reqmodname];
         }
-        catch (e) 
+
+        for (var x in this.hooks)
         {
-            var e = new Error ( "In " + e.fileName +":"+ e.lineNumber + ": Error loading module "+ modname+ ": "+ e );
-            this.modules[modname] = e;
-            throw e;
-        }  
+            mod[x] = this.hooks[x];            
+        }
+
+        if ("loadModule" in mod)
+        {
+            mod.loadModule();;       
+        }
 
     }
     ,
     unloadModule: function (modname)
     {
         if ( !(modname in this.modules) ) return;
+        print("Unloading module: " + modname);
 
-        this.log("MODULE_MANAGER: Unloading \"" + modname + "\"");
+        var thisModule = this.modules[modname];
 
-        for (var x in this.modules[modname].submodules)
+
+        for (var x in thisModule.submodules)
         {
-            this.log("MODULE_MANAGER: Submodule \"" + this.modules[modname].submodules[x] + "\"");
-            this.unloadModule(this.modules[modname].submodules[x]);
+            this.unloadModule(thisModule.submodules[x]);
         }
-        
-        if ("unloadModule" in this.modules[modname]) this.modules[modname].unloadModule();
+
+        if (thisModule.require) for (var x in thisModule.require)
+        {
+            if (this.modules[thisModule.require[x]].onUnloadSubmodule) 
+            {
+                this.modules[thisModule.require[x]].onUnloadSubmodule(thisModule, modname);
+            }
+        }
+
+        if ("unloadModuleHooks" in thisModule) 
+        {
+            var unloadModuleHooks = thisModule.unloadModuleHooks;
+            for (var x in unloadModuleHooks)
+            {
+                unloadModuleHooks[x].apply(thisModule, [thisModule]);
+            }
+            
+        }
+
+        if ("unloadModule" in thisModule) thisModule.unloadModule();
 
         delete this.modules[modname];
         
         return;
     }
     ,
-    loadScript: function () 
+    loadScript: function loadScript () 
     {
 
         if (!( sys.readObject && sys.os && sys.enableStrict))
@@ -165,11 +167,7 @@
         print ("================================================================================");
 
 
-        var gpl_obj = {
-            beforeLogIn: this.AGPL
-        };
-
-        this.registerHandler("beforeLogIn", gpl_obj);
+        this.registerHandler("beforeLogIn", this, "AGPL");
 
         sys.unsetAllTimers();
 
@@ -194,26 +192,21 @@
 
             for (var x in this.config.modules)
             {
-                try 
-                {
-                    this.loadModule(this.config.modules[x]);
-                } 
-                catch (e)
-                {
-                    this.log("Error in loadModule " +this.config.modules[x]+": " + e);
-                }
+                this.loadModule(this.config.modules[x]);
             }
 
             sys.writeToFile("main.json", JSON.stringify(this.config));
         }
         catch(e) 
         {
-            this.log("Failed to start: " + e);
+            var stack = (e.stack && e.stack.join()) ||  (e.backtrace && e.backtrace()) || (sys.backtrace || function (){})() || "";
+            
+            this.log("Failed to start, error in " + e.fileName + " at line #" + e.lineNumber + ": " + e.toString() +"\n" + stack);
             sys.stopEvent();
         }  
     }
     ,
-    unloadScript: function ()
+    unloadScript: function unloadScript ()
     {
         var mods = Object.keys (this.modules);
 
@@ -234,5 +227,16 @@
                 "This license provides you with the rights to obtain source code for the scripts, you are not required to accept it or download the scripts."
         );
     }
+    ,
+    hooks:
+    {
+        onUnloadModule: function (f) 
+        {
+            if (!this.unloadModuleHooks) this.unloadModuleHooks = [];
+            
+            this.unloadModuleHooks.push(f);
+        }
 
-})
+    }
+
+}})();
