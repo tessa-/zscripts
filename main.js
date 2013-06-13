@@ -103,9 +103,9 @@
 
         if (thisModule.require) for (var x in thisModule.require)
         {
-            if (this.modules[thisModule.require[x]].onUnloadSubmodule) 
+            if (this.modules[thisModule.require[x]].unloadSubmodule) 
             {
-                this.modules[thisModule.require[x]].onUnloadSubmodule(thisModule, modname);
+                this.modules[thisModule.require[x]].unloadSubmodule(thisModule, modname);
             }
         }
 
