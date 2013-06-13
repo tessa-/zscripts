@@ -1,5 +1,5 @@
 ({
-    require: ["com", "theme", "parsecommand"]
+    require: ["com", "theme", "parsecommand", "util"]
     ,
     commands_db: new Object
     ,
@@ -25,8 +25,27 @@
         {
             this.commands_db[comnd.aliases[x]] = comnd;
         }
-
+        
+        object.onUnloadModule( this.util.bind(
+            this, 
+            function () 
+            {
+                this.unregisterCommand(name);
+            }
+        ));
         return;
+    }
+    ,
+    unregisterCommand: function (name)
+    {
+        if (this.commands_db[name])
+        {
+            if (this.commands_db[name].aliases) for (var x in this.commands_db[name].aliases)
+            {
+                delete this.commands_db[this.commands_db[name].aliases[x]];
+            }
+        }
+        delete this.commands_db[name];
     }
     ,
     issueCommand: function(src, text, chan)
