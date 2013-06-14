@@ -48,7 +48,7 @@ profileUpdateInfo(prof, src):
     ,
     loadModule: function ()
     {
-        this.database = this.io.read("profile");
+        this.database = this.io.openDB("profile");
 
         if (!this.database.profiles) this.database.profiles = new Object;
         if (!this.database.profile_counter) this.database.profile_counter = 0;
@@ -64,6 +64,11 @@ profileUpdateInfo(prof, src):
         }
 
         
+    }
+    ,
+    unloadModule: function ()
+    {
+        this.io.closeDB("profile");
     }
     ,
     updateAllRelations: function()
@@ -264,11 +269,6 @@ profileUpdateInfo(prof, src):
             }
             
         }
-    }
-    ,
-    unloadModule: function ()
-    {
-        this.io.write("profile", this.database);
     }
 
 });

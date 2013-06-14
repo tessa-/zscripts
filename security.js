@@ -5,7 +5,7 @@
     ,
     loadModule: function () 
     {
-        this.database = this.io.read("security");
+        this.database = this.io.openDB("security");
 
         if (!this.database.bans) this.database.bans = new Object;
 
@@ -50,6 +50,11 @@
         }
     }
     ,
+    unloadModule: function()
+    {
+        this.io.closeDB("security");
+    }
+    ,
     checkUsers: function (src)
     {
         var uids = sys.playerIds();
@@ -68,11 +73,6 @@
         {
             sys.kick(src);
         }
-    }
-    ,
-    unloadModule: function()
-    {
-        this.io.write("security", this.database);
     }
     ,
     profIsMuted: function (p)
