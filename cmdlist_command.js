@@ -29,7 +29,7 @@
             {
 
                 if (cmds[x].name != x) continue;
-                var canuse = sys_auth$src != 3 && cmds[x].perm.apply(cmds[x].bind, [src]);
+                var canuse = sys_auth$src == 3 || cmds[x].perm.apply(cmds[x].bind, [src]);
                 if (!cmd.flags.all && sys_auth$src != 3 && !canuse) continue;
 
                 msg.push("<b>/" + text.escapeHTML(x) +"</b>" + (canuse?"":" (NO PERMISSION)") );

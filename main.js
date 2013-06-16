@@ -175,12 +175,11 @@
         sys.unsetAllTimers();
 
         try {
-            var f = sys.getFileContent("main.json");
-
-            if (!f) 
-            { 
-                f = "{}";
-            }
+            var f;
+            if (sys.exists("main.json")) f = sys.read("main.json");
+            
+            else f = "{}";
+            
 
 
             var o = JSON.parse(f);         
