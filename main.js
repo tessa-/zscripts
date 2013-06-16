@@ -1,5 +1,5 @@
 //"use strict";
-(function () {return {
+(function () {"use strict"; return {
     config: null
     ,
     modules: {}
@@ -26,13 +26,14 @@
             return;
         }
 
-        var f = function () 
+        var f = function _meta_handler_func_ () 
         {
             for (var x in f.callbacks)
             {
                 f.callbacks[x].func.apply(f.callbacks[x].bind, arguments);
             }
         }
+        f.name = "_META_" + handlername;
 
         script[handlername] = f;
         script[handlername].callbacks = [{func:object[propname], bind:object}];
@@ -83,7 +84,7 @@
 
         if ("loadModule" in mod)
         {
-            mod.loadModule();;       
+            mod.loadModule();     
         }
 
     }
@@ -152,6 +153,8 @@
                     return sys.getFileContent(fname) == undefined;
                 }
             }
+
+            if (!sys.exec) sys.exec = function (fname) { try { sys.eval(sys.read(fname)) } catch (e) { e.fileName = fname; throw e; }};
 
             if (!sys.os) sys.os = function () {return "unknown";};
 

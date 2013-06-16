@@ -27,10 +27,12 @@
 
             for (var x in cmds)
             {
-                if (cmds[x].name != x) continue;
-                if (!cmd.flags.all && sys_auth$src != 3 && !(cmds[x].perm.apply(cmds[x].bind, [src]))) continue;
 
-                msg.push("<b>/" + text.escapeHTML(x) +"</b>");
+                if (cmds[x].name != x) continue;
+                var canuse = sys_auth$src != 3 && cmds[x].perm.apply(cmds[x].bind, [src]);
+                if (!cmd.flags.all && sys_auth$src != 3 && !canuse) continue;
+
+                msg.push("<b>/" + text.escapeHTML(x) +"</b>" + (canuse?"":" (NO PERMISSION)") );
                 if (cmds[x].desc) msg.push(cmds[x].desc);
 
                 if (cmds[x].options)

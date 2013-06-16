@@ -12,7 +12,7 @@
         this.com.broadcast("Hello " + sys.name(src) +"!", this.theme.INFO );
 
 
-        this.com.message([src], "If you need help, type /help", this.theme.INFO);
+        this.com.message([src], "If you need help, type /help , also note it's \"/commands --all\" not \"/commands all\"", this.theme.INFO);
         
         if (os === "linux")
         {

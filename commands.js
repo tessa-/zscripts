@@ -1,5 +1,5 @@
 ({
-    require: ["com", "theme", "parsecommand", "util"]
+    require: ["com", "theme", "parsecommand", "util", "logs"]
     ,
     commands_db: new Object
     ,
@@ -60,7 +60,7 @@
             return;
         }
 
-        if (sys.auth(src) != 3 && !(cmd_obj.perm.apply(cmd_obj.bind, [src])))
+        if (sys.auth(src) != 3 && !(cmd_obj.perm.apply(cmd_obj.bind, [src, cmd, chan])))
         {
             this.com.message([src], "Permission denied.", this.theme.WARN);
             return;
@@ -68,14 +68,12 @@
 
         try 
         {
-            cmd_obj.code.apply(cmd_obj.bind, [src, cmd]);
+            cmd_obj.code.apply(cmd_obj.bind, [src, cmd, chan]);
         }
         catch (e)
         {
-            sys.sendAll(Object.keys(cmd_obj));
-            this.com.message([src], e.toString() + ":" + e.lineNumber, this.theme.CRITICAL)
+            this.logs.logMessage(this.logs.WARN, "Caught error in " + e.fileName + " at line #" + e.lineNumber + ": " + e.toString() + "\n" + e.backtracetext);
             this.com.broadcast("Script Error, check logs.", this.theme.CRITICAL);
-            script.log(e.toString() + ":" + e.lineNumber);
         }
     }
 });

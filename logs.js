@@ -1,5 +1,5 @@
 ({
-    require: ["com", "theme"]
+    require: ["com", "theme", "text"]
     ,
     logs: []
     ,

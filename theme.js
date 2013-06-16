@@ -7,11 +7,17 @@
     ,
     warnText: "~Script~: "
     ,
+    gameHTML: "<font color=green><timestamp /><b>~Script~:</b></font> "
+    ,    
     INFO: 0
     ,
     WARN: 1
     ,
     CRITICAL: 2
+    ,
+    GAME: 3
+    ,
+    TOUR: 4
     ,
     formatAs: function (text, type)
     {
@@ -25,6 +31,12 @@
 
             case 2:
             return this.warnHTML + "<font color=red><b>" + text + "</b></font>";
+
+            case 3:
+            return this.gameHTML + text;
+            
+            case 4:
+            return this.gameHTML + "<font color=green><b>" + text + "</b></font>";
 
             default:
             return text;

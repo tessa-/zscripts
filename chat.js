@@ -1,4 +1,4 @@
-({
+(function () { return {
     require: ["commands", "security", "profile", "com", "theme", "time", "logs", "text"]
     ,
     filters: []
@@ -10,7 +10,7 @@
         this.cap[src] = func;
     }*/
     //,
-    beforeChatMessage: function (src, msg, chan)
+    beforeChatMessage: function beforeChatMessage (src, msg, chan)
     {
         if (msg.length == 0) return;
 
@@ -74,8 +74,8 @@
         this.filters.push(filter);
     }
     ,
-    loadModule: function ()
+    loadModule: function loadModule ()
     {
         script.registerHandler("beforeChatMessage", this);
     }
-});
+}})();
