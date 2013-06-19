@@ -4,23 +4,23 @@
     ,
     modules: {}
     ,
-    log: function (msg)
+    log: function log (msg)
     {
         print ("SCRIPT: " + msg);
     }
     ,
-    broadcast: function (msg)
+    broadcast: function _DEPRECATED_ (msg)
     {
         //sys.sendAll("SCRIPT: " + msg);
     }
     ,
-    registerHandler: function (handlername, object, propname)
+    registerHandler: function registerHandler (handlername, object, propname)
     {
         if (!propname) propname = handlername;
 
         if (! (handlername in script))
         {
-            var f = function _handler_func_ () 
+            var f = function _meta_event_handler_func_ () 
             {
                 for (var x in f.callbacks)
                 {
@@ -53,7 +53,7 @@
 
     }
     ,
-    reloadModule: function (modname)
+    reloadModule: function reloadModule (modname)
     {
         var unloads = this.unloadModule(modname);
 
@@ -63,7 +63,7 @@
         }
     }
     ,
-    loadModule: function (modname) 
+    loadModule: function loadModule (modname) 
     {
         
         if (this.modules[modname]) return;
@@ -106,7 +106,7 @@
 
     }
     ,
-    unloadModule: function (modname)
+    unloadModule: function unloadModule (modname)
     {
         if ( !(modname in this.modules) ) return;
         this.log("Unloading module: " + modname);
@@ -241,7 +241,7 @@
         }
     }
     , 
-    AGPL: function (src)
+    AGPL: function AGPL (src)
     {
         sys.sendHtmlMessage(
             src,
@@ -254,7 +254,7 @@
     ,
     hooks:
     {
-        onUnloadModule: function (f) 
+        onUnloadModule: function _meta_hook_onUnloadModule_ (f) 
         {
             if (!this.unloadModuleHooks) this.unloadModuleHooks = [];
             
