@@ -1,5 +1,5 @@
 ({
-    require: ["com", "theme", "text"]
+    require: ["com", "theme", "text", "util"]
     ,
     logs: []
     ,
@@ -29,5 +29,23 @@
         {
             sys.append("logs.txt", JSON.stringify([level, msg]) + "\n");
         } catch (_) {}
+    }
+    ,
+    loadModule: function ()
+    {
+        this.savedLogFunction = script.log;
+        script.log = this.util.bind(
+            this
+            ,
+            function(msg)
+            {
+                this.logMessage(this.INFO, msg);
+            }
+        );
+    }
+    ,
+    unloadModule: function ()
+    {
+        script.log = this.savedLogFunction;
     }
 });
