@@ -17,33 +17,33 @@
     registerHandler: function (handlername, object, propname)
     {
         if (!propname) propname = handlername;
-        
-        if (handlername in script)
-        {
-            if ( !(script[handlername].callbacks)) throw new Error("Not registerable");
-            
-            script[handlername].callbacks.push({func:object[propname], bind:object});
-            return;
-        }
 
-        var f = function _handler_func_ () 
+        if (! (handlername in script))
         {
-            for (var x in f.callbacks)
+            var f = function _handler_func_ () 
             {
-                f.callbacks[x].func.apply(f.callbacks[x].bind, arguments);
-            }
+                for (var x in f.callbacks)
+                {
+                    f.callbacks[x].func.apply(f.callbacks[x].bind, arguments);
+                }
+            }    
+            script[handlername] = f;
+            script[handlername].callbacks = [];
         }
 
-        script[handlername] = f;
-        script[handlername].callbacks = [{func:object[propname], bind:object}];
+        if ( !(script[handlername].callbacks)) throw new Error("Not registerable");    
+
+        var callbk = {func:object[propname], bind:object};
+
+        script[handlername].callbacks.push(callbk);
 
         var _bind = this;
         if ("onUnloadModule" in object)
         {
             object.onUnloadModule( 
-                function _meta_callback_unload_() 
+                function _meta_callback_unload_ () 
                 {
-                    script[handlername].callbacks.splice(script[handlername].callbacks.indexOf(_meta_callback_unload_),1);
+                    script[handlername].callbacks.splice(script[handlername].callbacks.indexOf(callbk),1);
                 }
             );
         }
@@ -76,6 +76,11 @@
         if (!mod.require) mod.require = [];
         mod.submodules = [];
 
+        for (var x in this.hooks)
+        {
+            mod[x] = this.hooks[x];            
+        }
+
         for (var x in mod.require)
         {
             var reqmodname = mod.require[x];
@@ -92,10 +97,7 @@
             this.modules[modname][reqmodname] = this.modules[reqmodname];
         }
 
-        for (var x in this.hooks)
-        {
-            mod[x] = this.hooks[x];            
-        }
+
 
         if ("loadModule" in mod)
         {
