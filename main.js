@@ -26,14 +26,13 @@
             return;
         }
 
-        var f = function _meta_handler_func_ () 
+        var f = function _handler_func_ () 
         {
             for (var x in f.callbacks)
             {
                 f.callbacks[x].func.apply(f.callbacks[x].bind, arguments);
             }
         }
-        f.name = "_META_" + handlername;
 
         script[handlername] = f;
         script[handlername].callbacks = [{func:object[propname], bind:object}];
@@ -52,7 +51,7 @@
     {
         
         if (this.modules[modname]) return;
-        print("Loading module: " + modname);
+        this.log("Loading module: " + modname);
 
         var mod = sys.exec(modname+".js");
 
@@ -92,7 +91,7 @@
     unloadModule: function (modname)
     {
         if ( !(modname in this.modules) ) return;
-        print("Unloading module: " + modname);
+        this.log("Unloading module: " + modname);
 
         var thisModule = this.modules[modname];
 
