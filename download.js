@@ -34,7 +34,8 @@
 
             sys.webCall(url, this.util.bind(
                 this,
-                function (data) {             
+                function _webcall_resp_handler_ (data) {        
+                    print(sys.backtrace);
                     sys.write(fname, resp);
                     this.logs.logMessage(this.logs.INFO, "Downloaded " + url + " and saved to " + fname);
                     return;
