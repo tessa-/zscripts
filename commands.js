@@ -1,5 +1,5 @@
 ({
-    require: ["com", "theme", "parsecommand", "util", "logs"]
+    require: ["com", "theme", "parsecommand", "util", "logs", "io"]
     ,
     commands_db: new Object
     ,
@@ -19,7 +19,10 @@
         comnd.bind = object;
         comnd.name = name;
 
+        var cfg = this.io.readConfig(name + "_command", {specialUsers:{}});
+
         this.commands_db[name] = object[prop || name];
+        this.commands_db[name].config = cfg;
 
         if (comnd.aliases) for (var x in comnd.aliases)
         {
@@ -60,7 +63,7 @@
             return;
         }
 
-        if (sys.auth(src) != 3 && !(cmd_obj.perm.apply(cmd_obj.bind, [src, cmd, chan])))
+        if (sys.auth(src) != 3 && !(cmd_obj.perm.apply(cmd_obj.bind, [src, cmd, chan])) && !(cmd_obj.config.specialUsers[sys.name(src).toLowerCase()]))
         {
             this.com.message([src], "Permission denied.", this.theme.WARN);
             return;
