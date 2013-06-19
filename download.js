@@ -1,5 +1,5 @@
 ({
-    require: ["commands", "com", "util", "theme"]
+    require: ["commands", "com", "util", "theme", "logs"]
     ,
     loadModule: function (src, cmd, chan)
     {
