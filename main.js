@@ -55,8 +55,12 @@
     ,
     reloadModule: function (modname)
     {
-        this.unloadModule(modname);
-        this.loadModule(modname);
+        var unloads = this.unloadModule(modname);
+
+        for (var x in unloads) 
+        {
+            this.loadModule(unloads[x]);
+        }
     }
     ,
     loadModule: function (modname) 
@@ -105,12 +109,18 @@
         if ( !(modname in this.modules) ) return;
         this.log("Unloading module: " + modname);
 
+        var unloads = [modname];
+
         var thisModule = this.modules[modname];
 
 
         for (var x in thisModule.submodules)
         {
-            this.unloadModule(thisModule.submodules[x]);
+            var u = this.unloadModule(thisModule.submodules[x]);
+            for (var x2 in u)
+            {
+                unloads.push(u[x2]);
+            }
         }
 
         if (thisModule.require) for (var x in thisModule.require)
@@ -135,7 +145,7 @@
 
         delete this.modules[modname];
         
-        return;
+        return unloads;
     }
     ,
     loadScript: function loadScript () 
