@@ -64,7 +64,11 @@
             if (!m) break;
         }
 
-        if (m) this.com.broadcast("<timestamp /><b>" +sys.name(src) + ":</b> " + this.text.escapeHTML(m), -1, true, [chan]);
+        if (m) 
+        {
+            sys.broadcast(m, chan, src, false, -1);
+            //this.com.broadcast("<timestamp /><b>" +sys.name(src) + ":</b> " + this.text.escapeHTML(m), -1, true, [chan]);
+        }
         sys.stopEvent();
         
     }
