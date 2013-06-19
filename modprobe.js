@@ -1,6 +1,11 @@
 ({
     require: ["commands", "logs", "com", "theme"]
     ,
+    loadModule: function () 
+    {
+        this.commands.registerCommand("modprobe", this);
+    }
+    ,
     modprobe: 
     {
         desc: "Manages loadable modules"
