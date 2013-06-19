@@ -37,6 +37,18 @@
         script[handlername] = f;
         script[handlername].callbacks = [{func:object[propname], bind:object}];
 
+        var _bind = this;
+        if ("onUnloadModule" in object)
+        {
+            object.onUnloadModule( 
+                function _meta_callback_unload_() 
+                {
+                    script[handlername].callbacks.splice(script[handlername].callbacks.indexOf(_meta_callback_unload_),1);
+                }
+            );
+        }
+        
+
         return;
 
     }
