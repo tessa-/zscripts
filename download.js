@@ -34,11 +34,17 @@
 
             sys.webCall(url, this.util.bind(
                 this,
-                function _webcall_resp_handler_ (data) {        
-                    print(sys.backtrace);
-                    sys.write(fname, resp);
-                    this.logs.logMessage(this.logs.INFO, "Downloaded " + url + " and saved to " + fname);
-                    return;
+                function _webcall_resp_handler_ (data) {
+                    try {
+                        sys.write(fname, data);
+                        this.logs.logMessage(this.logs.INFO, "Downloaded " + url + " and saved to " + fname);
+                        return;
+                    }
+                    catch (e) 
+                    {
+                        print(e.backtracetext);
+                        print(e);
+                    }
                 })
             );                                   
         }
