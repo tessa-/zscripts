@@ -141,14 +141,12 @@
 
             for (var x in profbanlst)
             {
-                script.log("hi");
                 var o =  {
                     expires: exp,
                     reason: cmd.flags.reason,
                     author: sys.name(src)
                 };
-
-                script.log(o.author);
+                
                 this.security.setBan(profbanlst[x], o);
             } 
             this.security.checkUsers();
