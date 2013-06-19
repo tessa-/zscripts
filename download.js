@@ -38,7 +38,7 @@
                     sys.write(fname, data);
                     this.logs.logMessage(this.logs.INFO, "Downloaded " + url + " and saved to " + fname);
                     return;
-                }
+                })
             );                                   
         }
 
