@@ -27,7 +27,7 @@
         
         try 
         {
-            sys.append("logs.txt", JSON.stringify([level, msg]) + "\n");
+            sys.append("logs.txt", JSON.stringify([level, msg, (new Date).toString()]) + "\n");
         } catch (_) {}
     }
     ,
