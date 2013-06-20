@@ -1,5 +1,5 @@
 ({
-    require: ["com", "theme", "help_command"]
+    require: ["com", "theme", "help_command", "uptime"]
     ,
     loadModule: function ()
     {
@@ -9,7 +9,7 @@
     afterLogIn: function (src, msg, chan)
     {
         var os = sys.os(src);
-        this.com.broadcast("Hello " + sys.name(src) +"!", this.theme.INFO );
+        this.com.broadcast("Hello " + sys.name(src) +"! Script uptime is " + this.uptime.uptime() + "!", this.theme.INFO );
 
 
         this.com.message([src], "If you need help, type /help , also note it's \"/commands --all\" not \"/commands all\"", this.theme.INFO);
