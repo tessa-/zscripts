@@ -83,23 +83,28 @@
             if (this.votedb === null) return;
             var yesV = 0;
             var noV = 0;
+            var ipDB = new Object;
             for (var x in this.votedb)
             {
+
                 if (! sys.name(x)) continue;
-                
-                if (this.votedb[x])
-                {
-                    yesV += Math.log(this.reputation.reputationOf(x)+Math.E);
-                }
-                else 
-                {
-                    noV += Math.log(this.reputation.reputationOf(x)+Math.E);
-                }
-                
 
-                
+                if (!ipDB[sys.ip(x)]) ipDB[sys.ip(x)] = 0;
 
-                
+                ipDB[sys.ip(x)] += (this.votedb[x]?1:-1) * Math.max(0,this.reputation.reputationOf(x) - (sys.connections(sys.ip(x)) - 1) * 50);
+                                
+            }
+
+            for (var x in ipDB)
+            {
+                if (ipDB[x] >= 0)
+                {
+                    yesV += Math.log(Math.E + ipDB[x]);
+                }
+                else
+                {
+                    noV += Math.log(Math.E + Math.abs(ipDB[x]));
+                }
             }
 
             this.com.broadcast("Weighted vote totals: (yes points: " + yesV + ") (no points: " + noV + ")");
