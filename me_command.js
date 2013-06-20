@@ -1,5 +1,5 @@
 ({
-    require: ["commands", "text"]
+    require: ["commands", "text", "security", "profile"]
     ,
     loadModule: function ()
     {
@@ -8,10 +8,10 @@
     ,
     "me":
     {
-        perm: function() {
-            return true;
+        perm: function(src)
+        {
+            return !this.security.profIsMuted(this.profile.profileID(src));
         }
-        // This command is harmless so you may always use it, until mutes are implemented.
         ,
         code: function(src, cmd)
         {
