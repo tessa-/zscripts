@@ -71,6 +71,8 @@
 
         var mod = sys.exec(modname+".js");
 
+        mod.name = modname;
+
         this.modules[modname] = mod;    
 
         if (!mod.require) mod.require = [];
@@ -224,7 +226,7 @@
         }
         catch(e) 
         {
-            var stack = (e.stack && e.stack.join()) ||  (e.backtrace && e.backtrace()) || (sys.backtrace || function (){})() || "";
+            var stack = (e.backtracetext);
             
             this.log("Failed to start, error in " + e.fileName + " at line #" + e.lineNumber + ": " + e.toString() +"\n" + stack);
             sys.stopEvent();
