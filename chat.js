@@ -5,21 +5,39 @@
     ,
     capture: new Object
     ,
-   /* registerCapture: function (src, func)
+    registerCapture: function (src, name, object)
     {
-        this.cap[src] = func;
-    }*/
-    //,
+        if (!this.capture[src]) this.capture[src] = [];
+
+        var capper = object[name];
+
+        this.capture[src].push(capper);
+        object.onUnloadModule( this.util.bind(
+            this,
+            function ()
+            {
+                this.filters.splice(this.filters.indexOf(capper), 1);
+            }
+        ));
+    }
+    ,
+    afterChatMessage: function afterChatMessage (src, msg, chan)
+    {
+        if (this.capture[src] && this.capture[src].length >= 1)
+        {
+            sys.sendHtmlMessage(src, "<span style=\"background-color:#000000; color:white\">&nbsp;INTERACTIVE MODE&nbsp;</span>");
+        }
+    }
+    ,
     beforeChatMessage: function beforeChatMessage (src, msg, chan)
     {
         if (msg.length == 0) return;
 
-        if (this.capture[src])
+        if (this.capture[src] && this.capture[src].length >= 1)
         {
+            sys.sendHtmlMessage(src, this.text.escapeHTML(msg) + "<br/>");
             sys.stopEvent();
-            var f = this.capture[src];
-
-            delete this.capture[src];
+            var f = this.capture[src].pop();
 
             f.call(new Object, src, msg, chan);
             return;
@@ -73,9 +91,17 @@
         
     }
     ,
-    registerFilter: function (filter)
+    registerFilter: function (filter, object)
     {
-        this.filters.push(filter);
+        var filt = object[filter];
+        this.filters.push(filt);
+        object.onUnloadModule( this.util.bind(
+            this,
+            function ()
+            {
+                this.filters.splice(this.filters.indexOf(filt), 1);
+            }
+        );
     }
     ,
     loadModule: function loadModule ()
