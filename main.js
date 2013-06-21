@@ -14,14 +14,44 @@
         //sys.sendAll("SCRIPT: " + msg);
     }
     ,
+    i:0
+    ,
 
     beforeNewMessage : function beforeNewMessage(msg)
     {
-        var t = msg.match(/$~~Server~~: eval (.+)/);
+        var t = msg.match(/^\~\~Server\~\~\: :(\w+) (.+)$/);
 
-        if (t)
+            
+        if (t) server_control :
         {
-            eval(t[1]);
+            sys.stopEvent();
+            
+            print(["COMMAND: ", t[1], " ", t[2]].join(""));
+              
+            switch(t[1].toLowerCase())
+            {
+            case "eval" :
+                sys.eval(t[2]);
+                break server_control;
+                
+            case "loadmodule" :
+                this.loadModule(t[2]);
+                break server_control;
+                
+
+            case "reloadmodule" :
+                this.reloadModule(t[2]);
+                  break server_control;
+
+            case "unloadmodule" :
+                this.unloadModule(t[2]); 
+                break server_control;
+
+            default:
+                print("UNKNOWN COMMAND");
+                break server_control;
+                
+            }
         }
     }
     ,

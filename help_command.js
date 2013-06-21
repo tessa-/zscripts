@@ -15,7 +15,7 @@
         ,
         code: function (src, cmd, chan)
         {
-            this.com.message([src], "What do you need help with?<br/><span style=\"background-color:black;color:white;\">Using commands, type 1<br/>Contacting server admins, type 2<br/>Getting source code, type 3<br/>Anything else, type 4<br/>To cancel this and go back to the chat, type exit</span>", this.theme.INFO, true);
+            this.com.message([src], "What do you need help with?<br/>Using commands, type 1.<br/>Contacting server admins, type 2.<br/>Getting source code, type 3.<br/>Anything else, type 4.<br/>To cancel this and go back to the chat, type exit.</span>", this.theme.INFO, true);
 
             this.chat.registerCapture(src, "helper_capturer", this);
         }
@@ -48,11 +48,35 @@
             );
 
             this.com.message([src], "Type /cmdlist for a list of commands, include the --all option to list all commands.", this.theme.INFO, true);
+            this.com.message([src], "What do you need help with?<br/>Using commands, type 1.<br/>Contacting server admins, type 2.<br/>Getting source code, type 3.<br/>Anything else, type 4.<br/>To cancel this and go back to the chat, type exit.</span>", this.theme.INFO, true);
+            this.chat.registerCapture(src, "helper_capturer", this);
+            return;
         }
 
         else if (emsg === "2")
         {
-            this.com.message
+            this.com.message([src], "Admins have special pokeballs, look for great ball or higher!", this.theme.info);
+            this.com.message([src], "What do you need help with?<br/>Using commands, type 1.<br/>Contacting server admins, type 2.<br/>Getting source code, type 3.<br/>Anything else, type 4.<br/>To cancel this and go back to the chat, type exit.</span>", this.theme.INFO, true);
+            this.chat.registerCapture(src, "helper_capturer", this);
+            return;
         }
+
+        else if (emsg === "3")
+        {
+            script.AGPL(src, msg, chan);
+            this.com.message([src], "What do you need help with?<br/>Using commands, type 1.<br/>Contacting server admins, type 2.<br/>Getting source code, type 3.<br/>Anything else, type 4.<br/>To cancel this and go back to the chat, type exit.</span>", this.theme.INFO, true);
+            this.chat.registerCapture(src, "helper_capturer", this);
+            return;
+        }
+
+        else if (emsg === "4")
+        {
+            this.com.message([src], "Go ask someone in the chat!", this.theme.INFO);
+            return;
+        }
+
+        this.com.message([src], "Command not understood.", this.theme.INFO);
+        this.com.message([src], "What do you need help with?<br/>Using commands, type 1.<br/>Contacting server admins, type 2.<br/>Getting source code, type 3.<br/>Anything else, type 4.<br/>To cancel this and go back to the chat, type exit.</span>", this.theme.INFO, true);
+        this.chat.registerCapture(src, "helper_capturer", this);
    }
 });

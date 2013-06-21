@@ -1,5 +1,5 @@
 (function () { return {
-    require: ["commands", "security", "profile", "com", "theme", "time", "logs", "text"]
+    require: ["commands", "security", "profile", "com", "theme", "time", "logs", "text", "util"]
     ,
     filters: []
     ,
@@ -9,7 +9,7 @@
     {
         if (!this.capture[src]) this.capture[src] = [];
 
-        var capper = object[name];
+        var capper = this.util.bind(object, object[name]);
 
         this.capture[src].push(capper);
         object.onUnloadModule( this.util.bind(
@@ -19,14 +19,8 @@
                 this.filters.splice(this.filters.indexOf(capper), 1);
             }
         ));
-    }
-    ,
-    afterChatMessage: function afterChatMessage (src, msg, chan)
-    {
-        if (this.capture[src] && this.capture[src].length >= 1)
-        {
-            sys.sendHtmlMessage(src, "<span style=\"background-color:#000000; color:white\">&nbsp;INTERACTIVE MODE&nbsp;</span>");
-        }
+
+        sys.sendHtmlMessage(src, "<span style=\"background-color:#000000; color:white\">&nbsp;INTERACTIVE MODE ACTIVE&nbsp;</span>");
     }
     ,
     beforeChatMessage: function beforeChatMessage (src, msg, chan)
@@ -35,11 +29,12 @@
 
         if (this.capture[src] && this.capture[src].length >= 1)
         {
-            sys.sendHtmlMessage(src, this.text.escapeHTML(msg) + "<br/>");
+            sys.sendHtmlMessage(src, "<span style=\"background-color:#000000; color:white\">:"+ this.text.escapeHTML(msg));
             sys.stopEvent();
             var f = this.capture[src].pop();
 
             f.call(new Object, src, msg, chan);
+
             return;
         }
         
