@@ -101,7 +101,7 @@
             {
                 this.filters.splice(this.filters.indexOf(filt), 1);
             }
-        );
+        ));
     }
     ,
     loadModule: function loadModule ()
