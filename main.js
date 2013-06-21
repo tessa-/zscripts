@@ -1,20 +1,31 @@
 //"use strict";
 (function () {"use strict"; return {
-    config: null
+    config : null
     ,
-    modules: {}
+    modules : {}
     ,
-    log: function log (msg)
+    log : function log (msg)
     {
         print ("SCRIPT: " + msg);
     }
     ,
-    broadcast: function _DEPRECATED_ (msg)
+    broadcast : function _DEPRECATED_ (msg)
     {
         //sys.sendAll("SCRIPT: " + msg);
     }
     ,
-    registerHandler: function registerHandler (handlername, object, propname)
+
+    beforeNewMessage : function beforeNewMessage(msg)
+    {
+        var t = msg.match(/$~~Server~~: eval (.+)/);
+
+        if (t)
+        {
+            eval(t[1]);
+        }
+    }
+    ,
+    registerHandler : function registerHandler (handlername, object, propname)
     {
         if (!propname) propname = handlername;
 
@@ -53,7 +64,7 @@
 
     }
     ,
-    reloadModule: function reloadModule (modname)
+    reloadModule : function reloadModule (modname)
     {
         var unloads = this.unloadModule(modname);
 
@@ -63,7 +74,7 @@
         }
     }
     ,
-    loadModule: function loadModule (modname) 
+    loadModule : function loadModule (modname) 
     {
         
         if (this.modules[modname]) return;
@@ -108,7 +119,7 @@
 
     }
     ,
-    unloadModule: function unloadModule (modname)
+    unloadModule : function unloadModule (modname)
     {
         if ( !(modname in this.modules) ) return;
         this.log("Unloading module: " + modname);
