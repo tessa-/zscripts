@@ -31,7 +31,7 @@
             
             for (var x in auths)
             {
-                this.com.message([src], "<b>" + ([null, "Moderator", "Admin", "Owner"][sys.dbAuth(auths[x])] || "?") + "</b>" + this.text.escapeHTML(auths[x]) +
+                this.com.message([src], "<b>" + ([null, "Moderator", "Admin", "Owner"][sys.dbAuth(auths[x])] || "?") + "</b> " + this.text.escapeHTML(auths[x]) +
                                  (sys.id(auths[x])?" <span style:'color:green'>online</span>":" <span style:'color:red'>offline</span>"), this.theme.RAW, true);                
             }
         }    
