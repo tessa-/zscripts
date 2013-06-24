@@ -64,9 +64,53 @@ items: storage
 
 */
 
+/*
+ RPG Context Object:
+
+ {
+     engine: 
+     battle:
+     player:
+     arena: 
+     
+ 
+ }
+*/
 
 ({
-    require: []
+    database: null
+    ,
+    games: null
+    ,
+    require: ["io", "sched"]
+    ,
+    loadModule: function ()
+    {
+        this.database = this.io.openDB("rpg");
+        if (!this.database.games) this.database.games = new Object;
+        this.games = this.database.games;
+    }
+    ,
+    step: function ()
+    {
+        gametick: for (var x in this.games)
+        {
+            if (this.games[x].paused) continue gametick;
+            if (!this.games.ready) continue gametick;
+            this.games[x].tick++;
+
+            playerstep: for (var x2 in this.games[x].players)
+            {
+                if (!sys.id(x2)) 
+                    // player offline
+                {
+                    continue playerstep;
+                }
+                if (this.games[x].players[x2]
+                
+            }
+        }
+    }
     ,
     materials: null
     ,
@@ -77,7 +121,37 @@ items: storage
         return this.materials[item.material].name + " " + this.weapons[item.type].name;
     }
     ,
-    equipAttackPower: function (equip)
+    entityTick: function (e, ctx)
+    {
+        for (var x in e.activeSkills)
+        {
+            var s = e.activeSkills[x];
+            if (s.timer) 
+            {
+                s.timer--;
+                if (s.timer <= 0) 
+                {
+                    delete e.activeSkills[x];
+                    continue;
+                }
+            }
+            
+            e.hp += s.hp || 0;
+            e.sta += s.sta || 0;
+            e.mana += s.mana || 0;
+            e.mst += s.mst || 0;
+
+            if (s.effect) this.effects[s.effect](e, ctx);
+        }
+
+        if (e.hp <= 0) this.entityDie(e);
+        if (e.sta <= 0) this.entityPurge(e);
+        if (e.mana <= 0) this.entityPurge(e);
+        if (e.mst <= 0) this.entityPurge(e);
+      
+    }
+    ,
+    equipPhysAtk: function (equip)
     {
         if (equip === null) return;
         var b = this.equips[equip.type].base;
@@ -97,15 +171,31 @@ items: storage
         return val *factor;
     }
     ,
-
-    entityPhsyAttackPower: function (entity)
+    entityModPhysAtk : function(e) 
     {
-        return Math.log(this.entityStr(entity) + Math.E) * (this.equipPhysAttackPower(entity.lhand) + this.equipPhysAttackPower(entity.rhand));
+        var mod = 1;
+        for (var x in e.activeSkills)
+        {
+            if (e.activeSkills[x].physAtk) mod *= e.activeSkills[x].physAtk
+        }
     }
     ,
-    entityPhysDefPower: function ()
+    entityModPhysDef : function (e)
     {
+        return 0;
+    }
 
+    ,
+
+
+    entityPhsyAtk: function (entity)
+    {
+        return Math.log(entity.str + Math.E + this.entityModPhys(entity)) * (this.equipPhysAtk(entity.lhand) + this.equipPhysAtk(entity.rhand));
+    }
+    ,
+    entityPhysDef: function ()
+    {
+        return Math.log(this.entityStr(entity) + Math.E) * (this.equipPhysAtk(entity.lhand) + this.equipPhysAtk(entity.rhand));
     }
     ,
     entityMaxHP: function (e)
@@ -113,24 +203,58 @@ items: storage
         return (e.str*0.1 + e.res*0.3 + (Math.log(e.res/1000+Math.E)*15000 | 0));
     }
     ,
-    entityMaxMana: function (e)
+    entityMaxMP: function (e)
     {
         return (e.mag*1.2 + (Math.log(e.res*0.3+Math.E)*70 | 0));
+    }
+    ,
+    entityMaxSP: function (e)
+    {
+        return (e.str*0.2 + e.res*0.2 + (Math.log(e.res/1000+Math.E)*15000 | 0));
+    }
+    ,
+    entityMaxMSP: function (e)
+    {
+        return (e.res*0.1 + e.mag*0.1 + e.psy*1.2 + e.spr*0.1 (Math.log(e.res/1000+Math.E)*10000 | 0));
     }
     ,
     entityDesc: function (entity) 
     {
         return [
-            (entity.playername||entity.type),
-            "HP: " + entity.hp + "/" + this.entityMaxHP(entity),
-            "Mana: " + entity.mana + "/" + this.entityMaxMana(entity),
-            "Strength: " + 10 * Math.log(Math.E+entity.str) / Math.log(Math.E+100),
-            "Resillience: " + entity.res,
-            "Magic: " + entity.mag,
-            ].join("\n");
+            "<b><i>" +(entity.playername||entity.type) + "</i>",
+            "<span style='color:red'>Health: " + entity.hp + "/" + this.entityMaxHP(entity) + "</span>",
+            "<span style='color:green'>Stamina: " + entity.sta + "/" + this.entityMaxSP(entity) + "</span>",
+            "<span style='color:blue'>Mana: " + entity.mana + "/" + this.entityMaxMP(entity) + "</span>",
+            "<span style='color:cyan'>Mental Stamina: " + entity.mst + "/" + this.entityMaxMSP(entity) + "</span>",
+            "<span style='color:gold'>Life Energy: " + entity.lp + "/" + this.entityMaxLP(entity) + "</span>",
+            
+            "<br/>",
+
+            "Physical Offense: " + this.entityPhysAtk(entity),
+            "Magical Offense: " + this.entityMagAtk(entity),
+            "Psychic Offense: " + this.entityPsyAtk(entity),
+            "Spiritual Offense: " + this.entitySprAtk(entity),
+
+            "Physical Defense: " + this.entityPhysDef(entity),
+            "Thermal Defense: " + this.entityThrDef(entity),
+            "Electric Defense: " + this.entityElcDef(entity),
+            "Magical Defense: " + this.entityMagDef(entity),
+            "Psychic Defense: " + this.entityPsyDef(entity),
+            "Spiritual Defense: " + this.entitySprDef(entity),
+
+            "<br />",
+
+            "Exp:",
+            "STR: " + entity.str,
+            "RES: " + entity.res,
+            "SPD: " + entity.spd,
+            "MAG: " + entity.mag,
+            "PSY: " + entity.psy,
+            "SPR: " + entity.spr
+            ].join("<br/>");
     }
     ,
-    equipPhysAttackPower: function () {}
+    equipPhpsAtk: function () {}
     ,
     newPlayerEntity: function (src, charname)
     {
