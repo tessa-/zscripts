@@ -24,7 +24,7 @@
         ,
         perm: function () { return true; }
         ,
-        code: function () 
+        code: function (src) 
         {
             this.com.message([src], "Authlist:", this.theme.INFO);
             var auths = sys.dbAuths();
