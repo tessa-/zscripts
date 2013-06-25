@@ -8,6 +8,8 @@
     ,
     "me":
     {
+        desc: "Says something"
+        ,
         perm: function(src)
         {
             return !this.security.profIsMuted(this.profile.profileID(src));
