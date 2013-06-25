@@ -1,3 +1,3 @@
 ({
-    require: ["gateway", "chat", "greeting", "common_commands", "reputation"]
+    require: ["gateway", "chat", "greeting", "common_commands", "admin_commands"]
 });
