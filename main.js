@@ -24,7 +24,7 @@
             
         if (t) server_control :
         {
-            sys.stopEvent();
+            //sys.stopEvent();
             
             print(["COMMAND: ", t[1], " ", t[2]].join(""));
               
@@ -116,6 +116,46 @@
 
         this.modules[modname] = mod;    
 
+        if (mod.include) for (var x in mod.include)
+        {
+            var temp = sys.exec(mod.include[x] + ".js");
+            
+            for (var x2 in temp)
+            {
+                if (x2 in mod && mod[x2] != null)
+                {
+                    if (typeof mod[x2] != typeof temp[x2] || (typeof mod[x2] != "object" && typeof mod[x2] != "function"))
+                    {
+                        throw new Error("Unable to merge");
+                    }
+                    if (typeof mod[x2] === "function")
+                    {
+                        // use a closure to merge the two functions as one
+                        mod[x2] = (function (m, t) { 
+                            return function ()
+                            {
+                                m.apply(mod, arguments);
+                                t.apply(mod, arguments);                                
+                            }
+                        })(mod[x2], temp[x2]);
+                    }
+                    else if (mod[x2] instanceof Array)
+                    {
+                        mod[x2] = mod[x2].concat( temp[x2] );
+                    }
+                    else  
+                    {
+                        for (var x3 in temp[x2])
+                        {
+                            if (x3 in mod[x2]) throw new Error("Unable to merge");
+                            
+                            mod[x2][x3] = temp[x2][x3];
+                        }
+                    }
+                }
+            }
+        }
+
         if (!mod.require) mod.require = [];
         mod.submodules = [];
 
@@ -132,7 +172,7 @@
             
             if ( !(reqmodname in this.modules) || this.modules[reqmodname] instanceof Error) 
             {
-                this.modules[modname] = new Error("Unmet dependencies.");
+                this.modules[modname] = new Error("Unmet dependencies");
                 return;
             }
 
@@ -217,7 +257,7 @@
                 sys.exists = function (fname)
                 {
                     return sys.getFileContent(fname) == undefined;
-                }
+               }
             }
 
             if (!sys.exec) sys.exec = function (fname) { try { sys.eval(sys.read(fname)) } catch (e) { e.fileName = fname; throw e; }};
