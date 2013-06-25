@@ -8,7 +8,7 @@
     ,
     loadModule: function ()
     {
-        this.database = this.io.read("reputation");
+        this.database = this.io.openDB("reputation");
 
         if (!this.database.users) this.database.users = new Object;
         
@@ -32,7 +32,7 @@
             this.beforeLogOut(u[x]);
         }
 
-        this.io.write("reputation", this.database);
+        this.io.closeDB("reputation");
     }
     ,
     updateReputation: function (src)
