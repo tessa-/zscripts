@@ -57,7 +57,7 @@
 
             if (typeof variant === "function")
             {
-                return "<Function> [[" +variant.name + ":" +variant.fileName + ":"+variant.lineNumber + "]]"; 
+                return "<Function> [[" + (variant.name?variant.name:"<anonymous>") + "]]"; 
             }
 
             if (typeof variant === "object")
