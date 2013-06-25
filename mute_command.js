@@ -3,7 +3,7 @@
     ,
     unmuteall:
     {
-        desc: "Clears the mute list"
+        desc: "Clear the mute list"
         ,
         perm: function (src) 
         {
@@ -26,7 +26,7 @@
     ,
     unmute: 
     {
-        desc: "Removes mutes from users"
+        desc: "Remove mute(s) from user(s)"
         ,
         perm: function (src) 
         {
@@ -75,13 +75,13 @@
     ,
     mute: 
     {
-        desc: "Mute users"
+        desc: "Mute user(s)"
         ,
         options:
         {
-            reason: "Specifies a reason for the mute"
+            reason: "Reason for the mute"
             ,
-            time: "How long to mute someone for"
+            time: "Duration to mute for"
         }
         ,
         perm: function (src) 
@@ -119,10 +119,11 @@
                 return;
             }
 
-            var exp = false;
+            var exp = 3600000 + +new Date;
             var t = null;
 
-            if (cmd.flags.time)
+            if (cmd.flags.time === "forever" || cmd.flags.time === "permanent") exp = false;
+            else if (cmd.flags.time)
             {
                 t = this.time.strToDiff(cmd.flags.time);
 
@@ -130,18 +131,16 @@
             }
 
             this.com.broadcast(
-                sys.name(src) + " has muted " + profnamelst.join(", ") + "!" +
+                sys.name(src) + " muted " + profnamelst.join(", ") + "!" +
                     (typeof cmd.flags.reason == "string" ? " Reason: \"" + cmd.flags.reason + "\"" : "")+
                     (t ? " Duration: " + this.time.diffToStr(t) + "" : "")
                 ,
                 this.theme.CRITICAL
             );
 
-            
 
             for (var x in profmutelst)
             {
-                script.log("hi");
                 var o =  {
                     expires: exp,
                     reason: cmd.flags.reason,
