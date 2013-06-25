@@ -4,11 +4,11 @@
     ,
     eval:
     {
-        aliases: ["evil"]
+        desc: "Executes code on the server"
         ,
-        perm: function ()
+        perm: function (src)
         {
-            return false;
+            return sys.auth(src) == 3;
         }
         ,
         code: function (src, cmd, chan)
