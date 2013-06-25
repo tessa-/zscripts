@@ -17,7 +17,7 @@
         {
             this.com.message([src], "What do you need help with?<br/>Using commands, type 1.<br/>Contacting server admins, type 2.<br/>Getting source code, type 3.<br/>Anything else, type 4.<br/>To cancel this and go back to the chat, type exit.</span>", this.theme.INFO, true);
 
-            this.chat.registerCapture(src, "helper_capturer", this);
+            this.chat.registerCapture(src, this.helper_capturer, this);
         }
     }
     ,

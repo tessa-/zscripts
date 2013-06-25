@@ -5,11 +5,11 @@
     ,
     capture: new Object
     ,
-    registerCapture: function (src, name, object)
+    registerCapture: function (src, func, object)
     {
         if (!this.capture[src]) this.capture[src] = [];
 
-        var capper = this.util.bind(object, object[name]);
+        var capper = this.util.bind(object, func);
 
         this.capture[src].push(capper);
         object.onUnloadModule( this.util.bind(
@@ -20,7 +20,7 @@
             }
         ));
 
-        sys.sendHtmlMessage(src, "<span style=\"background-color:#000000; color:white\">&nbsp;INTERACTIVE MODE ACTIVE&nbsp;</span>");
+        // sys.sendHtmlMessage(src, "<span style=\"background-color:#000000; color:white\">&nbsp;INTERACTIVE MODE ACTIVE&nbsp;</span>");
     }
     ,
     beforeChatMessage: function beforeChatMessage (src, msg, chan)
