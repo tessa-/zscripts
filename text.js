@@ -1,7 +1,7 @@
 ({
     escapeHTML: function (html)
     {
-        return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g,"<br/>");
+        return html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g,"<br/>").replace(/ /g, "&nbsp;");
     }
     ,
     stripHTML: function (html)

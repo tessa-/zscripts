@@ -1,6 +1,6 @@
 ({
 
-    require: ["com", "commands", "theme"]
+    require: ["com", "commands", "theme", "util"]
     ,
     eval:
     {
@@ -15,7 +15,7 @@
         {
             try 
             {
-                this.com.message([src], JSON.stringify(eval(cmd.input)), this.theme.INFO);
+                this.com.message([src], this.util.inspect(eval(cmd.input), true), this.theme.INFO);
             } 
             catch (e)
             {
