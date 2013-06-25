@@ -68,7 +68,7 @@
 
             for (var x in profmutelst)
             {
-                this.security.removeBan(profmutelst[x]);
+                this.security.removeMute(profmutelst[x]);
             }
         }
     }
