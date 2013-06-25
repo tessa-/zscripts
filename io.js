@@ -114,6 +114,25 @@
         delete this.openDBs[dbname];
     }
     ,
+    purgeDB: function (dbname)
+    {
+        
+        //var metadb = this.openDBs[dbname];
+        //var db = metadb.db;
+
+        //m
+
+        //sys.rm(dbname + ".jsqz");
+    }
+    ,
+    backupDB: function (dbname)
+    {
+        var metadb = this.openDBs[dbname];
+        var db = metadb.db;
+
+        sys.writeObject(dbname + ".backup."+ (+new Date)+".jsqz.bak", db, 9);
+    }
+    ,
     step: function ()
     {
         var now = +new Date;
