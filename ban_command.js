@@ -155,6 +155,8 @@
     ,
     banlist: 
     {
+        desc: "Lists banned users"
+        ,
         perm: function (src)
         {
             return true;
