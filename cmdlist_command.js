@@ -1,5 +1,5 @@
 ({
-    require: ["commands", "com","text", "theme"]
+    require: ["commands", "com","text", "theme", "less"]
     ,
     cmdlist: 
     {
@@ -32,12 +32,11 @@
                 var canuse = sys_auth$src == 3 || cmds[x].perm.apply(cmds[x].bind, [src]);
                 if (!cmd.flags.all && sys_auth$src != 3 && !canuse) continue;
 
-                msg.push("<b>/" + text.escapeHTML(x) +"</b>" + (canuse?"":" (NO PERMISSION)") );
-                if (cmds[x].desc) msg.push(cmds[x].desc);
+                msg.push("<b>/" + text.escapeHTML(x) +"</b>" + (canuse?"":" (NO PERMISSION)") + (cmds[x].desc?" "+cmds[x].desc:"") );
 
                 if (cmds[x].options)
                 {
-                    msg.push("Options:");
+                   // msg.push("Options:");
                     var options = cmds[x].options;
 
                     for (var x2 in options)
@@ -47,7 +46,8 @@
                 }
             }
             
-            com.message([src], "Commands list: <br/>" +msg.join("<br />"), this.theme.INFO, true);
+            com.message([src], "Commands list:", this.theme.INFO, true);
+            this.less.less(src, msg.join("<br />"), true);
         }
     }
     ,
