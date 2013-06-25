@@ -61,7 +61,11 @@
                 return;
             }
 
-            throw new Error("Modprobe requires one of: --load --unload or --reload");
+            this.com.message([src], "Loaded modules:", this.theme.INFO);
+            for (var x in script.modules)
+            {
+                this.com.message([src], x, -1);
+            }
 
         }
     }
