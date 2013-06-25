@@ -102,12 +102,13 @@
         {
             this.loadModule(unloads[x]);
         }
+
+        this.loadModule(modname); // load even if unload failed
     }
     ,
     loadModule : function loadModule (modname) 
     {
-        
-        if (this.modules[modname]) return;
+        if (this.modules[modname] && !(this.modules[modname] instanceof Error)) return;
         this.log("Loading module: " + modname);
 
         var mod = sys.exec(modname+".js");
@@ -118,6 +119,7 @@
 
         if (mod.include) for (var x in mod.include)
         {
+            this.log("Including module: " + mod.include[x])
             var temp = sys.exec(mod.include[x] + ".js");
             
             for (var x2 in temp)
@@ -153,6 +155,10 @@
                         }
                     }
                 }
+                else
+                {
+                    mod[x2] = temp[x2];
+                }
             }
         }
 
@@ -177,7 +183,8 @@
             }
 
             this.modules[reqmodname].submodules.push(modname);
-            this.modules[modname][reqmodname] = this.modules[reqmodname];
+            Object.defineProperty(this.modules[modname], reqmodname, {configurable : true, value: this.modules[reqmodname]});
+//            this.modules[modname][reqmodname] = this.modules[reqmodname];
         }
 
 
