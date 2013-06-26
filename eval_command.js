@@ -1,6 +1,6 @@
 ({
 
-    require: ["com", "commands", "theme", "util"]
+    require: ["com", "commands", "theme", "util", "less"]
     ,
     eval:
     {
@@ -15,7 +15,7 @@
         {
             try 
             {
-                this.com.message([src], this.util.inspect(eval(cmd.input), true), this.theme.INFO);
+                this.less.less(src, this.util.inspect(eval(cmd.input), true), false);
             } 
             catch (e)
             {
