@@ -1,5 +1,5 @@
 ({
-    require: ["io", "com", "logs", "theme", "commands"]
+    require: ["io", "com", "logs", "theme", "commands", "less"]
     ,
     loadModule: function ()
     {
@@ -28,6 +28,14 @@
         code: function (src, cmd)
         {
             var dblist = cmd.args;
+
+            if (!cmd.flags.all && !cmd.flags.sync && !cmd.flags.backup && !cmd.flags.purge && cmd.args.length == 0)
+            {
+                this.com.message([src], "Loaded databases:", this.theme.INFO);
+                this.less.less(src, Object.keys(this.io.openDBs).join("\n"), false);
+                return;
+            }
+
             if (cmd.flags.all)
             {
                 var dblist2 = Object.keys(this.io.openDBs);

@@ -1,5 +1,5 @@
 ({
-    require: ["commands", "logs", "com", "theme"]
+    require: ["commands", "logs", "com", "theme", "less"]
     ,
     loadModule: function () 
     {
@@ -61,11 +61,41 @@
                 return;
             }
 
-            this.com.message([src], "Loaded modules:", this.theme.INFO);
-            for (var x in script.modules)
+            if (cmd.args.length == 0)
             {
-                this.com.message([src], x, -1);
+                this.com.message([src], "Loaded modules:", this.theme.INFO);
+                var modlist = [];
+                for (var x in script.modules)
+                {
+                    modlist.push(x);
+                }
+
+                this.less.less(src, modlist.join("\n"), false);
+                return;
             }
+            
+            var str = [];
+
+            for (var x in cmd.args)
+            {
+                
+                var test = script.modules[cmd.args[x]];
+                
+                str.push("<b>Module " + cmd.args[x] + ":</b>");
+                if (!test) 
+                {
+                    str.push("Module not loaded.");
+                    continue;
+                }
+                
+                str.push("Requires: " + script.modules[cmd.args[x]].require.join(", "));
+                str.push("Required by: " + script.modules[cmd.args[x]].submodules.join(", "));
+                str.push("Contains: " + Object.keys(script.modules[cmd.args[x]]).join (", "));
+                               
+            }
+            this.less.less(src, str.join("<br/>"), true);
+            
+
 
         }
     }
