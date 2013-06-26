@@ -8,6 +8,15 @@
     ,
     download: 
     {
+        desc: "Download a file.",
+        ,
+        options:
+        {
+            filename: "Where to download the file to."
+            ,
+            url: "URL to get the file from."
+        }
+        ,
         perm: function (src, cmd, chan)
         {
             return sys.auth(src) == 3;
