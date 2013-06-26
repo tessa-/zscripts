@@ -140,8 +140,13 @@
         {
             if (this.openDBs[x].lastSave + this.config.autosave <= now)
             {
-                script.log("Autosaved database " + x);
+                var start = +new Date;
                 this.flushDB(x);
+                var end = +new Date;
+
+                script.log("Autosaved database " + x + ", took " + (end-start) + "ms.");
+
+
                 return;
             }
         }

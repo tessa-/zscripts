@@ -28,6 +28,7 @@
         code: function (src, cmd)
         {
             var dblist = cmd.args;
+            var now = +new Date;
 
             if (!cmd.flags.all && !cmd.flags.sync && !cmd.flags.backup && !cmd.flags.purge && cmd.args.length == 0)
             {
@@ -35,6 +36,8 @@
                 this.less.less(src, Object.keys(this.io.openDBs).join("\n"), false);
                 return;
             }
+
+            
 
             if (cmd.flags.all)
             {
@@ -44,14 +47,18 @@
 
             if (cmd.flags.sync) for (var x in dblist) 
             {
+                var start = +new Date;
                 this.io.flushDB(dblist[x]);
-                this.logs.logMessage(this.logs.INFO, "Synced database " + dblist[x]);
+                var end = +new Date;
+                this.logs.logMessage(this.logs.INFO, "Synced database " + dblist[x] + ", took " + (end-start) + "ms.");
             }
 
             if (cmd.flags.backup) for (var x in dblist) 
             {
+                var start = +new Date;
                 this.io.backupDB(dblist[x]);
-                this.logs.logMessage(this.logs.INFO, "Backed up database " + dblist[x]);
+                var end = +new Date;
+                this.logs.logMessage(this.logs.INFO, "Backed up database " + dblist[x] + ", took " + (end-start) + "ms.");
             }
 
             if (cmd.flags.purge) for (var x in dblist)
