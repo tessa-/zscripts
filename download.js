@@ -8,7 +8,7 @@
     ,
     download: 
     {
-        desc: "Download a file.",
+        desc: "Download a file."
         ,
         options:
         {
