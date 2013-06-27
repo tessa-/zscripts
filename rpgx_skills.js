@@ -5,18 +5,48 @@
         gpunch:
         {
             name: "Great Punch",
-            sp: 100,
+            // The name of the skill
+
+            cost: 
+            // Cost to use the skill
+            {
+                sp: 100
+                // Costs 100 stamina points
+            }
+
             level: 1,
+            // Level Class of the skill, has no effect on damage but serves to classify skills by strength
+
             threshold: 0,
-            physAtk: 3,
+            // Exp required for first use
+            
             use: "none",
+            // Item subclass required to use. "none" means empty hand.
+
+            components: 
+            // Multiple components are supported, for example to damage the opponent and the user.
+            [{
+                target: "opp",
+                // Target of the component, either "self", "opp", "ally" or combinations of such (in array)
+
+                count: 1,
+                // Number of targets to select. -1 is all targets possible
+
+                move: "physical",
+                // The function to be called for this component
+
+                base: 3,
+                // The base damage done if offence = defense
+            }]
+            ,
             related: { spunch: 0.5 }
+            // Related skills that are given EXP points when you use this skill
         }
         ,
         spunch:
         {
             name: "Super Punch",
-            level: 1
+            level: 1,
             sp: 250,
             threshold: 360,
             psysAtk: 5,
@@ -49,8 +79,8 @@
         ustance:
         {
             name: "Uber Stance",
-            type: "passive"
-            effect: "ustance"
+            type: "passive",
+            effect: "ustance",
             level: 4,
             threshold: 2300,
             sp: 50

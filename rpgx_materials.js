@@ -171,7 +171,7 @@
         ,
         ti:
         {
-            name: "Titanium"
+            name: "Titanium",
             strength: 90,
             sharpness: 50,
             density: 40
@@ -180,7 +180,7 @@
         ametal:
         {
             name: "Amorphorous Metal Alloy",
-            type: "metal"
+            type: "metal",
             strength: 125,
             sharpness: 350,
             density: 85
@@ -189,7 +189,7 @@
         diamond:
         {
             name: "Diamond",
-            type: "gem"
+            type: "gem",
             strength: 400,
             sharpness: 500,
             density: 40
@@ -207,7 +207,7 @@
         ruby:
         {
             name: "Ruby",
-            type: "gem"
+            type: "gem",
             strength: 100,
             sharpness: 250,
             density: 40

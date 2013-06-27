@@ -84,11 +84,14 @@ items: storage
     ,
     require: ["io", "sched"]
     ,
+    include: ["rpgx_materials", "rpgx_areas", "rpgx_skills", "rpgx_equips"]
+    ,
     loadModule: function ()
     {
         this.database = this.io.openDB("rpg");
         if (!this.database.games) this.database.games = new Object;
         this.games = this.database.games;
+
     }
     ,
     step: function ()
@@ -106,15 +109,42 @@ items: storage
                 {
                     continue playerstep;
                 }
-                if (this.games[x].players[x2]
-                
+
+                var p = this.games[x].players[x2];
+
+                var ctx = 
+                    {
+                        game: this.games[x],
+                    };
+
+                if (!player.inbattle) this.idleStep(p, ctx);                    
             }
         }
     }
     ,
-    materials: null
+    chanRPG: function (chan)
+    {
+        var _;
+        if (_ = this.games["chan$" + sys.channel(chan).toLowerCase()]) return _;
+
+        else 
+        {
+            _ = this.games["chan$" + sys.channel(chan).toLowerCase()] = this.newRPGGame();
+            this.startGameForChan(chan);
+            return _;
+        }
+    }
     ,
-    weapons: null
+    startGameForChan: function (chan)
+    {
+        
+    }
+    ,
+    newRPGGame: function ()
+    {
+        var game = {players: {}, paused:true, ready: false };
+        return game;
+    }
     ,
     equipName: function(item)
     {
@@ -261,6 +291,7 @@ items: storage
         var newp = 
             {
                 type: null,
+                area: "town",
                 playername: sys.name(src).toLowerCase(),
                 charname: charname,
                 str: 100,
@@ -303,8 +334,4 @@ items: storage
             };
         return newp;
     }
-    ,
-    
-    
-
 });

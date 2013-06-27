@@ -60,7 +60,7 @@
             name: "Light Armor",
             type: "body",
             amount: 40,
-            materials: ["metal", "scale", "wood"]
+            materials: ["metal", "scale", "wood"],
             base: 25
         }
         ,
@@ -78,7 +78,7 @@
             name: "Heavy Armor",
             type: "body",
             amount: 360,
-            materials: ["metal"]
+            materials: ["metal"],
             base: 140
         }
         ,
@@ -144,7 +144,7 @@
             subtype: "magic",
             hands:1,
             amount: 3,
-            materials: ["bone", "wood", "metal"]
+            materials: ["bone", "wood", "metal"],
             base: 30
         }
         ,
@@ -155,7 +155,7 @@
             hands: 2,
             subtype: "magic",
             amount: 15,
-            materials: ["wood", "bone"]
+            materials: ["wood", "bone"],
             base: 65
         }
         ,
