@@ -241,7 +241,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 }
                 var end = +new Date;
 
-                script.log((this.config.autosavemethod === "commit" ? "Autocommited" : "Autosaved" ) + " database " + x + ", took " + (end-start) + "ms.");
+                this.openDBs[x].lastSave = +new Date;
+
+                //script.log((this.config.autosavemethod === "commit" ? "Autocommited" : "Autosaved" ) + " database " + x + ", took " + (end-start) + "ms.");
 
 
                 return;
