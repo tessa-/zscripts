@@ -40,7 +40,7 @@
                 return "<Undefined>";
             }
 
-            if (typeof variant === "null")
+            if (variant === null)
             {
                 return "<Null>";
             }
