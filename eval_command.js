@@ -20,6 +20,7 @@
             catch (e)
             {
                 this.com.message([src], e.toString(), this.theme.CRITICAL);
+                this.com.message([src], e.backtracetext, -1);
             }
         }
     }
