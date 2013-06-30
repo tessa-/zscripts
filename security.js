@@ -117,6 +117,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         {
             this.sched.at(mute.expires, function () { _this.checkMute(profid); });
         }
+
+        this.io.markDB("security");
     }
     ,
 
@@ -136,6 +138,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     removeMute: function (profid)
     {
         delete this.database.mutes[profid];
+
+        this.io.markDB("security");
     }
     ,
     profIsBanned: function (p)
@@ -153,11 +157,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         {
             this.sched.at(ban.expires, function () { _this.checkBan(profid); });
         }
+
+        this.io.markDB("security");
     }  
     ,
     removeBan: function(profid)
     {
         delete this.database.bans[profid];
+
+        this.io.markDB("security");
     }
     ,
     getBan: function (profid)

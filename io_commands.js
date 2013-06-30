@@ -71,7 +71,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 var start = +new Date;
                 this.io.flushDB(dblist[x]);
                 var end = +new Date;
-                this.logs.logMessage(this.logs.INFO, "Synced database " + dblist[x] + ", took " + (end-start) + "ms.");
+               
+            }
+
+            if (cmd.flags.commit) for (var x in dblist) 
+            {
+                var start = +new Date;
+                this.io.commitDB(dblist[x]);
+                var end = +new Date;
+                
             }
 
             if (cmd.flags.backup) for (var x in dblist) 
@@ -79,7 +87,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 var start = +new Date;
                 this.io.backupDB(dblist[x]);
                 var end = +new Date;
-                this.logs.logMessage(this.logs.INFO, "Backed up database " + dblist[x] + ", took " + (end-start) + "ms.");
+                
             }
 
             if (cmd.flags.purge) for (var x in dblist)

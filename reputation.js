@@ -69,8 +69,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             var diff = now - this.times[p];
             var minutes =  ~~(diff / 1000 / 60);
             this.database.users[p] += minutes;
-
+            
             this.times[p] = now;
+            this.io.markDB("reputation");
         }
     }
     ,
