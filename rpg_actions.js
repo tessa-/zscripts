@@ -39,8 +39,37 @@
         ,
         dig: function (src, sub, chan, ctx)
         {
-            ctx.player.activeActions.push({ timer: 40, action: "dig", stepMessage: "You are digging a hole."});
+            ctx.player.activeActions.push({ timer: 40, done: "dig", tick: "digTick" });
         }
         
     }
+    ,
+    actions:
+    {
+        dig:  function (actionObj, ctx)
+        {
+          //  print(this.util.inspect(ctx.player));
+            var src = sys.id(ctx.player.name);
+            this.com.message([src], "You dug something up!", this.theme.GAME);
+
+            for (var x in this.areas[ctx.player.area].digs)
+            {
+                this.com.message([src], "It was an " + x, this.theme.GAME);
+            }
+        }
+        ,
+        explore: function (actionObj, ctx)
+        {
+            for (var x in this.areas[ctx.player.area].mobs)
+            {
+                this.com.message([src], "You started battle with " + JSON.stringify(this.areas[ctx.player.area].mobs[x]), this.theme.GAME);
+            }
+        }
+        ,
+        digTick: function (actionObj, ctx)
+        {
+            var src = sys.id(ctx.player.name);            
+            this.com.message([src], "You are digging a hole.", this.theme.GAME);
+        }
+    } 
 });

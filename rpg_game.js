@@ -1,7 +1,7 @@
 ({
     require: ["io", "com", "theme", "commands", "util"]
     ,
-    include: ["rpg_areas", "rpg_player", "rpg_entity", "rpg_actions"]
+    include: ["rpg_areas", "rpg_player", "rpg_entity", "rpg_actions", "rpg_mobs"]
     ,
     database: null
     // database stores the permanent data, games, etc.
@@ -11,6 +11,9 @@
     ,
     hooks: null
     // hooks associates rpgs with pipes
+    // not used as it should be for right now, will be fixed later
+
+
     ,
     loadModule: function ()
     {
@@ -41,6 +44,7 @@
     RPGStep: function (rpg)
     {
         if (rpg.paused) return;
+        rpg.tick++;
 
         for (var x in rpg.areas)
         {
@@ -50,14 +54,6 @@
         for (var x in rpg.players)
         {
             this.playerStep(rpg.players[x], {rpg: rpg});
-        }
-    }
-    ,
-    areaStep: function (area, ctx)
-    {
-        for (var x in area.battles)
-        {
-            this.battleStep(area.battles[x], { rpg: ctx.rpg, area: area});
         }
     }
     ,
@@ -73,6 +69,8 @@
                     areas: JSON.parse(JSON.stringify(this.areas)),
                     materials: {},
                     players: {},
+                    battles: {},
+                    battleCoutner: 0,
                     running: false,
                     tick: 0
                 };
@@ -176,13 +174,8 @@
         ,
         code: function (src, cmd, chan)
         {
-            if (typeof cmd.flags.rpgname != "string")
-            {
-                this.com.message([src], "You must provide --rpgname", this.theme.WARN);
-                return;
-            }
 
-            var rpgname = cmd.flags.rpgname;
+            var rpgname = cmd.input.replace(/^\s*([^\s])+\s*$/, "$1");
 
             if (this.channels[chan]) 
             {

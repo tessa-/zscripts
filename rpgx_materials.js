@@ -82,7 +82,7 @@
         {
             name: "Fire Dragon Scale",
             type: "scale",
-            strength: 60,
+            strength: 120,
             sharpness: 20,
             density: 35
         }
@@ -155,7 +155,7 @@
         {
             name: "Steel",
             type: "metal",
-            strength: 155,
+            strength: 120,
             sharpness: 60,
             density: 95
         }
@@ -164,7 +164,7 @@
         {
             name: "High-Grade Steel",
             type: "metal",
-            strength: 300,
+            strength: 150,
             sharpness: 70,
             density: 100
         }
@@ -190,8 +190,8 @@
         {
             name: "Diamond",
             type: "gem",
-            strength: 400,
-            sharpness: 500,
+            strength: 200,
+            sharpness: 250,
             density: 40
         }
         ,

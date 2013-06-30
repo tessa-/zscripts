@@ -1,15 +1,4 @@
 ({
-    entityUpdateStats: function (e)
-    // Works for players and entities
-    {
-        e.maxmp =  (e.mag*1.2 + (Math.log(e.res*0.3+Math.E)*70 | 0));
-        e.maxsp = (e.str*0.2 + e.res*0.2 + (Math.log(e.res/1000+Math.E)*15000 | 0));
-        e.maxmsp = (e.res*0.1 + e.mag*0.1 + e.psy*1.2 + e.spr*0.1 (Math.log(e.res/1000+Math.E)*10000 | 0));
-        e.maxhp = (e.str*0.1 + e.res*0.3 + (Math.log(e.res/1000+Math.E)*15000 | 0));
-        e.offense = Math.log(entity.str + Math.E) * (this.equipPhysAtk(entity.lhand) + this.equipPhysAtk(entity.rhand));
-        e.defense =  Math.log(entity.res + Math.E) * (this.equipPhysDef(entity.lhand) + this.equipPhysDef(entity.rhand));
-    }
-    ,
     entityTick: function (e)
     {
 

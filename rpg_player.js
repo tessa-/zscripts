@@ -19,29 +19,50 @@
                 lp: 100,
 
                 items: {},
+                // Bulk items, e.g., iron ore (50)
                 
                 equips: [],
+                // Single items
 
-                activeActions:[],
-                // All the things happening at the moment
+                battle: null,
+                // Active battle ID
+
+                activeActions: [],
+                // Current action being executed. These occur outside of battle
+                // And they are qued.
+
+
+                bulkEffects: [],
+                // All of these are executed at the same time.
+
+                indvEffects: {},
+                // Like bulkEffects, but an object instead of array.
 
                 head: null,
+                
                 body:
+                // Cotton clothing.
                 {
+                    
                     material: "cotton",
                     type: "clothes",
                     quality: 10
                 }
                 ,
                 lhand: null,
+                
                 rhand: 
+                // A wooden sword.
                 {
                     material: "birch",
                     type: "sword",
                     quality: 10
                 }
+
                 ,
+
                 feet:
+                // Leather shoes
                 {
                     material: "leather",
                     type: "shoes",
@@ -60,31 +81,27 @@
 
         for (var x in player.activeActions)
         {
-            if (player.activeActions[x].timer-- <= 0)
+            if ("timer" in player.activeActions[x] && player.activeActions[x].timer-- <= 0)
             {
-                this.actions[player.activeActions[x].action].call(this, player.activeActions[x], { rpg: ctx.rpg, player:player, index: x });
+                if (player.activeActions[x].done) this.actions[player.activeActions[x].done].call(this, player.activeActions[x], { rpg: ctx.rpg, player:player, index: x });
                 delete player.activeActions[x];
             }
-            else
+            else if (player.activeActions[x].tick)
             {
-                this.com.message([src], player.activeActions[x].stepMessage, this.theme.GAME);
+                 this.actions[player.activeActions[x].tick].call(this, player.activeActions[x], { rpg: ctx.rpg, player:player, index: x });
             }
             break;
         }
     }
     ,
-    actions:
-    {
-        dig:  function (actionObj, ctx)
-        {
-          //  print(this.util.inspect(ctx.player));
-            var src = sys.id(ctx.player.name);
-            this.com.message([src], "You dug something up!", this.theme.GAME);
 
-            for (var x in this.areas[ctx.player.area].digs)
-            {
-                this.com.message([src], "It was an " + x, this.theme.GAME);
-            }
-        }
-    }    
+    playerUpdateStats: function (e)
+    {
+        e.maxmp =  (e.mag*1.2 + (Math.log(e.res*0.3+Math.E)*70 | 0));
+        e.maxsp = (e.str*0.2 + e.res*0.2 + (Math.log(e.res/1000+Math.E)*15000 | 0));
+        e.maxmsp = (e.res*0.1 + e.mag*0.1 + e.psy*1.2 + e.spr*0.1 + (Math.log(e.psy/1000+Math.E)*10000 | 0));
+        e.maxhp = (e.str*0.1 + e.res*0.3 + (Math.log(e.res/1000+Math.E)*15000 | 0));
+        e.offense = Math.log(e.str/1500 + Math.E)*1000 + (this.equipAtk(e.lhand) + this.equipAtk(e.rhand));
+        e.defense =  Math.log(e.res/1500 + Math.E)*1000 + (this.equipDef(e.lhand) + this.equipDef(e.rhand));
+    }
 });

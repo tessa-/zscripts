@@ -1,7 +1,7 @@
 ({
     moves:
     {
-        instakil: function (ctx, source, targets)
+        instakill: function (ctx)
         {
             for (var x in targets)
             {
@@ -9,9 +9,9 @@
             }
         }
         ,
-        physical: function (ctx, source, targets)
+        physical: function (ctx)
         {
-            var offense = ctx.player.offense;
+            var offense = ctx.attacker.offense;
             var base = ctx.movepower;
 
             
