@@ -17,7 +17,7 @@ profileByIp(ipaddr):
   Returns a matching profile ID, otherwise -1
 
 trace(profid):
-  When profiles are merged one profile will take precedence, but the others
+  When profiles are merged one profile will take priority, but the others
   will still exist
 
 profileUpdateInfo(prof, src):
@@ -168,6 +168,7 @@ profileUpdateInfo(prof, src):
 
         prof.lastName = sys_name$src;
         prof.lastIP = sys_ip$src;
+        prof.lastOnline = +new Date;
 
         this.updateProfileRelations(profid);
 
