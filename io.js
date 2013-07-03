@@ -30,9 +30,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     diskRO: false
     ,
+    configs: null
+    ,
     loadModule: function ()
     {
         this.openDBs = new Object;
+        this.configs = new Object;
         script.registerHandler("step", this);
 
         this.config = this.readConfig("io", {autosave:60000, autosavemethod: "commit"});
@@ -52,11 +55,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     write: function (dbname, obj, fast)
     {
-        sys.writeObject("js_databases/" +dbname + ".jsqz", obj, (fast?1:9));
+        sys.writeObject("js_databases/" +dbname + ".jsqz", obj, (fast?1:3));
     }
     ,
     readConfig: function (cfgname, defaults)
     {
+        if (cfgname in this.configs) return this.configs[cfgname].object;
+
         if (!sys.exists(cfgname + ".config.json")) 
         {
             sys.write(cfgname+".config.json", JSON.stringify(defaults));
@@ -112,7 +117,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             
             if (!sys.exists("js_databases/" + dbname + ".jsqz.transactions")) break get_data;
 
-            script.log("Applying transactional patches to transactional database " + dbname);
+            script.log("Applying patches to database " + dbname);
 
             var dataText = JSON.stringify(db, null, 1);
 
@@ -149,14 +154,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         var db = metadb.db;
         var start = +new Date;
 
-        if (metadb.hasChanges === null || metadb.hasChagnes === true)
-        {
-            var start = +new Date;
-            this.write(dbname, db, true);
-            if (metadb.hasChanges === true) metadb.hasChanges = false; 
-            metadb.dataText = JSON.stringify(db, null, 1);
-            if (sys.exists("js_databases/" + dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
-        }
+        var start = +new Date;
+        this.write(dbname, db, true);
+        if (metadb.hasChanges === true) metadb.hasChanges = false; 
+        metadb.dataText = JSON.stringify(db, null, 1);
+        if (sys.exists("js_databases/" + dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
 
         metadb.lastSave = +new Date;
         var end = +new Date;
@@ -168,6 +170,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         
         var start = +new Date;
         var newData = JSON.stringify(this.openDBs[dbname].db, null, 1);
+
+        if (newData === this.openDBs[dbname].dataText) return;
 
         var dmp = new this.dmp.diff_match_patch;
 
