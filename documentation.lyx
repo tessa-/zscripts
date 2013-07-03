@@ -1,0 +1,593 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2cm
+\topmargin 2cm
+\rightmargin 2cm
+\bottommargin 2cm
+\headheight 2cm
+\headsep 2cm
+\footskip 2cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+ZScripts Framework Server Scripts MSI/API Documentation
+\end_layout
+
+\begin_layout Paragraph
+NOTE: This document only documents the MSI (Module Scripting Interface),
+ not end modules (e.g., ban_command) that aren't intended to be required by
+ other modules.
+\end_layout
+
+\begin_layout Part
+CORE (main)
+\end_layout
+
+\begin_layout Description
+loadModule(modname) Takes modname, loads the module.
+\end_layout
+
+\begin_layout Description
+unloadModule(modname) Unloads modname.
+\end_layout
+
+\begin_layout Description
+reloadModule(modname) Reloads modname
+\end_layout
+
+\begin_layout Description
+registerHandler(handlername,
+\begin_inset space ~
+\end_inset
+
+object,
+\begin_inset space ~
+\end_inset
+
+propname=handlername) Registers object[propname] as handlername in the script
+ events.
+\end_layout
+
+\begin_layout Description
+log(message) Logs the message.
+ Note: Overridden by logs.js.
+\end_layout
+
+\begin_layout Description
+broadcast(m) Deprecated.
+\end_layout
+
+\begin_layout Description
+modules: Contains all the modules loaded.
+\end_layout
+
+\begin_layout Part
+text
+\end_layout
+
+\begin_layout Description
+escapeHTML(text) Escapes html in text 
+\end_layout
+
+\begin_layout Description
+stripHTML(text) Converts html to plaintext (works so-so.)
+\end_layout
+
+\begin_layout Part
+util
+\end_layout
+
+\begin_layout Description
+bind(object,
+\begin_inset space ~
+\end_inset
+
+function) Binds function to object, returns the bind.
+\end_layout
+
+\begin_layout Description
+shuffle(array) Shuffles array in place.
+\end_layout
+
+\begin_layout Description
+inspect(variant) Returns a human readable representation of variant.
+ Plaintext and '
+\backslash
+n' separated.
+\end_layout
+
+\begin_layout Part
+time
+\end_layout
+
+\begin_layout Description
+conversionFactors[factor] Object key is e.g., 
+\begin_inset Quotes eld
+\end_inset
+
+day
+\begin_inset Quotes erd
+\end_inset
+
+, output is number of miliseconds per.
+ Some are approximations (e.g.
+ month)
+\end_layout
+
+\begin_layout Description
+diffToStr(dif) Converts number of miliseconds into a string length of time
+ (e.g., 62000 -> 
+\begin_inset Quotes eld
+\end_inset
+
+1 hour, 2 seconds
+\begin_inset Quotes erd
+\end_inset
+
+ or something.
+\end_layout
+
+\begin_layout Description
+strToDiff(str) Converts diff string to number of miliseconds.
+ May or may not work depending on the input formatting.
+\end_layout
+
+\begin_layout Part
+theme
+\end_layout
+
+\begin_layout Description
+scriptHTML Internal
+\end_layout
+
+\begin_layout Description
+scriptText Internal
+\end_layout
+
+\begin_layout Description
+warnHTML Internal
+\end_layout
+
+\begin_layout Description
+gameHTML Internal
+\end_layout
+
+\begin_layout Description
+INFO Constant for formatAs (default)
+\end_layout
+
+\begin_layout Description
+WARN Constant for formatAs
+\end_layout
+
+\begin_layout Description
+CRITICAL Constant for formatAs
+\end_layout
+
+\begin_layout Description
+GAME Constant for formatAs
+\end_layout
+
+\begin_layout Description
+TOUR Constant for formatAs
+\end_layout
+
+\begin_layout Description
+formatAs(text,
+\begin_inset space ~
+\end_inset
+
+const) format text as const, -1 for raw
+\end_layout
+
+\begin_layout Part
+com
+\end_layout
+
+\begin_layout Description
+message(users,
+\begin_inset space ~
+\end_inset
+
+msg,
+\begin_inset space ~
+\end_inset
+
+type,
+\begin_inset space ~
+\end_inset
+
+html,
+\begin_inset space ~
+\end_inset
+
+chans,
+\begin_inset space ~
+\end_inset
+
+servercode) Sends msg to all users formatted as type (see theme, use constant
+ or -1), in any of chans (unless chan is null, then all chans.) If servercode
+ is truthy then append it to the logs prefixed with servercode.
+\end_layout
+
+\begin_layout Description
+broadcast(msg,
+\begin_inset space ~
+\end_inset
+
+type,
+\begin_inset space ~
+\end_inset
+
+html,
+\begin_inset space ~
+\end_inset
+
+chans) Like message but for all users.
+\end_layout
+
+\begin_layout Part
+io
+\end_layout
+
+\begin_layout Description
+openDB(dbname) Opens database dbname, returns dbname.
+ Must not already be open.
+\end_layout
+
+\begin_layout Description
+closeDB(dbname) Closes DB dbname.
+\end_layout
+
+\begin_layout Description
+flushDB(dbname) Writes out DB to file (semi-slow with large databases [>
+ ~100,000 keypair])
+\end_layout
+
+\begin_layout Description
+commitDB(dbname) Commits changes to DB to file (/usually/ faster)
+\end_layout
+
+\begin_layout Description
+backupDB(dbname) Makes a backup of DB (semi-slow with big databases [> ~100,000
+ keypair])
+\end_layout
+
+\begin_layout Description
+purgeDB(dbname) Unimplemented.
+\end_layout
+
+\begin_layout Description
+markDB(dbname) Mark dbname as changed.
+ May or may not do anything.
+ Might break your code if you only use it sometimes but not never or always.
+\end_layout
+
+\begin_layout Description
+readConfig(cfgname,
+\begin_inset space ~
+\end_inset
+
+defaultConfig) Read config.
+\end_layout
+
+\begin_layout Description
+writeConfig(cfgname) Write config (DEPRECATED)
+\end_layout
+
+\begin_layout Part
+logs
+\end_layout
+
+\begin_layout Description
+DEBUG Debug constant
+\end_layout
+
+\begin_layout Description
+INFO Information constant
+\end_layout
+
+\begin_layout Description
+WARN Warning constant
+\end_layout
+
+\begin_layout Description
+ERROR Error constant
+\end_layout
+
+\begin_layout Description
+CRITICAL Critical constant
+\end_layout
+
+\begin_layout Description
+logMessage(levl,
+\begin_inset space ~
+\end_inset
+
+msg) Logs the message.
+\end_layout
+
+\begin_layout Part
+sched
+\end_layout
+
+\begin_layout Description
+at(time,
+\begin_inset space ~
+\end_inset
+
+function) Runs function at time.
+ (will be deprecated in future but not yet, haven't coded alternative yet)
+\end_layout
+
+\begin_layout Part
+profile
+\end_layout
+
+\begin_layout Description
+database Object that keeps profiles.
+ This is an I/O database opened with the I/O module.
+\end_layout
+
+\begin_layout Description
+relationaldatabase Object discarded on reload that holds relational database
+ information.
+\end_layout
+
+\begin_layout Description
+profileID(src) Gets profile id for src.
+\end_layout
+
+\begin_layout Description
+lastName(profid) Last name of profile ID.
+\end_layout
+
+\begin_layout Description
+profileNames(prof) Names of prof.
+\end_layout
+
+\begin_layout Description
+profileIPs(prof)
+\end_layout
+
+\begin_layout Description
+profileUpdateInfo(prof,
+\begin_inset space ~
+\end_inset
+
+src) Updates profile information for src.
+\end_layout
+
+\begin_layout Description
+registerPlayer(src) Registers src a profile.
+\end_layout
+
+\begin_layout Description
+...
+ Complete docs later, this module is not very important and big.
+\end_layout
+
+\begin_layout Part
+security
+\end_layout
+
+\begin_layout Description
+checkUsers() 
+\end_layout
+
+\begin_layout Description
+checkUser(src) kicks banned users.
+\end_layout
+
+\begin_layout Description
+profIsMuted(prof) Boolean if profile is muted.
+\end_layout
+
+\begin_layout Description
+profIsBanned(prof) Boolean if profile is banned.
+\end_layout
+
+\begin_layout Description
+getMute(prof) Gets mute object for profile.
+\end_layout
+
+\begin_layout Description
+setMute(prof,
+\begin_inset space ~
+\end_inset
+
+muteObj) Sets mute object on profile.
+\end_layout
+
+\begin_layout Description
+getBan(prof) Gets ban object for profile.
+\end_layout
+
+\begin_layout Description
+setBan(prof,
+\begin_inset space ~
+\end_inset
+
+banObj) Sets ban object on profile.
+\end_layout
+
+\begin_layout Description
+checkMute(prof) Checks users mute for expiry
+\end_layout
+
+\begin_layout Description
+checkBan(prof) Checks ban for expiry
+\end_layout
+
+\begin_layout Description
+removeMute(prof) Removes mute on prof
+\end_layout
+
+\begin_layout Description
+removeBan(prof) Removes ban on prof
+\end_layout
+
+\begin_layout Part
+commands
+\end_layout
+
+\begin_layout Description
+registerCommand(name,
+\begin_inset space ~
+\end_inset
+
+obj,
+\begin_inset space ~
+\end_inset
+
+prop=name) Registers name from obj[prop].
+ Obj must be a module.
+\end_layout
+
+\begin_layout Description
+unregisterCommand(name) Usually you don't need to use this, the command
+ is remove at the unload event.
+\end_layout
+
+\begin_layout Description
+issueCommand(...) Don't use.
+\end_layout
+
+\begin_layout Paragraph
+Command Objects are of the following form:
+\end_layout
+
+\begin_layout Description
+perm(src,
+\begin_inset space ~
+\end_inset
+
+cmd,
+\begin_inset space ~
+\end_inset
+
+chan) A permission function.
+\end_layout
+
+\begin_layout Description
+code(src,
+\begin_inset space ~
+\end_inset
+
+cmd,
+\begin_inset space ~
+\end_inset
+
+chan) Executes the command.
+\end_layout
+
+\begin_layout Description
+desc Descibes the command
+\end_layout
+
+\begin_layout Description
+options Object with key descriptions of the command's options.
+\end_layout
+
+\begin_layout Part
+chat
+\end_layout
+
+\begin_layout Description
+registerCapture(src,
+\begin_inset space ~
+\end_inset
+
+func,
+\begin_inset space ~
+\end_inset
+
+module) Registers the capture for the module to user src.
+\end_layout
+
+\begin_layout Description
+registerFilter(filter,
+\begin_inset space ~
+\end_inset
+
+module) Registers the filter for the module.
+\end_layout
+
+\begin_layout Part
+less
+\end_layout
+
+\begin_layout Description
+less(src,
+\begin_inset space ~
+\end_inset
+
+msg,
+\begin_inset space ~
+\end_inset
+
+html) Sends msg to src.
+ html says if it's an HTML message.
+ User is presented with a special interface to read a very long message.
+\end_layout
+
+\end_body
+\end_document
