@@ -8,12 +8,21 @@ else
     install_to=$1
     echo Installing to $install_to
     cp -f `pwd`/scripts.js ${install_to}/bin
-    ln -sf `pwd`/js_modules ${install_to}/bin/js_modules
+    if test -h ${install_to}/bin/js_modules
+    then
+        rm ${install_to}/bin/js_modules
+    else
+        if test -d ${install_to}/bin/js_modules
+        then
+            echo wtf error
+            exit
+        fi
+    fi
+    ln -s `pwd`/js_modules ${install_to}/bin/js_modules
     if ! test -d ${install_to}/bin/js_databases
     then
         mkdir ${install_to}/bin/js_databases
         
     fi
     echo NOTE Symbolic linked js_modules
-
 fi
