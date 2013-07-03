@@ -297,12 +297,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         sys.enableStrict();
 
-        print ("================================================================================");
-        print ("Welcome to ArchScript0x!");
-        print ("Copyright 2013 Ryan P. Nicholl <archzombielord@gmail.com>");
-        print ("OBEY THE GNU AGPLv3+ :)");
-        print ("================================================================================");
-
+        print(sys.read("ZSCRIPTS_COPYING"));
 
         this.registerHandler("beforeLogIn", this, "AGPL");
 

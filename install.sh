@@ -6,6 +6,7 @@ else
     install_to=$1
     echo Installing to $install_to
     cp -f `pwd`/scripts.js ${install_to}/bin
+    cp -f `pwd`/COPYING ${install_to}/bin/ZSCRIPTS_COPYING
     if test -h ${install_to}/bin/js_modules
     then
         rm ${install_to}/bin/js_modules
