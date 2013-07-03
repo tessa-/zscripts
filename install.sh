@@ -1,6 +1,4 @@
 #!/bin/sh
-set -x
-
 if ! test -d "$1"
 then
     exec echo Provide a directory to install to, e.g.: ./install.sh ../pokemon-online
