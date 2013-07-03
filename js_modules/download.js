@@ -55,7 +55,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 return;
             }
 
-            if (sys.exists(fname) && !cmd.flags.force)
+            if (sys.fileExists(fname) && !cmd.flags.force)
             {
                 this.com.message([src], "File already exists, must specifiy --force to overwrite", this.theme.WARN);
                 return;

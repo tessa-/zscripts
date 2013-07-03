@@ -280,9 +280,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 sys.read = sys.readFromFile;
             }
 
-            if (!sys.exists)
+            if (!sys.fileExists)
             {
-                sys.exists = function (fname)
+                sys.fileExists = function (fname)
                 {
                     return sys.getFileContent(fname) == undefined;
                }
@@ -310,7 +310,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         try {
             var f;
-            if (sys.exists("main.json")) f = sys.read("main.json");
+            if (sys.fileExists("main.json")) f = sys.read("main.json");
             
             else f = "{}";
             

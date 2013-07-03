@@ -40,12 +40,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         this.config = this.readConfig("io", {autosave:60000, autosavemethod: "commit"});
 
-        if (!sys.exists("js_databases")) sys.mkdir("js_databases");
+        if (!sys.fileExists("js_databases")) sys.mkdir("js_databases");
     }
     ,
     read: function (dbname) 
     {
-        if (sys.exists("js_databases/" + dbname + ".jsqz"))
+        if (sys.fileExists("js_databases/" + dbname + ".jsqz"))
         {
             return sys.readObject("js_databases/" + dbname + ".jsqz");
         }     
@@ -62,7 +62,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     {
         if (cfgname in this.configs) return this.configs[cfgname].object;
 
-        if (!sys.exists(cfgname + ".config.json")) 
+        if (!sys.fileExists(cfgname + ".config.json")) 
         {
             sys.write(cfgname+".config.json", JSON.stringify(defaults));
             return JSON.parse(JSON.stringify(defaults));
@@ -104,7 +104,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         var db, patches, dbo, dataText;
         get_data: 
         {
-            if (!sys.exists("js_databases/" + dbname + ".jsqz")) 
+            if (!sys.fileExists("js_databases/" + dbname + ".jsqz")) 
             {
                 db = new Object;
                 sys.writeObject("js_databases/" +dbname + ".jsqz", db, 9);
@@ -115,7 +115,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 db = sys.readObject("js_databases/" + dbname + ".jsqz");
             }
             
-            if (!sys.exists("js_databases/" + dbname + ".jsqz.transactions")) break get_data;
+            if (!sys.fileExists("js_databases/" + dbname + ".jsqz.transactions")) break get_data;
 
             script.log("Applying patches to database " + dbname);
 
@@ -158,7 +158,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.write(dbname, db, true);
         if (metadb.hasChanges === true) metadb.hasChanges = false; 
         metadb.dataText = JSON.stringify(db, null, 1);
-        if (sys.exists("js_databases/" + dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
+        if (sys.fileExists("js_databases/" + dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
 
         metadb.lastSave = +new Date;
         var end = +new Date;
@@ -198,7 +198,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         var start = +new Date;
         this.write(dbname, db, false);
 
-        if (sys.exists("js_databases/" +dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
+        if (sys.fileExists("js_databases/" +dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
 
         delete this.openDBs[dbname];
         var end = +new Date;

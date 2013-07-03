@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for iter in ./*.js
+for iter in ./js_modules/*.js
 do
-    sed 's/this\.module/this\.modules/g' "${iter}" > filename.notabs && mv filename.notabs "${iter}"
+    sed 's/sys\.exists/sys\.fileExists/g' "${iter}" > filename.notabs && mv filename.notabs "${iter}"
 done
