@@ -132,7 +132,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         if (this.modules[modname] && !(this.modules[modname] instanceof Error)) return;
         this.log("Loading module: " + modname);
 
-        var mod = sys.exec(modname+".js");
+        var mod = sys.exec("js_modules/" + modname +".js");
 
         mod.name = modname;
 
@@ -141,7 +141,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         if (mod.include) for (var x in mod.include)
         {
             this.log("Including module: " + mod.include[x])
-            var temp = sys.exec(mod.include[x] + ".js");
+            var temp = sys.exec("js_modules/" + mod.include[x] + ".js");
             
             for (var x2 in temp)
             {
