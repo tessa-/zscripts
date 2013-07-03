@@ -1,0 +1,342 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+ZScripts User Manual (WIP manual)
+\end_layout
+
+\begin_layout Section
+main.json
+\end_layout
+
+\begin_layout Paragraph
+main.json is a file you will use to configure the server's initial modloading.
+ It will look something like:
+\end_layout
+
+\begin_layout LyX-Code
+{"modules": ["default"]}
+\end_layout
+
+\begin_layout Paragraph
+This means to load the module 
+\begin_inset Quotes eld
+\end_inset
+
+default
+\begin_inset Quotes erd
+\end_inset
+
+.
+ To load other modules, simply add them into the array, with commas to separate
+ them, e.g.:
+\end_layout
+
+\begin_layout LyX-Code
+{"modules": ["default", "my_custom_module"]}
+\end_layout
+
+\begin_layout Paragraph
+Keep in mind if you make your own module or modify an existing one that
+ you need to distribute it to users of your server.
+\end_layout
+
+\begin_layout Section
+Command parser style
+\end_layout
+
+\begin_layout Paragraph
+This might trip up some new users.
+ If you're used to using bash, you should be familiar with how to use commands.
+ Otherwise it may be somewhat confusing at first, but is actually much easier
+ once you get used to it.
+ Each command has an indefinite number of arguments.
+ For example, 
+\begin_inset Quotes eld
+\end_inset
+
+/ban noob player1 player2
+\begin_inset Quotes erd
+\end_inset
+
+ will ban 3 players at once.
+ This might become annoying when players have spaces or unusual characters
+ in their name.
+ In this case the solution is simple, surround their name with quotes ("):
+ 
+\begin_inset Quotes eld
+\end_inset
+
+/ban "player with spaces"
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph
+This may seem tedious but when you understand the other options you will
+ find it easier.
+ Lets continue, most commands have optional arguments, for example the modprobe
+ command does something very different when it's used with the 
+\begin_inset Quotes eld
+\end_inset
+
+--unload
+\begin_inset Quotes erd
+\end_inset
+
+ flag versus no flag at all.
+ Flags start with 
+\begin_inset Quotes eld
+\end_inset
+
+--flagname
+\begin_inset Quotes erd
+\end_inset
+
+ and may have an optional 
+\begin_inset Quotes eld
+\end_inset
+
+=value
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+="quoted value"
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph
+Here is an examples of this:
+\end_layout
+
+\begin_layout LyX-Code
+/ban "very annoying spammer" spammer2 spammer3 --reason="spamming" --time="4
+ hours"
+\end_layout
+
+\begin_layout Paragraph
+You can form very useful commands this way.
+ It's much easier to understand than the spammer:4:3:true:spamming:whgat:~?!
+ syntax some other scripts have adopted, once you get used to it.
+\end_layout
+
+\begin_layout Section
+/commands
+\end_layout
+
+\begin_layout Paragraph
+Use "/commands" or "/commands --all" to get a list of commands.
+ It has fairly complete information and always lists 
+\emph on
+every 
+\emph default
+command that's relevant, but is rather brief.
+\end_layout
+
+\begin_layout Section
+/modprobe
+\end_layout
+
+\begin_layout Paragraph
+/modprobe will help you manage LSMs (loadable script modules.) By default,
+ it will list loaded modules.
+ If you include modules as arguments, it will list information about that
+ module.
+\end_layout
+
+\begin_layout Paragraph
+/modprobe has a few options as well:
+\end_layout
+
+\begin_layout Description
+--load Loads modules
+\end_layout
+
+\begin_layout Description
+--reload Loads modules, if they were already loaded then unloads them first.
+\end_layout
+
+\begin_layout Description
+--unload Removes modules
+\end_layout
+
+\begin_layout Section
+/ioctrl
+\end_layout
+
+\begin_layout Paragraph
+/ioctrl provides you with a critical command to manage the script databases
+ in a simple and straightforward manner.
+ By default it lists the databases open.
+ You also have a few options to apply to open databases:
+\end_layout
+
+\begin_layout Description
+--all Changes the selected databases to include all databases, not just
+ the ones you listed manually.
+\end_layout
+
+\begin_layout Description
+--commit Commits all database changes to file.
+\end_layout
+
+\begin_layout Description
+--sync Synchronizes all databases to file.
+ Basically the same as commit except this writes the 
+\emph on
+whole
+\emph default
+ database, not just changes.
+ Will merge all commits into the database.
+\end_layout
+
+\begin_layout Description
+--backup Makes a copy of the entire database and writes it to a file.
+\end_layout
+
+\begin_layout Paragraph
+Note that databases automatically commit data every once in a while and
+ synchronize at open and close, by default.
+\end_layout
+
+\begin_layout Section
+/eval
+\end_layout
+
+\begin_layout Paragraph
+Used by nearly every script admin.
+ This allows you run arbitrary code on the server.
+\end_layout
+
+\begin_layout Section
+Security Commands
+\end_layout
+
+\begin_layout Subsection
+/ban 
+\end_layout
+
+\begin_layout Paragraph
+Bans usernames from the server.
+ Options:
+\end_layout
+
+\begin_layout Description
+--reason= Reason for the ban
+\end_layout
+
+\begin_layout Description
+--time= Duration for the ban, e.g.
+ "4 hours", or "5 days, 3 hours, 1 minute".
+\end_layout
+
+\begin_layout Description
+--ip Ban IP (disables profile bans) 
+\emph on
+unimplemented
+\end_layout
+
+\begin_layout Description
+--name Ban name (disables profile bans) 
+\emph on
+unimplemented
+\end_layout
+
+\begin_layout Subsection
+/mute 
+\end_layout
+
+\begin_layout Paragraph
+Mutes usernames in all channels.
+ Options:
+\end_layout
+
+\begin_layout Description
+--reason= Reason for the mute
+\end_layout
+
+\begin_layout Description
+--time= Duration.
+\end_layout
+
+\begin_layout Description
+--ip 
+\emph on
+unimplemented
+\end_layout
+
+\begin_layout Description
+--name 
+\emph on
+unimplemented
+\end_layout
+
+\end_body
+\end_document
