@@ -20,9 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
 ({
-    require: ["io", "com", "theme", "commands", "util"]
+    require: ["io", "com", "theme", "commands", "util", "logs"]
     ,
-    include: ["rpg_areas", "rpg_player", "rpg_entity", "rpg_actions", "rpg_mobs"]
+    include: ["rpg_areas", "rpg_player", "rpg_entity", "rpg_actions", "rpg_mobs", "rpg_equips"]
     ,
     database: null
     // database stores the permanent data, games, etc.
@@ -33,8 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     hooks: null
     // hooks associates rpgs with pipes
     // not used as it should be for right now, will be fixed later
-
-
     ,
     loadModule: function ()
     {
@@ -109,6 +107,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.channels[chan] = rpg;
 
         if ( this.hooks[rpgname] ) throw new Error("Already hooked into another channel?");
+        
+        this.logs.logMessage(this.logs.INFO, "Loaded RPG game " + rpgname + " in channel " + sys.channel(chan));
 
         this.hooks[rpgname] = 
             {
@@ -160,6 +160,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             if (! player)
             {
                 this.com.message([src], "Creating you a new RPG character!", this.theme.GAME);
+                this.logs.logMessage(this.logs.INFO, sys.name(src) + " created an RPG character in RPG " + rpg.name);
 
                 player = this.newPlayer();
                 player.name = sys.name(src).toLowerCase();
@@ -196,7 +197,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         code: function (src, cmd, chan)
         {
 
-            var rpgname = cmd.input.replace(/^\s*([^\s])+\s*$/, "$1");
+            var rpgname = cmd.input.replace(/^\s*([^\s]+)\s*$/, "$1");
 
             if (this.channels[chan]) 
             {

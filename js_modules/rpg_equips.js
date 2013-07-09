@@ -194,13 +194,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     equipAtk: function (e) 
     {
-        if (!equip) return 20;
-        return Math.max(20, (this.equips[ctx.equip.type].base | 0) * (1 - (1 / Math.log(ctx.equip.quaility))));
+        if (!e) return 20;
+        return Math.max(20, (this.equips[e.type].base | 0) * (1 - (1 / Math.log(e.quality))));
     }
     ,
     equipDef: function (e) 
     {
-        if (!equip) return 20;
-        return Math.max(20, (this.equips[ctx.equip.type].base | 0) * (1 - (1 / Math.log(ctx.equip.quaility))));
+        if (!e) return 20;
+        return Math.max(20, (this.equips[e.type].base | 0) * (1 - (1 / Math.log(e.quality))));
     }
 });

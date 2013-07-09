@@ -118,11 +118,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     playerUpdateStats: function (e)
     {
-        e.maxmp =  (e.mag*1.2 + (Math.log(e.res*0.3+Math.E)*70 | 0));
-        e.maxsp = (e.str*0.2 + e.res*0.2 + (Math.log(e.res/1000+Math.E)*15000 | 0));
-        e.maxmsp = (e.res*0.1 + e.mag*0.1 + e.psy*1.2 + e.spr*0.1 + (Math.log(e.psy/1000+Math.E)*10000 | 0));
-        e.maxhp = (e.str*0.1 + e.res*0.3 + (Math.log(e.res/1000+Math.E)*15000 | 0));
-        e.offense = Math.log(e.str/1500 + Math.E)*1000 + (this.equipAtk(e.lhand) + this.equipAtk(e.rhand));
-        e.defense =  Math.log(e.res/1500 + Math.E)*1000 + (this.equipDef(e.lhand) + this.equipDef(e.rhand));
+        e.maxmp =  (e.mag*0.13 + (Math.log(e.mag+Math.E)*10 | 0));
+        e.maxsp = (e.str*0.02 + e.res*0.02 + (Math.log(e.res/100+Math.E)*150 | 0));
+        e.maxmsp = (e.res*0.01 + e.mag*0.01 + e.psy*0.12 + e.spr*0.01 + (Math.log(e.psy/1000+Math.E)*50 | 0));
+        e.maxhp = (e.str*0.01 + e.res*0.03 + (Math.log(e.res/100+Math.E)*100 | 0));
+        e.offense = 0|(Math.log(e.str/1500 + Math.E)*1000 + (this.equipAtk(e.lhand) + this.equipAtk(e.rhand)));
+        e.defense = 0|( Math.log(e.res/1500 + Math.E)*1000 + (this.equipDef(e.lhand) + this.equipDef(e.rhand)));
     }
 });

@@ -79,6 +79,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             {
                 var cmp = ctx.move.components[x2];
                 var targets = ctx.targets = [];
+                var count = cmp.count;
                 switch (typeof cmp.target)
                 {
                 case "object":
@@ -97,11 +98,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 this.util.shuffle(targets);
                 
-                for (var x3 in targets)
+                if (count !== 0) for (var x3 in targets)
                 {
-                    
-                }
-                
+                    if (count-- === 0) break;
+                }                
             }
             
             this.moves[ctx.move.type]
