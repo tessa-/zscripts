@@ -132,94 +132,103 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         if (this.modules[modname] && !(this.modules[modname] instanceof Error)) return;
         this.log("Loading module: " + modname);
 
-        var mod = sys.exec("js_modules/" + modname +".js");
-
-        mod.name = modname;
-
-        this.modules[modname] = mod;    
-
-        if (mod.include) for (var x in mod.include)
-        {
-            //this.log("Including module: " + mod.include[x])
-            var temp = sys.exec("js_modules/" + mod.include[x] + ".js");
+        try {
+            var mod = sys.exec("js_modules/" + modname +".js");
             
-            for (var x2 in temp)
+            mod.name = modname;
+            
+            this.modules[modname] = mod;    
+            
+            if (mod.include) for (var x in mod.include)
             {
-                if (x2 in mod && mod[x2] != null)
+            //this.log("Including module: " + mod.include[x])
+                var temp = sys.exec("js_modules/" + mod.include[x] + ".js");
+                
+                for (var x2 in temp)
                 {
-                    if (typeof mod[x2] != typeof temp[x2] || (typeof mod[x2] != "object" && typeof mod[x2] != "function"))
+                    if (x2 in mod && mod[x2] != null)
                     {
-                        throw new Error("Unable to merge");
-                    }
-                    if (typeof mod[x2] === "function")
-                    {
-                        // use a closure to merge the two functions as one
-                        mod[x2] = (function (m, t) { 
-                            return function ()
-                            {
-                                m.apply(mod, arguments);
-                                t.apply(mod, arguments);                                
-                            }
-                        })(mod[x2], temp[x2]);
-                    }
-                    else if (mod[x2] instanceof Array)
-                    {
-                        mod[x2] = mod[x2].concat( temp[x2] );
-                    }
-                    else  
-                    {
-                        for (var x3 in temp[x2])
+                        if (typeof mod[x2] != typeof temp[x2] || (typeof mod[x2] != "object" && typeof mod[x2] != "function"))
                         {
-                            if (x3 in mod[x2]) throw new Error("Unable to merge");
-                            
-                            mod[x2][x3] = temp[x2][x3];
+                            throw new Error("Unable to merge");
+                        }
+                        if (typeof mod[x2] === "function")
+                        {
+                            // use a closure to merge the two functions as one
+                            mod[x2] = (function (m, t) { 
+                                return function ()
+                                {
+                                    m.apply(mod, arguments);
+                                    t.apply(mod, arguments);                                
+                                }
+                            })(mod[x2], temp[x2]);
+                        }
+                        else if (mod[x2] instanceof Array)
+                        {
+                            mod[x2] = mod[x2].concat( temp[x2] );
+                        }
+                        else  
+                        {
+                            for (var x3 in temp[x2])
+                            {
+                                if (x3 in mod[x2]) throw new Error("Unable to merge");
+                                
+                                mod[x2][x3] = temp[x2][x3];
+                            }
                         }
                     }
-                }
-                else
-                {
-                    mod[x2] = temp[x2];
+                    else
+                    {
+                        mod[x2] = temp[x2];
+                    }
                 }
             }
-        }
 
-        if (!mod.require) mod.require = [];
-        mod.submodules = [];
+            if (!mod.require) mod.require = [];
+            mod.submodules = [];
 
-        for (var x in this.hooks)
-        {
-            mod[x] = this.hooks[x];            
-        }
-
-        for (var x in mod.require)
-        {
-            var reqmodname = mod.require[x];
-
-            this.loadModule(reqmodname);
-            
-            if ( !(reqmodname in this.modules) || this.modules[reqmodname] instanceof Error) 
+            for (var x in this.hooks)
             {
-                this.modules[modname] = new Error("Unmet dependencies");
-                return;
+                mod[x] = this.hooks[x];            
             }
 
-            this.modules[reqmodname].submodules.push(modname);
-            Object.defineProperty(this.modules[modname], reqmodname, {configurable : true, value: this.modules[reqmodname]});
-//            this.modules[modname][reqmodname] = this.modules[reqmodname];
+            for (var x in mod.require)
+            {
+                var reqmodname = mod.require[x];
+
+                this.loadModule(reqmodname);
+                
+                if ( !(reqmodname in this.modules) || this.modules[reqmodname] instanceof Error) 
+                {
+                    this.modules[modname] = new Error("Unmet dependencies");
+                    return;
+                }
+
+                this.modules[reqmodname].submodules.push(modname);
+                Object.defineProperty(this.modules[modname], reqmodname, {configurable : true, value: this.modules[reqmodname]});
+                //            this.modules[modname][reqmodname] = this.modules[reqmodname];
+            }
+
+
+
+            if ("loadModule" in mod)
+            {
+                mod.loadModule();     
+            }
         }
-
-
-
-        if ("loadModule" in mod)
+        catch (e)
         {
-            mod.loadModule();     
+            
+            this.modules[modname] = e;
+            throw e;
         }
 
     }
     ,
     unloadModule : function unloadModule (modname)
     {
-        if ( !(modname in this.modules) ) return;
+        if ( !(modname in this.modules)) return;
+        if (this.modules[modname] instanceof Error) return [modname];
         this.log("Unloading module: " + modname);
 
         var unloads = [modname];
