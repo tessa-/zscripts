@@ -209,7 +209,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 //            this.modules[modname][reqmodname] = this.modules[reqmodname];
             }
 
-
+            Object.defineProperty(this.modules[modname], "script", this,  {configurable : true, value: this.modules[reqmodname]});
 
             if ("loadModule" in mod)
             {

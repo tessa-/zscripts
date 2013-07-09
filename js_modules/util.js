@@ -29,6 +29,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     
     }
     ,
+    arrayify: function (variant)
+    {
+        if (typeof variant !== "object" || !(variant instanceof Array)) return [variant];
+
+        return variant;
+    }
+    ,
     shuffle: function (array)
     {
         // fisheryates
