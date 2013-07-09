@@ -62,6 +62,109 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         {
             ctx.player.activeActions.push({ timer: 40, done: "dig", tick: "digTick" });
         }
+        ,
+        dequip: function (src, sub, chan, ctx)
+        {
+            var slot = (sub[1]||"").toLowerCase();
+            
+            if (! (slot in {"lhand":null, "rhand":null, "head":null, "feet":null, "body":null, "back":null})) 
+            {
+                this.com.message([src], "Unknown slot to dequip");
+                return; 
+            }// add error message
+
+            var item = ctx.player[slot];
+
+            if (item === undefined) throw new Error("???");
+
+            if (item === null && slot === "lhand" && ctx.player.rhand && ctx.player.rhand.hands === 2)
+            {
+                item = ctx.player.rhand;
+                slot = "rhand";
+            }
+
+            if (item === null) 
+            {
+                this.com.message(src, "No item in that slot.");
+                return; // nothing to dequip
+            }
+
+            ctx.player[slot] = null; // remove item
+
+            ctx.player.equips.unshift(item); // Add to equips
+
+            this.com.message([src], "Item removed.");
+            
+        }
+        ,
+        view: function (src, sub, chan, ctx)
+        {
+            var msgs = [];
+
+            this.com.message(src, "Your player:");
+            msgs.push("<b>Right Hand:</b> " + this.equipName(ctx.player.rhand));
+            msgs.push("<b>Left Hand:</b> " + this.equipName(ctx.player.lhand));
+            msgs.push("<b>Head:</b> " + this.equipName(ctx.player.head));
+            msgs.push("<b>Body:</b> " + this.equipName(ctx.player.body));
+            msgs.push("<b>Feet:</b> " + this.equipName(ctx.player.feet));
+            msgs.push("<b>Back:</b> " + this.equipName(ctx.player.back));
+            this.less.less(src, msgs.join("<br />"), true);
+        }
+        ,
+        equip: function (src, sub, chan, ctx)
+        {
+            if (!sub[1])
+                // list equips
+            {
+                for (var x in ctx.player.equips)
+                {
+                    this.com.message(src, "" + (+x+1) + ": " + this.equipName(ctx.player.equips[x]));
+                }
+                
+                return;
+            }
+
+            var idx = +sub[1] - 1;
+
+            var item = ctx.player.equips.splice(idx, 1)[0];
+            var kind = this.equips[item.type];
+
+            if (!item) return; // invalid indexing ._.
+
+            var slot = kind.type;
+
+            if (slot === "hand") 
+            {
+                if (sub[2] === "lhand") slot = "lhand";
+                else if (sub[2] === "rhand") slot = "rhand";
+                else
+                {
+                    if (item.hands !== 2)
+                        // error
+                    {
+                        ctx.player.equips.unshift(item); // put item back
+                        this.com.message(src, "What hand?");
+                        return; // exit
+                    }
+
+                    slot = "rhand";
+
+                    if (ctx.player.lhand)
+
+                        // remove left hand equip
+                    {
+                        ctx.player.equips.unshift(ctx.player.lhand);
+                        ctx.player.lhand = null;
+                    }
+                }
+            }
+
+            ctx.player[slot] = item;
+
+            this.com.message(src, "Equipped " + this.equipName(item));
+
+            return;
+        }
         
     }
     ,

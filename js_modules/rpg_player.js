@@ -122,7 +122,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         e.maxsp = (e.str*0.02 + e.res*0.02 + (Math.log(e.res/100+Math.E)*150 | 0));
         e.maxmsp = (e.res*0.01 + e.mag*0.01 + e.psy*0.12 + e.spr*0.01 + (Math.log(e.psy/1000+Math.E)*50 | 0));
         e.maxhp = (e.str*0.01 + e.res*0.03 + (Math.log(e.res/100+Math.E)*100 | 0));
-        e.offense = 0|(Math.log(e.str/1500 + Math.E)*1000 + (this.equipAtk(e.lhand) + this.equipAtk(e.rhand)));
-        e.defense = 0|( Math.log(e.res/1500 + Math.E)*1000 + (this.equipDef(e.lhand) + this.equipDef(e.rhand)));
+        e.power = 800*Math.log(3/2*e.str+e.psy/3+Math.E)+e.psy/25000+300;
+        e.offense = e.power * (100 + this.equipAtk(e.lhand) + this.equipAtk(e.rhand));
+        e.offense = e.power * (100 + this.equipDef(e.lhand)/2 + this.equipDef(e.rhand)/2 + this.equipDef(e.body) + this.equipDef(e.feet) + this.equipDef(e.head) + this.equipDef(e.back));
     }
 });

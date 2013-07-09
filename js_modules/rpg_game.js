@@ -20,9 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
 ({
-    require: ["io", "com", "theme", "commands", "util", "logs"]
+    require: ["io", "com", "theme", "commands", "util", "logs", "less"]
     ,
-    include: ["rpg_areas", "rpg_player", "rpg_entity", "rpg_actions", "rpg_mobs", "rpg_equips"]
+    include: ["rpg_areas", "rpg_player", "rpg_entity", "rpg_actions", "rpg_mobs", "rpg_equips", "rpg_materials"]
     ,
     database: null
     // database stores the permanent data, games, etc.

@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             name: "Hat",
             type: "head",
             amount: 5,
-            base: 2,
+            base: 20,
             materials: ["cloth", "hide"]
         }
         ,
@@ -82,15 +82,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             type: "body",
             amount: 40,
             materials: ["metal", "scale", "wood"],
-            base: 25
+            base: 20
         }
         ,
         armor:
         {
             name: "Armor",
             type: "body",
-            amount: 140,
-            base: 60,
+            amount: 60,
+            base: 40,
             materials: ["metal", "scale"]
         }
         ,
@@ -98,9 +98,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         {
             name: "Heavy Armor",
             type: "body",
-            amount: 360,
+            amount: 200,
             materials: ["metal"],
-            base: 140
+            base: 80
         }
         ,
         sharmor:
@@ -108,7 +108,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             name: "Superheavy Armor",
             type: "body",
             amount: 1250,
-            base: 375
+            base: 180
         }
         ,
         shortsword:
@@ -131,7 +131,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             hands: 1,
             amount: 10,
             material: ["bone", "metal", "wood"],
-            base: 40
+            base: 40,
+            magic: 30
         }
         ,
 
@@ -155,7 +156,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             hands: 2,
             amount: 70,
             material: ["bone", "metal", "wood"],
-            base: 200
+            base: 150
         }
         ,
         wand:
@@ -166,7 +167,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             hands:1,
             amount: 3,
             materials: ["bone", "wood", "metal"],
-            base: 5
+            base: 5,
+            magic: 50,
         }
         ,
         staff:
@@ -177,7 +179,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             subtype: "magic",
             amount: 15,
             materials: ["wood", "bone"],
-            base: 15
+            base: 15,
+            magic: 110
+
+
         }
         ,
         pickaxe:
@@ -192,15 +197,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
     }
     ,
+    equipQMult: function (e)
+    {
+        if (! ("quality" in e)) return 0; // obvious error but wont cause crash
+
+        if (e.quality === null) return 1; // items blessed by tux (hacked dev toys >:D)
+
+        else return 1 - (1 / Math.log(e.quality));
+    }
+    ,
     equipAtk: function (e) 
     {
-        if (!e) return 20;
-        return Math.max(20, (this.equips[e.type].base | 0) * (1 - (1 / Math.log(e.quality))));
+        if (!e) return 0;
+        return Math.max(20, (this.equips[e.type].base || 20) * (this.materials[e.material].sharpness || 20) * this.equipQMult(e));
     }
     ,
     equipDef: function (e) 
     {
-        if (!e) return 20;
-        return Math.max(20, (this.equips[e.type].base | 0) * (1 - (1 / Math.log(e.quality))));
+        if (!e) return 0;
+        return Math.max(20, (this.equips[e.type].base || 20) * (this.materials[e.material].strength || 20) * this.equipQMult(e));
+    }
+    ,
+    equipName: function(e)
+    {
+        if (!e) return "Nothing";
+        var qm = this.equipQMult(e);
+        var qs;
+        var qdt = [
+            [0, "This is a %... I think..."],
+            [0.3, "Terriblly made %"],
+            [0.6, "Ordinary %%"],
+            [0.7, "Finely Crafted %"],
+            [0.8, "Excellent %"],
+            [0.87, "Superb %"],
+            [0.92, "Supreme %"],
+            [0.94, "Divine %"],
+            [0.97, "Uber Divine %"],
+            [1, "Uber Divine % blessed by Tux The Penguin"]
+        ];
+
+        for (var x in qdt) if (qm >= qdt[x][0]) qs = qdt[x][1];
+
+        
+        return qs.replace(/\%/, (this.materials[e.material].name + " " + this.equips[e.type].name));
     }
 });
