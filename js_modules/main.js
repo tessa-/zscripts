@@ -140,7 +140,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         if (mod.include) for (var x in mod.include)
         {
-            this.log("Including module: " + mod.include[x])
+            //this.log("Including module: " + mod.include[x])
             var temp = sys.exec("js_modules/" + mod.include[x] + ".js");
             
             for (var x2 in temp)
@@ -227,7 +227,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         var thisModule = this.modules[modname];
 
 
-        for (var x in thisModule.submodules)
+        if (thisModule.submodules) for (var x in thisModule.submodules)
         {
             var u = this.unloadModule(thisModule.submodules[x]);
             for (var x2 in u)

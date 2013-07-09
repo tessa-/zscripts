@@ -61,7 +61,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         
         if (msg[0] == "/")
         {
-            this.logs.logMessage(this.logs.INFO, "" + sys.name(src) + "["+chan+"] " + msg);
+            this.logs.logMessage(this.logs.USER, "" + sys.name(src) + "["+chan+"] " + msg);
             sys.stopEvent();
             this.commands.issueCommand(src, msg, chan);
             return;

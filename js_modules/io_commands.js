@@ -92,8 +92,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             if (cmd.flags.purge) for (var x in dblist)
             {
-//                this.io.purgeDB(dblist[x]);
-                this.logs.logMessage(this.logs.WARN, "(PURGE DISABLED)" );// Purged database " + dblist[x]);
+                this.io.purgeDB(dblist[x]);
             }
         }
     }

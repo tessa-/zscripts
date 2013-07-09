@@ -97,6 +97,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     openDB: function (dbname)
     {
+        var start = +new Date;
+        var end = start;
         if (dbname in this.openDBs)
         {
             throw new Error("DB already open");//return this.openDBs[dbname].db;
@@ -144,6 +146,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         dbo = { db: db, lastSave: +new Date, lastCommit: +new Date, dataText: dataText, hasChanges:null };
 
         this.openDBs[dbname] = dbo;
+
+        end = +new Date;
+        script.log("Opened database " + dbname + ", took " + (end - start) + "ms.")
 
         return db;
     }
@@ -207,13 +212,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     purgeDB: function (dbname)
     {
+        if (dbname in this.openDBs) return;
+
+        script.log("Purging DB " + dbname);
         
-        //var metadb = this.openDBs[dbname];
-        //var db = metadb.db;
+        if (sys.exists("js_databases/" + dbname + ".jsqz")) sys.rm("js_databases/" + dbname + ".jsqz");
+        if (sys.exists("js_databases/" + dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
 
-        //m
-
-        //sys.rm(dbname + ".jsqz");
     }
     ,
     backupDB: function (dbname)
