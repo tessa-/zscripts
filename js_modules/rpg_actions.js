@@ -102,12 +102,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             var msgs = [];
 
             this.com.message(src, "Your player:");
-            msgs.push("<b>Right Hand:</b> " + this.equipName(ctx.player.rhand));
-            msgs.push("<b>Left Hand:</b> " + this.equipName(ctx.player.lhand));
+            if (ctx.player.rhand && this.equips[ctx.player.rhand.type].hands === 2)
+            {
+                 msgs.push("<b>Both Hands:</b> " + this.equipName(ctx.player.rhand));
+            }
+            else
+            {
+                msgs.push("<b>Right Hand:</b> " + this.equipName(ctx.player.rhand));
+                msgs.push("<b>Left Hand:</b> " + this.equipName(ctx.player.lhand));
+            }
             msgs.push("<b>Head:</b> " + this.equipName(ctx.player.head));
             msgs.push("<b>Body:</b> " + this.equipName(ctx.player.body));
             msgs.push("<b>Feet:</b> " + this.equipName(ctx.player.feet));
             msgs.push("<b>Back:</b> " + this.equipName(ctx.player.back));
+            msgs.push("<b>Power:</b> " + ctx.player.power);
+            msgs.push("<b>Offense:</b> " + ctx.player.offense);
+            msgs.push("<b>Defense:</b> " + ctx.player.defense);
+            msgs.push("<b>Magical:</b> " + 0/0);
+
             this.less.less(src, msgs.join("<br />"), true);
         }
         ,
@@ -139,11 +151,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 else if (sub[2] === "rhand") slot = "rhand";
                 else
                 {
-                    if (item.hands !== 2)
+                    if (kind.hands !== 2)
                         // error
                     {
                         ctx.player.equips.unshift(item); // put item back
-                        this.com.message(src, "What hand?");
+                        this.com.message(src, "Which hand?");
                         return; // exit
                     }
 
@@ -157,6 +169,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         ctx.player.lhand = null;
                     }
                 }
+            }
+
+            if (ctx.player[slot]) ctx.player.equips.unshift(ctx.player[slot]);// put old item back
+
+            if (slot === "lhand" && ctx.player.rhand && this.equips[ctx.player.rhand.type].hands === 2)
+            {
+                ctx.player.equips.unshift(ctx.player.rhand);// put old item back
+                ctx.player.rhand = null;
             }
 
             ctx.player[slot] = item;

@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         shoes:
         {
             name: "Shoes",
-            type: "foot",
+            type: "feet",
             amount: 25,
             base: 10,
             materials: ["hide", "scale"]
@@ -201,9 +201,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     {
         if (! ("quality" in e)) return 0; // obvious error but wont cause crash
 
-        if (e.quality === null) return 1; // items blessed by tux (hacked dev toys >:D)
+        if (e.quality === null) return 10; // items blessed by tux (hacked dev toys >:D)
 
-        else return 1 - (1 / Math.log(e.quality));
+        else return 1 - (1 / Math.log(e.quality/100 + Math.E));
     }
     ,
     equipAtk: function (e) 
@@ -224,16 +224,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         var qm = this.equipQMult(e);
         var qs;
         var qdt = [
-            [0, "This is a %... I think..."],
-            [0.3, "Terriblly made %"],
-            [0.6, "Ordinary %%"],
-            [0.7, "Finely Crafted %"],
-            [0.8, "Excellent %"],
+            [0, "Failure of a %"],
+            [0.3, "Really shity %"],
+            [0.5, "Ordinary %"],
+            [0.70, "Fine %"],
+            [0.82, "Excellent %"],
             [0.87, "Superb %"],
             [0.92, "Supreme %"],
-            [0.94, "Divine %"],
-            [0.97, "Uber Divine %"],
-            [1, "Uber Divine % blessed by Tux The Penguin"]
+            [0.94, "Legendary %"],
+            [0.97, "Sacred %"],
+            [1, "Divine % (hacked >:3)"]
         ];
 
         for (var x in qdt) if (qm >= qdt[x][0]) qs = qdt[x][1];
