@@ -91,13 +91,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             if (typeof variant === "object")
             {
                 var refidx = refs.indexOf(variant);
+                var dup = true;
 
                 var str = "";
                 
                 if (refidx === -1)
                 {
                     refidx = refs.length;
-                    refs.push(variant);                    
+                    refs.push(variant);
+                    dup = false;
                 }
 
                 str += "<" + (variant instanceof Array ? "Array" : "Object") + " &" + refidx + ">";
@@ -108,8 +110,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     str += " [[Circular Reference]]";
                     return str;
                 }
-
-                if (refs.indexOf(variant) != refs.length - 1 )
+                else if (dup)
                 {
                     str += " [[Duplicate Reference]]";
                     return str;
