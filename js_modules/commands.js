@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     loadModule: function ()
     {
-        
+
     }
     ,
     registerCommand: function (name, object, prop)
@@ -49,10 +49,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         {
             this.commands_db[comnd.aliases[x]] = comnd;
         }
-        
+
         object.onUnloadModule( this.util.bind(
-            this, 
-            function () 
+            this,
+            function ()
             {
                 this.unregisterCommand(name);
             }
@@ -72,27 +72,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         delete this.commands_db[name];
     }
     ,
+    commandPerm: function (src, cmd, chan)
+    {
+        if (sys.auth(src) == 3) return true;
+
+        else if (cmd_obj.config.specialUsers[sys.name(src).toLowerCase()])
+        {
+            return true;
+        }
+
+        else
+        {
+            var cmdobj = this.commands_db[cmd.name];
+            cmdobj.perm.call(cmdobj.bind, src, cmd, chan);
+            return true;
+        }
+    }
+    ,
     issueCommand: function(src, text, chan)
     {
         var cmd = this.parsecommand.parseCommand(text);
 
         var cmd_obj = this.commands_db[cmd.name];
-        
+
         if (!cmd_obj)
         {
             this.com.message([src], "Command does not exist.", this.theme.WARN);
             return;
         }
 
-        if (sys.auth(src) != 3 && !(cmd_obj.perm.apply(cmd_obj.bind, [src, cmd, chan])) && !(cmd_obj.config.specialUsers[sys.name(src).toLowerCase()]))
+        if (!this.commandPerm(src, cmd, chan))
         {
             this.com.message([src], "Permission denied.", this.theme.WARN);
             return;
         }
 
-        try 
+        try
         {
-            cmd_obj.code.apply(cmd_obj.bind, [src, cmd, chan]);
+            cmd_obj.code.call(cmd_obj.bind, src, cmd, chan);
         }
         catch (e)
         {

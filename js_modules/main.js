@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
 //"use strict";
-(function () {"use strict"; return {
+(function () { return {
     config : null
     ,
     modules : {}
@@ -42,36 +42,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     {
         var t = msg.match(/^\~\~Server\~\~\: :(\w+) (.+)$/);
 
-            
+
         if (t) server_control :
         {
             //sys.stopEvent();
-            
+
             print(["COMMAND: ", t[1], " ", t[2]].join(""));
-              
+
             switch(t[1].toLowerCase())
             {
             case "eval" :
                 sys.eval(t[2]);
                 break server_control;
-                
+
             case "loadmodule" :
                 this.loadModule(t[2]);
                 break server_control;
-                
+
 
             case "reloadmodule" :
                 this.reloadModule(t[2]);
                   break server_control;
 
             case "unloadmodule" :
-                this.unloadModule(t[2]); 
+                this.unloadModule(t[2]);
                 break server_control;
 
             default:
                 print("UNKNOWN COMMAND");
                 break server_control;
-                
+
             }
         }
     }
@@ -82,18 +82,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         if (! (handlername in script))
         {
-            var f = function _meta_event_handler_func_ () 
+            var f = function _meta_event_handler_func_ ()
             {
                 for (var x in f.callbacks)
                 {
                     f.callbacks[x].func.apply(f.callbacks[x].bind, arguments);
                 }
-            }    
+            };
+
             script[handlername] = f;
             script[handlername].callbacks = [];
         }
 
-        if ( !(script[handlername].callbacks)) throw new Error("Not registerable");    
+        if ( !(script[handlername].callbacks)) throw new Error("Not registerable");
 
         var callbk = {func:object[propname], bind:object};
 
@@ -102,14 +103,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         var _bind = this;
         if ("onUnloadModule" in object)
         {
-            object.onUnloadModule( 
-                function _meta_callback_unload_ () 
+            object.onUnloadModule(
+                function _meta_callback_unload_ ()
                 {
                     script[handlername].callbacks.splice(script[handlername].callbacks.indexOf(callbk),1);
                 }
             );
         }
-        
+
 
         return;
 
@@ -119,7 +120,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     {
         var unloads = this.unloadModule(modname);
 
-        for (var x in unloads) 
+        for (var x in unloads)
         {
             this.loadModule(unloads[x]);
         }
@@ -127,23 +128,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.loadModule(modname); // load even if unload failed
     }
     ,
-    loadModule : function loadModule (modname) 
+    loadModule : function loadModule (modname)
     {
         if (this.modules[modname] && !(this.modules[modname] instanceof Error)) return;
         this.log("Loading module: " + modname);
 
         try {
             var mod = sys.exec("js_modules/" + modname +".js");
-            
+
             mod.name = modname;
-            
-            this.modules[modname] = mod;    
-            
+
+            this.modules[modname] = mod;
+
             if (mod.include) for (var x in mod.include)
             {
             //this.log("Including module: " + mod.include[x])
                 var temp = sys.exec("js_modules/" + mod.include[x] + ".js");
-                
+
                 for (var x2 in temp)
                 {
                     if (x2 in mod && mod[x2] != null)
@@ -155,24 +156,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         if (typeof mod[x2] === "function")
                         {
                             // use a closure to merge the two functions as one
-                            mod[x2] = (function (m, t) { 
+                            mod[x2] = (function (m, t) {
                                 return function ()
                                 {
                                     m.apply(mod, arguments);
-                                    t.apply(mod, arguments);                                
-                                }
+                                    t.apply(mod, arguments);
+                                };
                             })(mod[x2], temp[x2]);
                         }
                         else if (mod[x2] instanceof Array)
                         {
                             mod[x2] = mod[x2].concat( temp[x2] );
                         }
-                        else  
+                        else
                         {
                             for (var x3 in temp[x2])
                             {
                                 if (x3 in mod[x2]) throw new Error("Unable to merge");
-                                
+
                                 mod[x2][x3] = temp[x2][x3];
                             }
                         }
@@ -189,7 +190,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             for (var x in this.hooks)
             {
-                mod[x] = this.hooks[x];            
+                mod[x] = this.hooks[x];
             }
 
             for (var x in mod.require)
@@ -197,8 +198,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 var reqmodname = mod.require[x];
 
                 this.loadModule(reqmodname);
-                
-                if ( !(reqmodname in this.modules) || this.modules[reqmodname] instanceof Error) 
+
+                if ( !(reqmodname in this.modules) || this.modules[reqmodname] instanceof Error)
                 {
                     this.modules[modname] = new Error("Unmet dependencies");
                     return;
@@ -213,12 +214,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             if ("loadModule" in mod)
             {
-                mod.loadModule();     
+                mod.loadModule();
             }
         }
         catch (e)
         {
-            
+
             this.modules[modname] = e;
             throw e;
         }
@@ -227,7 +228,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     unloadModule : function unloadModule (modname)
     {
-        if ( !(modname in this.modules)) return;
+        if ( !(modname in this.modules)) return [modname];
         if (this.modules[modname] instanceof Error) return [modname];
         this.log("Unloading module: " + modname);
 
@@ -245,39 +246,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             }
         }
 
-        if (thisModule.require) for (var x in thisModule.require)
+        if (thisModule.require) for (x in thisModule.require)
         {
-            if (this.modules[thisModule.require[x]].unloadSubmodule) 
+            if (this.modules[thisModule.require[x]].unloadSubmodule)
             {
                 this.modules[thisModule.require[x]].unloadSubmodule(thisModule, modname);
             }
         }
 
-        if ("unloadModuleHooks" in thisModule) 
+        if ("unloadModuleHooks" in thisModule)
         {
             var unloadModuleHooks = thisModule.unloadModuleHooks;
-            for (var x in unloadModuleHooks)
+            for (x in unloadModuleHooks)
             {
                 unloadModuleHooks[x].apply(thisModule, [thisModule]);
             }
-            
+
         }
 
         if ("unloadModule" in thisModule) thisModule.unloadModule();
 
         delete this.modules[modname];
-        
+
         return unloads;
     }
     ,
-    loadScript: function loadScript () 
+    loadScript: function loadScript ()
     {
 
         if (!( sys.readObject && sys.os && sys.enableStrict))
         {
             print("WARNING: Missing required functions.");
 
-            if (!sys.writeObject)  
+            if (!sys.writeObject)
             {
                 sys.stopEvent();
                 return;
@@ -294,7 +295,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 sys.fileExists = function (fname)
                 {
                     return sys.getFileContent(fname) == undefined;
-               }
+                };
             }
 
             if (!sys.exec) sys.exec = function (fname) { try { sys.eval(sys.read(fname)) } catch (e) { e.fileName = fname; throw e; }};
@@ -315,12 +316,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         try {
             var f;
             if (sys.fileExists("main.json")) f = sys.read("main.json");
-            
+
             else f = "{}";
-            
 
 
-            var o = JSON.parse(f);         
+
+            var o = JSON.parse(f);
 
             if (typeof o == typeof new Object);
 
@@ -337,13 +338,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             sys.writeToFile("main.json", JSON.stringify(this.config));
         }
-        catch(e) 
+        catch(e)
         {
             var stack = (e.backtracetext);
-            
+
             this.log("Failed to start, error in " + e.fileName + " at line #" + e.lineNumber + ": " + e.toString() +"\n" + stack);
             sys.stopEvent();
-        }  
+        }
     }
     ,
     unloadScript: function unloadScript ()
@@ -355,7 +356,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             this.unloadModule(mods[x]);
         }
     }
-    , 
+    ,
     AGPL: function AGPL (src)
     {
         sys.sendHtmlMessage(
@@ -369,13 +370,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     hooks:
     {
-        onUnloadModule: function _meta_hook_onUnloadModule_ (f) 
+        onUnloadModule: function _meta_hook_onUnloadModule_ (f)
         {
             if (!this.unloadModuleHooks) this.unloadModuleHooks = [];
-            
+
             this.unloadModuleHooks.push(f);
         }
 
     }
 
-}})();
+};})();
