@@ -22,7 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ({
     require: ["io", "com", "theme", "commands", "util", "logs", "less"]
     ,
-    include: ["rpg_areas", "rpg_player", "rpg_entity", "rpg_actions", "rpg_mobs", "rpg_equips", "rpg_materials"]
+    include: ["rpg_areas", "rpg_player", "rpg_entity", "rpg_actions",
+              "rpg_mobs", "rpg_equips", "rpg_materials", "rpg_moves"]
     ,
     database: null
     // database stores the permanent data, games, etc.
@@ -70,7 +71,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             this.areaStep(rpg.areas[x], { rpg: rpg });
         }
 
-        for (var x in rpg.players)
+        for (x in rpg.players)
         {
             this.playerStep(rpg.players[x], {rpg: rpg});
         }
@@ -78,11 +79,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     RPG: function (rpgname)
     {
-        if (this.database.games[rpgname]) return this.database.games[rpgname];
+        if (this.database.games[rpgname]) { return this.database.games[rpgname]; }
 
-        else 
+        else
         {
-            var newr = this.database.games[rpgname] = 
+            var newr = this.database.games[rpgname] =
                 {
                     name: rpgname,
                     areas: JSON.parse(JSON.stringify(this.areas)),
@@ -93,11 +94,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     running: false,
                     tick: 0
                 };
+
             for (var x in newr.areas)
             {
                 newr.areas[x].battles = [];
             }
         }
+
+        return newr;
     }
     ,
     startRPGinChan: function (rpgname, chan)
@@ -107,10 +111,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.channels[chan] = rpg;
 
         if ( this.hooks[rpgname] ) throw new Error("Already hooked into another channel?");
-        
+
         this.logs.logMessage(this.logs.INFO, "Loaded RPG game " + rpgname + " in channel " + sys.channel(chan));
 
-        this.hooks[rpgname] = 
+        this.hooks[rpgname] =
             {
                 message: this.util.bind
                 (
@@ -133,9 +137,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 )
             };
 
-        
+
         this.hooks[rpgname].running = true;
-        
+
     }
     ,
     rpg: // not to be confused with "RPG"
@@ -179,7 +183,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 subactions[0] = subactions[0].toLowerCase();
                 if (subactions[0] in this.rpgActions)
                 {
-                    this.rpgActions[subactions[0]].apply(this, [src, subactions, chan, {player:player, rpg: rpg, }] );
+                    this.rpgActions[subactions[0]].apply(this, [src, subactions, chan, {player:player, rpg: rpg }] );
                 }
             }
         }
@@ -199,7 +203,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             var rpgname = cmd.input.replace(/^\s*([^\s]+)\s*$/, "$1");
 
-            if (this.channels[chan]) 
+            if (this.channels[chan])
             {
                 this.com.message([src], "This channel already has a running RPG", this.theme.WARN);
                 return;
@@ -215,5 +219,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             this.startRPGinChan(rpgname, chan);
         }
     }
-    
+
 });

@@ -23,9 +23,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     battleStep: function (ctx)
     {
         var rpg = ctx.rpg;
-        var name = ctx.battlename;
+        var id = ctx.battleid;
 
-        var battle = ctx.battle = this.battles[name];
+        var battle = ctx.battle = this.battles[id];
+
+
+	/*
+	  A battle object might look like this:
+
+	  {
+	      players: [ "Player1", "Player2" ]
+	      ,
+	      mobs: [ {... mob ...} ]
+
+	  }
+
+	  // Turns are atomic, so there is no turn information
+
+	  
+	 */
 
         var team_players = []; // Do not save!
         for (var x in battle.players)
