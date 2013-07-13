@@ -19,15 +19,24 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
+/** Modprobe
+ * @memberof script.modules
+ * @name modprobe
+ * @namespace
+ */
+/** @scope script.modules.modprobe */
 ({
     require: ["commands", "logs", "com", "theme", "less"]
     ,
-    loadModule: function () 
+    loadModule: function ()
     {
         this.commands.registerCommand("modprobe", this);
     }
     ,
-    modprobe: 
+    /**
+     * @type commandDescriptor
+     */
+    modprobe:
     {
         desc: "Manages loadable modules"
         ,
@@ -42,9 +51,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         ,
         perm: function (src, cmd, chan)
         {
-            sys.auth(src) == 3;
+            return sys.auth(src) === 3;
         }
         ,
+        /** The modprobe command will list all the modules, or --load, --unload, or --reload them */
         code: function (src, cmd, chan)
         {
             if (cmd.flags.load || cmd.flags.l)
@@ -53,7 +63,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 for (var x in cmd.args)
                 {
-                    //  this.com.message([src], "Loading module " + 
+                    //  this.com.message([src], "Loading module " +
                     script.loadModule(cmd.args[x]);
                 }
                 return;
@@ -94,28 +104,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 this.less.less(src, modlist.join("\n"), false);
                 return;
             }
-            
+
             var str = [];
 
             for (var x in cmd.args)
             {
-                
+
                 var test = script.modules[cmd.args[x]];
-                
+
                 str.push("<b>Module " + cmd.args[x] + ":</b>");
-                if (!test) 
+                if (!test)
                 {
                     str.push("Module not loaded.");
                     continue;
                 }
-                
+
                 str.push("Requires: " + script.modules[cmd.args[x]].require.join(", "));
                 str.push("Required by: " + script.modules[cmd.args[x]].submodules.join(", "));
                 str.push("Contains: " + Object.keys(script.modules[cmd.args[x]]).join (", "));
-                               
+
             }
             this.less.less(src, str.join("<br/>"), true);
-            
+
 
 
         }

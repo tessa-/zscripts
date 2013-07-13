@@ -19,10 +19,19 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
+/** Commands list
+ * @name cmdlist_command
+ * @memberOf script.modules
+ * @namespace
+ * */
+/** @scope script.modules.cmdlist_command */
 ({
     require: ["commands", "com","text", "theme", "less"]
     ,
-    cmdlist: 
+    /** Lists all commands available to the user
+     * @type commandDescriptor
+     * */
+    cmdlist:
     {
         aliases: ["commands", "commandlist"]
         ,
@@ -57,7 +66,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 if (cmds[x].options)
                 {
-                   // msg.push("Options:");
                     var options = cmds[x].options;
 
                     for (var x2 in options)
@@ -66,7 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     }
                 }
             }
-            
+
             com.message([src], "Commands list:", this.theme.INFO, true);
             this.less.less(src, msg.join("<br />"), true);
         }

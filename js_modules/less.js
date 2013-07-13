@@ -19,9 +19,20 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
+/** Provides the less function
+ * @name less
+ * @memberOf script.modules
+ * @namespace
+ * */
+/** @scope script.modules.less */
 ({
     require: ["chat", "com", "theme"]
     ,
+    /** Less function
+     * @param {Number} src User to send less to
+     * @param msg The message to send
+     * @param html If msg is html.
+     */
     less: function (src, msg, html)
     {
         var lines;
@@ -41,7 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 bind.com.message([src], lines[i+20*p], -1, html);
             }
             p++;
-            
+
             if (p*20 >= lines.length)
             {
                 bind.com.message([src], "<span style='color:white;background-color:black'>END OF TEXT.</span>", -1, true);
@@ -51,7 +62,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             bind.com.message([src], "<span style='color:white;background-color:black'>END OF PAGE " + (p) +". TYPE 'NEXT' TO GO FORWARD, 'EXIT' TO QUIT.</span>", -1, true);
 
             bind.chat.registerCapture(src, handle, bind);
-                
+
         }
 
         function handle (_, msg)

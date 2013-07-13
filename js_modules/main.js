@@ -20,26 +20,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
 //"use strict";
-(function () { return {
-    config : null
+/**
+ * @fileOverview This file is the main modloader.
+ * @author <a href="mailto:archzombielord@gmail.com">ArchZombie0x</a>
+ */
+
+/** The module loader object
+ *  @name script
+ *  @namespace
+ */
+(function () {
+ /** @scope script */
+ return {
+    /** Holds some very basic configuration */
+    config: null
     ,
-    modules : {}
+    /** The modules object stores all the modules
+     * @namespace
+     * @memberOf script
+     */
+    modules: new Object
     ,
-    log : function log (msg)
+    /** Logs a message to the console or the logging module*/
+    log: function log (msg)
     {
         print ("SCRIPT: " + msg);
     }
     ,
+    /** Does nothing
+     * @deprecated
+     */
     broadcast : function _DEPRECATED_ (msg)
     {
-        //sys.sendAll("SCRIPT: " + msg);
+
     }
     ,
-    i:0
-    ,
-
-    beforeNewMessage : function beforeNewMessage(msg)
+    /** Handles new messages to get commands from ~~Server~~
+     * @param {string} msg The message recieved by the script
+     * @event
+     *  */
+    beforeNewMessage: function beforeNewMessage(msg)
     {
+        /** The "test" for a server command. */
         var t = msg.match(/^\~\~Server\~\~\: :(\w+) (.+)$/);
 
 
@@ -76,7 +98,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
     }
     ,
-    registerHandler : function registerHandler (handlername, object, propname)
+    /** Registers a script event handler
+     * @param {string} handlername The event name of the script handler.
+     * @param {Module} object The module to register this handler from
+     * @param {string} [propname=handlername] The name of the handler on the module, if it is different from the event name.
+     * */
+    registerHandler: function registerHandler (handlername, object, propname)
     {
         if (!propname) propname = handlername;
 
@@ -116,6 +143,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     }
     ,
+    /** Reloads a module
+     * @param {string} modname
+     * @throws Error When the module can't be loaded.
+     * */
     reloadModule : function reloadModule (modname)
     {
         var unloads = this.unloadModule(modname);
@@ -128,6 +159,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.loadModule(modname); // load even if unload failed
     }
     ,
+    /** Loads a module
+     * @param {string} modname Name of the module to be loaded.
+     */
     loadModule : function loadModule (modname)
     {
         if (this.modules[modname] && !(this.modules[modname] instanceof Error)) return;
@@ -226,6 +260,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     }
     ,
+    /** Unloads a module
+     * @param {string} modname Name of module to remove.
+     * @return {string[]} List of all modules that were removed, includes others due to dependencies.
+     */
     unloadModule : function unloadModule (modname)
     {
         if ( !(modname in this.modules)) return [modname];
@@ -271,9 +309,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         return unloads;
     }
     ,
+    /** Handles loading the script
+     * @event
+     */
     loadScript: function loadScript ()
     {
-
+        /*
         if (!( sys.readObject && sys.os && sys.enableStrict))
         {
             print("WARNING: Missing required functions.");
@@ -298,12 +339,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 };
             }
 
-            if (!sys.exec) sys.exec = function (fname) { try { sys.eval(sys.read(fname)) } catch (e) { e.fileName = fname; throw e; }};
+            if (!sys.exec) sys.exec = function (fname) { try { sys.eval(sys.read(fname)); } catch (e) { e.fileName = fname; throw e; }};
 
             if (!sys.os) sys.os = function () {return "unknown";};
 
             if (!sys.enableStrict) sys.enableStrict = function(){};
         }
+         */
 
         sys.enableStrict();
 
@@ -347,6 +389,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
     }
     ,
+    /** Handles unloading the script
+     * @event
+     */
     unloadScript: function unloadScript ()
     {
         var mods = Object.keys (this.modules);
@@ -357,6 +402,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
     }
     ,
+    /** Sends a license message to src
+     * @param {number} src User ID to send message to.
+     */
     AGPL: function AGPL (src)
     {
         sys.sendHtmlMessage(
@@ -368,8 +416,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         );
     }
     ,
+    /** Hooks to be added to all modules
+     *
+     */
     hooks:
+    /**
+     * @scope script.hooks
+     */
     {
+        /** Runs the function when the module is unloaded
+         * @param {function} f Function to be run when the module is unloaded.
+         */
         onUnloadModule: function _meta_hook_onUnloadModule_ (f)
         {
             if (!this.unloadModuleHooks) this.unloadModuleHooks = [];

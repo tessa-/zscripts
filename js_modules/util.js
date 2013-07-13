@@ -19,16 +19,32 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
+/** Utilities module
+ * @memberof script.modules
+ * @name util
+ * @namespace
+ */
+/** @scope script.modules.util */
 ({
+    /** Binds a function and object together.
+     * @param {Object} obj The object to be used as "this" when calling func.
+     * @param {Function} func The function to be called.
+     * @return A new function which is a clone of func, but where the this object is always obj.
+     */
     bind: function (obj, func)
     {
         return function ()
         {
             func.apply(obj, arguments);
-        }
-    
+        };
+
     }
     ,
+    /** Converts a value to an array if it isn't already one.
+     * @param variant The value to be wrapped in an array if it isn't already one
+     * @return {Array}
+     * @example arrayify(8) >> [8], arrayify([7, 8]) >> [7, 8]
+     */
     arrayify: function (variant)
     {
         if (typeof variant !== "object" || !(variant instanceof Array)) return [variant];
@@ -36,6 +52,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         return variant;
     }
     ,
+    /** Shuffles the array.
+     * @param array Array to be shuffled.
+     */
     shuffle: function (array)
     {
         // fisheryates
@@ -43,22 +62,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         var temp;
         var rand;
 
-        for (var i = array.length; i;) 
+        for (i = array.length; i;)
+            // Shuffles the array
         {
             rand = Math.floor(Math.random() * i--);
             temp = array[i];
             array[i] = array[rand];
             array[rand] = temp;
-        }      
+        }
     }
     ,
-    inspect: function (variant, exclude) 
+    /** Inspects variant
+     * @param variant Value to be inspected
+     * @param {Boolean} exclude If duiplicates should only be printed once. (recommended)
+     * @return {String} Human readable representation of variant.
+     */
+    inspect: function (variant, exclude)
     {
         // Rather complicated function, bear with it!
+        /** The stack frames variable includes all the objects we are already inside of, to catch circular references. */
         var stack_frames = [];
-        var refs = [];
-        var o = 0;
 
+        /** The refs varible keeps track of all the objects we have touched at any time, to catch duiplcate references */
+        var refs = [];
 
 
         function serialize (variant)
@@ -77,7 +103,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             {
                 return "<Number> " + variant;
             }
-            
+
             if (typeof variant === "string")
             {
                 return "<String> " + JSON.stringify(variant);
@@ -85,7 +111,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             if (typeof variant === "function")
             {
-                return "<Function> [[" + (variant.name?variant.name:"<anonymous>") + "]]"; 
+                // Right now most all fucntions would be anonymous, but later we may add features to sys to make it able to read more function information :)
+                return "<Function> [[" + (variant.name?variant.name:"<anonymous>") + "]]";
             }
 
             if (typeof variant === "object")
@@ -94,7 +121,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 var dup = true;
 
                 var str = "";
-                
+
                 if (refidx === -1)
                 {
                     refidx = refs.length;
@@ -103,8 +130,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 }
 
                 str += "<" + (variant instanceof Array ? "Array" : "Object") + " &" + refidx + ">";
+                // Arrays still do not look very nice, they have object syntax.
 
-               
+
                 if (stack_frames.indexOf(variant) != -1)
                 {
                     str += " [[Circular Reference]]";
@@ -123,20 +151,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 str += "{\n";
 
                 stack_frames.push(variant);
-             
+
                 for (var x in variant)
                 {
-                    for (var i = 0; i < stack_frames.length; i++) str += "    ";
+                    for (i = 0; i < stack_frames.length; i++) str += "    ";
                     str += JSON.stringify(x) + ": " + serialize(variant[x]) + "\n";
                 }
 
                 stack_frames.pop();
-                
-                for (var i = 0; i < stack_frames.length; i++) str += "    ";
+
+                for (i = 0; i < stack_frames.length; i++) str += "    ";
                 str += "}";
 
                 return str;
             }
+
+            return "?";
         }
 
         return serialize(variant);

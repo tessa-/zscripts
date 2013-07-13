@@ -19,18 +19,29 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
+/** Module that holds /ban, /banlist, /unban, etc.
+ * @name ban_command
+ * @memberOf script.modules
+ * @namespace
+ * */
+/** @scope script.modules.ban_command */
 ({
     require: ["commands", "security", "profile", "text", "com", "theme", "time"]
     ,
+    /** The unban command descriptor
+     * @type commandDescriptor
+     * */
     unbanall:
     {
         desc: "Clears the ban list"
         ,
-        perm: function (src) 
+        /** Must be level 2 or higher to use unbanall */
+        perm: function (src)
         {
             return sys.auth(src) >= 2;
         }
         ,
+        /** Unbans everyone */
         code: function (src, cmd)
         {
             if (!(cmd.flags.force))
@@ -38,35 +49,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 this.com.message([src], "Are you sure you want to do this? Retry with --force option.", this.theme.WARN);
                 return;
             }
-            
+
             this.com.broadcast(sys.name(src) + " has cleared the server's ban list.");
 
             this.security.database.bans = new Object;
         }
     }
     ,
-    unban: 
+    unban:
     {
         desc: "Removes bans from users"
         ,
-        perm: function (src) 
+        perm: function (src)
         {
             return sys.auth(src) >= 2;
-        } 
+        }
 
         ,
         code: function (src, cmd, chan)
         {
             var b = new Object;
-            
+
             var profbanlst = [];
             var profnamelst = [];
 
             for (var x in cmd.args)
             {
                 var prof = this.profile.profileByName(cmd.args[x]);
-                
-                if (prof != -1) 
+
+                if (prof != -1)
                 {
                     profbanlst.push (prof);
                     profnamelst.push(cmd.args[x]);
@@ -94,7 +105,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
     }
     ,
-    ban: 
+    ban:
     {
         desc: "Bans users from the server"
         ,
@@ -105,7 +116,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             time: "Duration of ban"
         }
         ,
-        perm: function (src) 
+        perm: function (src)
         {
             return sys.auth(src) >= 2;
         }
@@ -113,15 +124,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         code: function (src, cmd, chan)
         {
             var b = new Object;
-            
+
             var profbanlst = [];
             var profnamelst = [];
 
             for (var x in cmd.args)
             {
                 var prof = this.profile.profileByName(cmd.args[x]);
-                
-                if (prof != -1) 
+
+                if (prof != -1)
                 {
                     profbanlst.push (prof);
                     profnamelst.push(cmd.args[x]);
@@ -158,7 +169,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 this.theme.CRITICAL
             );
 
-            
+
 
             for (var x in profbanlst)
             {
@@ -167,14 +178,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     reason: cmd.flags.reason,
                     author: sys.name(src)
                 };
-                
+
                 this.security.setBan(profbanlst[x], o);
-            } 
+            }
             this.security.checkUsers();
         }
     }
     ,
-    banlist: 
+    banlist:
     {
         desc: "Lists banned users"
         ,
@@ -196,7 +207,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         "Expires: <i>" + (banlist[x].expires ? new Date(banlist[x].expires).toString():"indefinite") + "</i><br/>" +
                         "Reason: <i>" + this.text.escapeHTML(banlist[x].reason || "") + "</i><br/>" +
                         "Author: <i>"+ this.text.escapeHTML(banlist[x].author || "") + "</i>"
-                );                                        
+                );
             }
 
             this.com.message([src], "Ban list:<br/>" + bans.join("<br/>"), this.theme.INFO, true);

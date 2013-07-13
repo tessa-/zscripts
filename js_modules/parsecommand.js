@@ -19,18 +19,43 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
+/** Command parser
+ * @name parsecommand
+ * @memberOf script.modules
+ * @namespace
+ * */
+/** A parsed command
+ * @name parsedCommand
+ * @class
+ */
+/** A list of all the arguments
+ * @name args
+ * @memberOf parsedCommand.prototype
+ * @type Array
+ */
+/** A list of all the flags
+ * @name flags
+ * @memberOf parsedCommand.prototype
+ * @type Object
+ */
+/** @scope script.modules.parsecommand */
 ({
     require: []
     ,
     loadModule: function()
     {
-       
+
     }
     ,
+    /** Parses a command.
+     * @param {String} text The text to parse.
+     * @return {parsedCommand} The parsed command.
+     * */
+
     parseCommand: function (text)
     {
         var cmd = new Object;
-        
+
         var match = text.match(/^(?:!|\/)([^\s]*)(?:\s+(.*))?/i);
 
         cmd.args = [];
@@ -49,7 +74,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                          input.replace(/^\s*(?:\-{1,2}((?:\w|\\ )+)(?:\=(?:\"((?:\\.|[^\"])+)\"|((?:\w|\\ )+)))?)|(?:(?:\"((?:\\.|[^\"])+)\")|((?:\w|\\ )+))/, cl_next))
                //                                      ^flagname              ^flagvalstr        ^flagvalueraw             ^argvalstr         ^argvalraw
               ) {};
-        
+
         function cl_next (text, flagname, flagvaluestr, flagvalueraw, argvaluestr, argvalueraw)
         {
             if (flagname)
@@ -60,12 +85,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 {
                     cmd.flags[flagname] = f.replace(/\\(.)/g, "$1");
                 }
-                else 
+                else
                 {
                     cmd.flags[flagname] = true;
                 }
             }
-            else 
+            else
             {
                 cmd.args.push(((argvaluestr !== undefined ? argvaluestr: void 0) || argvalueraw).replace(/\\(.)/g, "$1"));
             }
@@ -73,7 +98,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
 
         return cmd;
-        
+
     }
 
 });

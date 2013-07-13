@@ -19,13 +19,18 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
+/** Implements I/O layer
+ * @name io
+ * @memberOf script.modules
+ * @namespace
+ * */
+/** @scope script.modules.io */
 ({
-    name: "Standard Input/Output"
-    ,
     require: ["dmp"]
     ,
-    authors: ["ArchZombie0x"]
-    ,
+    /** Object that contains all databases
+     * @type {Object}
+     */
     openDBs: null
     ,
     diskRO: false
@@ -43,16 +48,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         if (!sys.fileExists("js_databases")) sys.mkdir("js_databases");
     }
     ,
-    read: function (dbname) 
+    /** Reads file data
+     * @deprecated Use openDB instead.
+     */
+    read: function (dbname)
     {
         if (sys.fileExists("js_databases/" + dbname + ".jsqz"))
         {
             return sys.readObject("js_databases/" + dbname + ".jsqz");
-        }     
+        }
 
         return new Object;
     }
     ,
+    /** Reads file data
+     * @deprecated Use commitDB instead.
+     */
     write: function (dbname, obj, fast)
     {
         sys.writeObject("js_databases/" +dbname + ".jsqz", obj, (fast?1:3));
@@ -62,14 +73,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     {
         if (cfgname in this.configs) return this.configs[cfgname].object;
 
-        if (!sys.fileExists(cfgname + ".config.json")) 
+        if (!sys.fileExists(cfgname + ".config.json"))
         {
             sys.write(cfgname+".config.json", JSON.stringify(defaults));
             return JSON.parse(JSON.stringify(defaults));
         }
 
-        
-        
+
+
         var o = JSON.parse (sys.read(cfgname + ".config.json"));
         var changed = false;
 
@@ -95,6 +106,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         sys.write(cfgname + ".config.json", JSON.stringify(val));
     }
     ,
+    /** Opens a database
+     * @returns {IOdatabase}
+     */
     openDB: function (dbname)
     {
         var start = +new Date;
@@ -104,9 +118,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             throw new Error("DB already open");//return this.openDBs[dbname].db;
         }
         var db, patches, dbo, dataText;
-        get_data: 
+        get_data:
         {
-            if (!sys.fileExists("js_databases/" + dbname + ".jsqz")) 
+            if (!sys.fileExists("js_databases/" + dbname + ".jsqz"))
             {
                 db = new Object;
                 sys.writeObject("js_databases/" +dbname + ".jsqz", db, 9);
@@ -116,7 +130,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             {
                 db = sys.readObject("js_databases/" + dbname + ".jsqz");
             }
-            
+
             if (!sys.fileExists("js_databases/" + dbname + ".jsqz.transactions")) break get_data;
 
             script.log("Applying patches to database " + dbname);
@@ -140,7 +154,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             sys.rm("js_databases/" + dbname + ".jsqz.transactions");
         }
-        
+
         if (!dataText) dataText = JSON.stringify(db, null, 1);
 
         dbo = { db: db, lastSave: +new Date, lastCommit: +new Date, dataText: dataText, hasChanges:null };
@@ -161,18 +175,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         var start = +new Date;
         this.write(dbname, db, true);
-        if (metadb.hasChanges === true) metadb.hasChanges = false; 
+        if (metadb.hasChanges === true) metadb.hasChanges = false;
         metadb.dataText = JSON.stringify(db, null, 1);
         if (sys.fileExists("js_databases/" + dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
 
         metadb.lastSave = +new Date;
         var end = +new Date;
-        script.log("Synchronized database " + dbname + ", took " + (end - start) + "ms.");    
+        script.log("Synchronized database " + dbname + ", took " + (end - start) + "ms.");
     }
     ,
     commitDB: function (dbname)
     {
-        
+
         var start = +new Date;
         var newData = JSON.stringify(this.openDBs[dbname].db, null, 1);
 
@@ -215,7 +229,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         if (dbname in this.openDBs) return;
 
         script.log("Purging DB " + dbname);
-        
+
         if (sys.exists("js_databases/" + dbname + ".jsqz")) sys.rm("js_databases/" + dbname + ".jsqz");
         if (sys.exists("js_databases/" + dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
 
@@ -259,5 +273,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             }
         }
     }
-    
+
 });

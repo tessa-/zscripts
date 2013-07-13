@@ -19,15 +19,33 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
-({
+/** Contains the RPG game :)
+ * @name rpg_game
+ * @memberOf script.modules
+ * @requires io, com, theme, commands, util, logs, less
+ * @namespace
+ * */
+(
+/** @scope script.modules.rpg_game */
+{
+    /** List of modules to be required.
+     * @type {string[]}
+     */
     require: ["io", "com", "theme", "commands", "util", "logs", "less"]
     ,
+    /** List of files to be included in this module.
+     * @type {string[]}
+     */
     include: ["rpg_areas", "rpg_player", "rpg_entity", "rpg_actions",
               "rpg_mobs", "rpg_equips", "rpg_materials", "rpg_moves"]
     ,
+    /** I/O database that keeps track of games etc.
+     * @type {IOdatabase}
+     */
     database: null
     // database stores the permanent data, games, etc.
     ,
+    /** */
     channels: null
     // channels is used to associate databases with channels, it doesn't keep between reloads
     ,
@@ -142,6 +160,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     }
     ,
+    /** @type commandDescriptor */
     rpg: // not to be confused with "RPG"
     {
         desc: "does rpg stuffs",
@@ -189,6 +208,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
     }
     ,
+    /** @type commandDescriptor */
     loadrpg:
     {
         desc: "Loads an RPG into a channel."
