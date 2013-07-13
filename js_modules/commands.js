@@ -51,6 +51,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * @memberOf commandDescriptor.prototype
  * @type String
  */
+/** If the server console can use the command, requires special handling in some cases.
+ * @name server
+ * @memberOf commandDescriptor.prototype
+ * @type Boolean
+ */
 /** Describes the command's options. Key is option name, value is description.
  * @name options
  * @memberOf commandDescriptor.prototype

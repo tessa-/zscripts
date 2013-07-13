@@ -48,14 +48,57 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
     ,
     /** Does nothing
-     * @deprecated
+     * @deprecated Doesn't do anything
      */
     broadcast : function _DEPRECATED_ (msg)
     {
 
     }
     ,
-    /** Handles new messages to get commands from ~~Server~~
+    /** Handles server commands, very primitive at the moment
+     * @param {string} msg The message recieved by the script
+     * @event
+     * */
+    beforeServerMessage: function beforeServerMessage ()
+    {
+        // If before server message is available we dont need to before new message hack
+        delete this.beforeNewMessage;
+        var t = msg.match(/^\/(\w+) (.+)$/);
+
+        if (t) server_control :
+        {
+            sys.stopEvent();
+
+            print(["COMMAND: ", t[1], " ", t[2]].join(""));
+
+            switch(t[1].toLowerCase())
+            {
+            case "eval" :
+                sys.eval(t[2]);
+                break server_control;
+
+            case "loadmodule" :
+                this.loadModule(t[2]);
+                break server_control;
+
+
+            case "reloadmodule" :
+                this.reloadModule(t[2]);
+                  break server_control;
+
+            case "unloadmodule" :
+                this.unloadModule(t[2]);
+                break server_control;
+
+            default:
+                print("UNKNOWN COMMAND");
+                break server_control;
+
+            }
+        }
+    }
+    ,
+    /** Workaround to handle new messages to get commands from ~~Server~~
      * @param {string} msg The message recieved by the script
      * @event
      *  */

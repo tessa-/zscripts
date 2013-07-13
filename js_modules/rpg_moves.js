@@ -19,48 +19,61 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
  /////////////////////// END LEGAL NOTICE /////////////////////////////// */
+/** @scope script.modules.rpg_game */
 ({
-     moves:
-     {
-         instakill: function (ctx)
-         {
-             for (var x in targets)
-             {
-                 targets[x].hp = 0;
+    /**
+     * @namespace
+     */
+    moves:
+    {
+        /** Instakill kills all enemies instantly, no damage calculation
+         * @param {rpgContext} ctx
+         */
+        instakill: function (ctx)
+        {
+            for (var x in targets)
+            {
+                targets[x].hp = 0;
+            }
+        }
+        ,
+        /** Physical does physical damage
+         * @param {rpgContext} ctx
+         */
+        physical: function (ctx)
+        {
+            var offense = ctx.attacker.offense;
+            var base = ctx.movepower;
+
+
+            for (var x in targets)
+            {
+                var defense = targets[x].defense;
+
+                var damage = base + base * Math.min(Math.max(-0.90, Math.log(offense/defense)), 9);
+
+                targets[x].hp -= damage | 0;
+            }
+        }
+        ,
+        /** Heal reverses damage.
+         * @param {rpgContext} ctx
+         */
+        heal: function (ctx, source, targets)
+        {
+            var base = ctx.movepower;
+
+            for (var x in targets)
+            {
+
+
              }
-         }
-         ,
-         physical: function (ctx)
-         {
-             var offense = ctx.attacker.offense;
-             var base = ctx.movepower;
-
-
-             for (var x in targets)
-             {
-                 var defense = targets[x].defense;
-
-                 var damage = base + base * Math.min(Math.max(-0.90, Math.log(offense/defense)), 9);
-
-                 targets[x].hp -= damage | 0;
-             }
-         }
-         ,
-         heal: function (ctx, source, targets)
-         {
-             var base = ctx.movepower;
-
-             for (var x in targets)
-             {
-
-
-             }
-         }
-     }
-     ,
-     pickMove: function (e)
-     {
-         var plan = e.plan;
+        }
+    }
+    ,
+    pickMove: function (e)
+    {
+        var plan = e.plan;
 
          var list = plan.list;
          var total = plan.total;
