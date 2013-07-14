@@ -21,10 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
 /** Implements communication layer
  * @name com
- * @memberOf this.script.modules
+ * @memberOf script.modules
  * @namespace
  * */
-/** @scope this.script.modules.com */
+/** @scope script.modules.com */
 ({
     require: ["text", "theme", "util"]
     ,
