@@ -26,7 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
 /** @scope script.modules.server */
 ({
-    onLoadModule: function ()
+    require: ["commands", "parsecommand"]
+    ,
+    loadModule: function ()
     {
         this.script.registerHandler("beforeServerMessage", this);
     }
@@ -43,18 +45,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             var cmdObj = this.parsecommand.parseCommand(msg);
             var cmdName = cmdObj.name;
 
-            if (!commandName)
+            if (!cmdName)
             {
                 print("[[~Script~]]: Please enter a command.");
+                return;
+            }
+
+            if (!this.commands.commands_db[cmdName])
+            {
+                print("[[~Script~]]: Command does not exist.");
                 return;
             }
 
             if (!this.commands.serverCanUseCmd(cmdName))
             {
                 print("[[~Script~]]: Sorry, but that command can't be used in the server console.");
+                return;
             }
 
-            cmdObj.code.call(cmdObj.bind, 0, cmdObj, -1);
+            var cd = this.commands.commands_db[cmdName];
+            cd.code.call(cd.bind, 0, cmdObj, -1);
         }
     }
 });

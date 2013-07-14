@@ -127,7 +127,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         try {
             var mod = sys.exec("js_modules/" + modname +".js");
 
-            mod.name = modname;
+            mod.modname = modname;
 
             this.modules[modname] = mod;
 

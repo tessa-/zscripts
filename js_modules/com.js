@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         {
             for (var x in usrs)
             {
-                if (usrs[x] === 0) print(this.stripHtmlBool(fmt_msg, html));
+                if (usrs[x] === 0) print(this.text.stripHTML(fmt_msg));
                 else sys.sendHtmlMessage(usrs[x], fmt_msg );
             }
         }
@@ -52,7 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         {
             for (var x1 in usrs)
             {
-                if (usrs[x1] == 0) print("[#" + chans.join(", #")+"]"+this.stripHtmlBool(fmt_msg, html));
+                if (usrs[x1] == 0) print("[#" + chans.join(", #")+"]"+this.text.stripHTML(fmt_msg));
                 else for (var x2 in chans)
                 {
                     sys.sendHtmlMessage(usrs[x1], fmt_msg, chans[x2]);
