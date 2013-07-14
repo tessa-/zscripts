@@ -20,11 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
 /** Module that provides sys-like functions but also works with e.g., ~~Server~~ and etc.
- * @name ban_command
+ * @name user
  * @memberOf script.modules
  * @namespace
  * */
-/** @scope script.modules.ban_command */
+/** @scope script.modules.user */
 ({
     name: function (id)
     {
