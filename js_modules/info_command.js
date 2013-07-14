@@ -49,11 +49,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 else if (test === undefined || test === "" || test === null)
                 {
                     this.com.broadcast("ZOMMMG W.T.F.", this.theme.CRITICAL);
-                    script.log(JSON.stringify(this.profile.database));
-                    script.log(JSON.stringify(this.profile.relationaldatabase));
+                    this.script.log(JSON.stringify(this.profile.database));
+                    this.script.log(JSON.stringify(this.profile.relationaldatabase));
 
-                    script.log(this.profile.profileByName(cmd.args[x]));
-                    script.log(this.profile.profileByIP(cmd.args[x]));
+                    this.script.log(this.profile.profileByName(cmd.args[x]));
+                    this.script.log(this.profile.profileByIP(cmd.args[x]));
                     continue;
                 }
                 

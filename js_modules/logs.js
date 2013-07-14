@@ -61,8 +61,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     loadModule: function ()
     {
-        this.savedLogFunction = script.log;
-        script.log = this.util.bind(
+        this.savedLogFunction = this.script.log;
+        this.script.log = this.util.bind(
             this
             ,
             function(msg)
@@ -74,6 +74,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     unloadModule: function ()
     {
-        script.log = this.savedLogFunction;
+        this.script.log = this.savedLogFunction;
     }
 });

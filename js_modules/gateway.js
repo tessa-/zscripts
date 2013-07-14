@@ -24,8 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     loadModule: function()
     {
-        script.registerHandler("beforeLogIn", this );
-        script.registerHandler("beforeLogOut", this );
+        this.script.registerHandler("beforeLogIn", this );
+        this.script.registerHandler("beforeLogOut", this );
     }
     ,
     beforeLogIn: function(src)

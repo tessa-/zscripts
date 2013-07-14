@@ -33,8 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         if (!this.database.users) this.database.users = new Object;
         
-        script.registerHandler("afterLogIn", this);
-        script.registerHandler("beforeLogOut", this);
+        this.script.registerHandler("afterLogIn", this);
+        this.script.registerHandler("beforeLogOut", this);
 
         var u = sys.playerIds();
 

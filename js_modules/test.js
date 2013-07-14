@@ -24,10 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     loadModule: function ()
     {
-        script.log(JSON.stringify(this.profile.database));
-        //script.log ("testing!");
+        this.script.log(JSON.stringify(this.profile.database));
+        //this.script.log ("testing!");
         
-        //script.broadcast(JSON.stringify(script.module));
+        //this.script.broadcast(JSON.stringify(this.script.module));
         
         this.com.broadcast("Hello world!!! <a> </a> :)", false, null); 
 

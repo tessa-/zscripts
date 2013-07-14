@@ -63,6 +63,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         //sys.setTimer(function() {lock.tick();}, 200, true);
 
-        script.registerHandler("step", this);
+        this.script.registerHandler("step", this);
     }
 });

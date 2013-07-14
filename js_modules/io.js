@@ -21,10 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
 /** Implements I/O layer
  * @name io
- * @memberOf script.modules
+ * @memberOf this.script.modules
  * @namespace
  * */
-/** @scope script.modules.io */
+/** @scope this.script.modules.io */
 ({
     require: ["dmp"]
     ,
@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     {
         this.openDBs = new Object;
         this.configs = new Object;
-        script.registerHandler("step", this);
+        this.script.registerHandler("step", this);
 
         this.config = this.readConfig("io", {autosave:60000, autosavemethod: "commit"});
 
@@ -133,7 +133,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             if (!sys.fileExists("js_databases/" + dbname + ".jsqz.transactions")) break get_data;
 
-            script.log("Applying patches to database " + dbname);
+            this.script.log("Applying patches to database " + dbname);
 
             var dataText = JSON.stringify(db, null, 1);
 
@@ -162,7 +162,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.openDBs[dbname] = dbo;
 
         end = +new Date;
-        script.log("Opened database " + dbname + ", took " + (end - start) + "ms.")
+        this.script.log("Opened database " + dbname + ", took " + (end - start) + "ms.")
 
         return db;
     }
@@ -181,7 +181,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         metadb.lastSave = +new Date;
         var end = +new Date;
-        script.log("Synchronized database " + dbname + ", took " + (end - start) + "ms.");
+        this.script.log("Synchronized database " + dbname + ", took " + (end - start) + "ms.");
     }
     ,
     commitDB: function (dbname)
@@ -200,7 +200,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         this.openDBs[dbname].dataText = newData;
         var end = +new Date;
-        script.log("Commited database " + dbname + ", took " + (end - start) + "ms.");
+        this.script.log("Commited database " + dbname + ", took " + (end - start) + "ms.");
     }
     ,
     markDB: function (dbname)
@@ -221,14 +221,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         delete this.openDBs[dbname];
         var end = +new Date;
-        script.log("Closed database " + dbname + ", took " + (end - start) + "ms.");
+        this.script.log("Closed database " + dbname + ", took " + (end - start) + "ms.");
     }
     ,
     purgeDB: function (dbname)
     {
         if (dbname in this.openDBs) return;
 
-        script.log("Purging DB " + dbname);
+        this.script.log("Purging DB " + dbname);
 
         if (sys.exists("js_databases/" + dbname + ".jsqz")) sys.rm("js_databases/" + dbname + ".jsqz");
         if (sys.exists("js_databases/" + dbname + ".jsqz.transactions")) sys.rm("js_databases/" + dbname + ".jsqz.transactions");
@@ -243,7 +243,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         var backupname = dbname + ".backup."+start+".jsqz.bak";
         sys.writeObject("js_databases/" + backupname, db, 9);
         var end = +new Date;
-        script.log("Backed up database " + dbname + " to " + backupname + ", took " + (end - start) + "ms.");
+        this.script.log("Backed up database " + dbname + " to " + backupname + ", took " + (end - start) + "ms.");
     }
     ,
     step: function ()
@@ -266,7 +266,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 this.openDBs[x].lastSave = +new Date;
 
-                //script.log((this.config.autosavemethod === "commit" ? "Autocommited" : "Autosaved" ) + " database " + x + ", took " + (end-start) + "ms.");
+                //this.script.log((this.config.autosavemethod === "commit" ? "Autocommited" : "Autosaved" ) + " database " + x + ", took " + (end-start) + "ms.");
 
 
                 return;

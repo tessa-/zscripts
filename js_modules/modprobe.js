@@ -64,7 +64,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 for (var x in cmd.args)
                 {
                     //  this.com.message([src], "Loading module " +
-                    script.loadModule(cmd.args[x]);
+                    this.script.loadModule(cmd.args[x]);
                 }
                 return;
             }
@@ -76,7 +76,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 for (var x in cmd.args)
                 {
-                    script.unloadModule(cmd.args[x]);
+                    this.script.unloadModule(cmd.args[x]);
                 }
                 return;
             }
@@ -87,7 +87,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 for (var x in cmd.args)
                 {
-                    script.reloadModule(cmd.args[x]);
+                    this.script.reloadModule(cmd.args[x]);
                 }
                 return;
             }
@@ -96,7 +96,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             {
                 this.com.message([src], "Loaded modules:", this.theme.INFO);
                 var modlist = [];
-                for (var x in script.modules)
+                for (var x in this.script.modules)
                 {
                     modlist.push(x);
                 }
@@ -110,7 +110,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             for (var x in cmd.args)
             {
 
-                var test = script.modules[cmd.args[x]];
+                var test = this.script.modules[cmd.args[x]];
 
                 str.push("<b>Module " + cmd.args[x] + ":</b>");
                 if (!test)
@@ -119,9 +119,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     continue;
                 }
 
-                str.push("Requires: " + script.modules[cmd.args[x]].require.join(", "));
-                str.push("Required by: " + script.modules[cmd.args[x]].submodules.join(", "));
-                str.push("Contains: " + Object.keys(script.modules[cmd.args[x]]).join (", "));
+                str.push("Requires: " + this.script.modules[cmd.args[x]].require.join(", "));
+                str.push("Required by: " + this.script.modules[cmd.args[x]].submodules.join(", "));
+                str.push("Contains: " + Object.keys(this.script.modules[cmd.args[x]]).join (", "));
 
             }
             this.less.less(src, str.join("<br/>"), true);

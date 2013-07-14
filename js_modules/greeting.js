@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     loadModule: function ()
     {
-        script.registerHandler("afterLogIn", this);
+        this.script.registerHandler("afterLogIn", this);
     }
     ,
     afterLogIn: function (src, msg, chan)

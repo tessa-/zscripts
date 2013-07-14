@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /////////////////////// END LEGAL NOTICE /////////////////////////////// */
 /** Command parser
  * @name parsecommand
- * @memberOf script.modules
+ * @memberOf this.script.modules
  * @namespace
  * */
 /** A parsed command
@@ -38,7 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * @memberOf parsedCommand.prototype
  * @type Object
  */
-/** @scope script.modules.parsecommand */
+/** @scope this.script.modules.parsecommand */
 ({
     require: []
     ,

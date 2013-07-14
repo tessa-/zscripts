@@ -63,7 +63,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.commands.registerCommand("loadrpg", this);
         this.commands.registerCommand("rpg", this);
 
-        script.registerHandler("step", this);
+        this.script.registerHandler("step", this);
     }
     ,
     unloadModule: function ()

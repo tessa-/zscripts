@@ -84,7 +84,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         else if (emsg === "3")
         {
-            script.AGPL(src, msg, chan);
+            this.script.AGPL(src, msg, chan);
             this.com.message([src], "What do you need help with?<br/>Using commands, type 1.<br/>Contacting server admins, type 2.<br/>Getting source code, type 3.<br/>Anything else, type 4.<br/>To cancel this and go back to the chat, type exit.</span>", this.theme.INFO, true);
             this.chat.registerCapture(src, "helper_capturer", this);
             return;

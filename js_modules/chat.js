@@ -122,6 +122,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     loadModule: function loadModule ()
     {
-        script.registerHandler("beforeChatMessage", this);
+        this.script.registerHandler("beforeChatMessage", this);
     }
 }})();
