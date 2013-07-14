@@ -2218,7 +2218,7 @@ this['DIFF_DELETE'] = DIFF_DELETE;
 this['DIFF_INSERT'] = DIFF_INSERT;
 this['DIFF_EQUAL'] = DIFF_EQUAL;
 
-var r =  new this.diff_match_patch;
+var r = new this.diff_match_patch;
 
 return r;
 

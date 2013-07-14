@@ -26,13 +26,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
 /** @scope script.modules.ban_command */
 ({
-    require: ["commands", "security", "profile", "text", "com", "theme", "time"]
+     require: ["commands", "security", "profile", "text", "com", "theme", "time", "user"]
     ,
     /** The unban command descriptor
      * @type commandDescriptor
      * */
     unbanall:
     {
+        server: true
+        ,
         desc: "Clears the ban list"
         ,
         /** Must be level 2 or higher to use unbanall */
@@ -50,7 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 return;
             }
 
-            this.com.broadcast(sys.name(src) + " has cleared the server's ban list.");
+            this.com.broadcast(this.user.name(src) + " has cleared the server's ban list.");
 
             this.security.database.bans = new Object;
         }
@@ -96,9 +98,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 return;
             }
 
-            this.com.broadcast(sys.name(src) + " has unbanned " + profnamelst.join(", ") + ".");
+            this.com.broadcast(this.user.name(src) + " has unbanned " + profnamelst.join(", ") + ".");
 
-            for (var x in profbanlst)
+            for (x in profbanlst)
             {
                 this.security.removeBan(profbanlst[x]);
             }
@@ -107,6 +109,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     ,
     ban:
     {
+        server: true
+        ,
         desc: "Bans users from the server"
         ,
         options:
@@ -162,7 +166,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             }
 
             this.com.broadcast(
-                sys.name(src) + " has banned " + profnamelst.join(", ") + "!" +
+                this.user.name(src) + " has banned " + profnamelst.join(", ") + "!" +
                     (typeof cmd.flags.reason == "string" ? " Reason: \"" + cmd.flags.reason + "\"" : "")+
                     (t ? " Duration: " + this.time.diffToStr(t) + "" : "")
                 ,
@@ -176,7 +180,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 var o =  {
                     expires: exp,
                     reason: cmd.flags.reason,
-                    author: sys.name(src)
+                    author: this.user.name
                 };
 
                 this.security.setBan(profbanlst[x], o);

@@ -127,6 +127,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         delete this.commands_db[name];
     }
     ,
+    serverCanUseCmd: function (name)
+    {
+        return this.commands_db[name].server;
+    }
+    ,
     /** Checks if player has permission to use a command
      * @param {Number} src Player ID.
      * @param {parsedCommand} cmd

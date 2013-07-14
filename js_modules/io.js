@@ -135,17 +135,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             this.script.log("Applying patches to database " + dbname);
 
-            var dataText = JSON.stringify(db, null, 1);
+            dataText = JSON.stringify(db, null, 1);
 
-            var patches = sys.read("js_databases/" + dbname + ".jsqz.transactions").split(/\n/g);
+            patches = sys.read("js_databases/" + dbname + ".jsqz.transactions").split(/\n/g);
 
             if (patches[patches.length - 1] === "") patches.pop();
 
-            var dmp = new this.dmp.diff_match_patch;
-
             for (var x in patches)
             {
-                dataText = dmp.patch_apply(JSON.parse(patches[x]), dataText)[0];
+                dataText = this.dmp.patch_apply(JSON.parse(patches[x]), dataText)[0];
             }
 
             db = JSON.parse(dataText);
@@ -162,7 +160,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         this.openDBs[dbname] = dbo;
 
         end = +new Date;
-        this.script.log("Opened database " + dbname + ", took " + (end - start) + "ms.")
+
+        this.script.log("Opened database " + dbname + ", took " + (end - start) + "ms.");
 
         return db;
     }
@@ -173,7 +172,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         var db = metadb.db;
         var start = +new Date;
 
-        var start = +new Date;
         this.write(dbname, db, true);
         if (metadb.hasChanges === true) metadb.hasChanges = false;
         metadb.dataText = JSON.stringify(db, null, 1);
@@ -192,9 +190,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         if (newData === this.openDBs[dbname].dataText) return;
 
-        var dmp = new this.dmp.diff_match_patch;
 
-        var patch = dmp.patch_make(this.openDBs[dbname].dataText, dmp.diff_lineMode_(this.openDBs[dbname].dataText, newData));
+        var patch = this.dmp.patch_make(this.openDBs[dbname].dataText, this.dmp.diff_lineMode_(this.openDBs[dbname].dataText, newData));
 
         sys.append("js_databases/" + dbname + ".jsqz.transactions", JSON.stringify(patch) + "\n");
 

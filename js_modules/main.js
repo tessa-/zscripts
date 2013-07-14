@@ -198,7 +198,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 this.modules[reqmodname].submodules.push(modname);
                 Object.defineProperty(this.modules[modname], reqmodname, {configurable : true, value: this.modules[reqmodname]});
-                //            this.modules[modname][reqmodname] = this.modules[reqmodname];
             }
 
             Object.defineProperty(this.modules[modname], "script", {configurable : true, value: this});
